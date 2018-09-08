@@ -1,0 +1,175 @@
+The composer tool - www.getcomposer.org
+=======================================
+
+The "composer" is package dependency manager tool which downloads, updates, upgrades or remove the "packages or libs" from the PHP projects including almost all categories -- MVC frameworks - Laravel, Zend, CakePHP, Code Igniter, CMS - Wordpress, Jumla and many more.
+
+Laravel - A MVC Framework
+==========================
+
+This is the most commonly used PHP MVC framework. 
+
+The MVC stands for Model-View-Controller where,
+      Model stands for - Data or database classes/code
+      View stands for  - HTML/CSS/JavaScript code and
+      Controller stands for A class that take controll over requests and
+			    responses.
+
+The "Laravel" uses front-controller MVC design pattern. It means the requests from clients are received by the single controller class called "Router" and the "Router" will dispatches requests or forware these requests to user-defined controller classes.
+
+
+----> 1st Client Request -----> | Router controller | ---> User Controllers
+          Response <------------|                   | <----
+----> 2nd client Request -----> |                   |
+          Response <------------|                   |
+      and many clients
+
+
+The User define controller contains code to perform server side actions including the selection or loading of View (.php) files.
+
+*** In MVC design, no one can directly request the "page  -- .php or .css or .html or .js or images or video / audio files. All resources / files are served to clients as per system defined by the concern MVC framework.
+
+Laravel application structure and basics
+=========================================
+
+In order to install the "Laravel", we must have to download "composer - a depdendency package manager" tool from getcomposer.org
+
+Next, we have to install the "Laravel" installer via composer globally - which allow us to create project structure:
+
+>compose install global "Laravel/Installer"
+
+Now, to create a project of "Laravel" (It is important to note here that this command
+requires network connection to download laravel and third party libs)
+c:\yourapps>laravel new my-app
+
+
+The "routes" folder and web.php
+--------------------------------
+Under the root of app, "routes" folder contains the "front-controller" router which maps the "uri" to "controller's function".
+
+In web.php, we can add one or more uri-function mapping using Route::methodsxxxx()
+
+Route::get("/", function() {
+   return "welcome";  // Returns string
+});
+
+Route::get("/about", function() {
+   return view("about");  // Returns the content /resources/views/about.php 
+});
+
+Route::post("/save","YourControllerName@yourFunction")
+Route::get("/print/{i}","YourControll@Action")
+
+
+The "resources/views" -- View components
+-----------------------------------------
+Laravel uses default php view engine as well as a specialized view engine named "Blade". If you add "blade" word in your php file just before .php extension, laravel automatically uses "Blade" engine to process that page.
+e.g
+     index.blade.php  <--- It first processed by the Blade Engine of Laravel
+     
+In side the "views" folder, we can create different-different folder to manage the views. 
+e.g
+/views/
+      |-----/category/
+      |
+      |----/product/
+      |
+      |----/account/
+      |
+      |---/admin/
+      |.....
+
+Blade engine syntax
+-------------------
+The blade syntax allow us to write server code (PHP code) into web page. 
+
+** It is important to note that in MVC, the view component contains code to display data as well as to send the data to server. Complex, business logic can't appear in views.
+
+{{ expression }} - To display or write the data into respose buffer
+
+@statement       - In blade, every statement must ends with @endstatement -- And will
+			create a scope block.
+e.g
+@if a>2
+....
+....
+@endif
+
+@while condition
+.....
+@endwhile
+
+@switch expression
+  @case ...
+  @endcase
+....
+@endswitch
+
+
+Blade layout system --- To define consistent layout of elements
+================================================================
+
+Example:
+
+views/mylayout.blade.php  -- Layout page / Master page
+-------------------------
+<!doctype html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/app.css"/>
+    @yield("title")
+  </head>
+  <body>
+    <h1>Site Title</h1>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    <hr/>
+    <div>
+      @yield("content")
+    </div>
+ </body>
+</html>
+
+views/index.blade.php  -- Content pages
+-----------------------
+@extends("mylayout")
+
+@section("content")
+ <h2>Welcome home</h2>
+@endsection
+
+@section("title")
+<title>Welcome</title>
+@endsection
+
+views/about.blade.php  -- Content pages 
+----------------------------------
+@extends("mylayout")
+
+@section("content")
+ <h2>About us</h2>
+@endsection
+
+@section("title")
+<title>About</title>
+@endsection
+ 
+views/contact.blade.php  -- Content pages 
+----------------------------------
+@extends("mylayout")
+
+@section("content")
+ <h2>Contact us</h2>
+@endsection
+
+@section("title")
+<title>contact</title>
+<style>
+  h1 { color: blue; }
+</style>
+@endsection
+
+
+
+     

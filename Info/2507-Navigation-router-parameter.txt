@@ -1,0 +1,327 @@
+Router parameters
+=================
+
+We can define router parameters in "routes" table:
+
+ Syntax:  
+  { path: 'dept:/id', component: ProductComponent },
+  { path: 'dept', component: DeptListComponent },
+  { path: 'dept/new', component: DeptComponent },
+
+In DeptComponent, we must to import two classes namely : ActiviateRoute and Location,
+
+import { ActivatedRoute } from "@angular/router";
+import { Location } from "@angular/common";
+
+And inject the serivces of ActiviatedRoute and Location classes
+
+Example: Create one or more components for the single entity.
+
+In this example, we will create a list component and edit/delte/add component for dept entity.
+
+>ng generate component dept    -- Will create dept component into dept folder
+>ng generate component dept/dept-list --flat     <--- This will create dept-list 						      component into "dept" folder.
+
+We can also create "model" components into model folder too:
+  >ng generate class model/dept
+  >ng generate class model/emp   
+
+Similarly, service components also added into separate folder:
+   >ng generate service service/dept
+
+
+app-routing.ts
+-----------------
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { DeptComponent } from "./dept/dept.component";
+import { DeptListComponent } from "./dept/dept-list.component";
+
+import { ProductComponent } from "./product/product.component";
+import { ProductListComponent } from "./product/product-list.component";
+const routes: Routes = [
+  { path: 'home', component: ProductListComponent },
+  { path: 'edit:/id', component: ProductComponent },
+  { path: 'dept', component: DeptListComponent },
+  { path: 'dept/new', component: DeptComponent },
+  { path: 'dept/:id', component: DeptComponent },
+  
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot( routes)
+  ],
+  exports: [
+  RouterModule
+  ],
+  declarations: []
+})
+export class AppRoutingModule { }
+
+
+dept.php
+=========
+
+<?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
+
+$data = array("message"=>"", "status"=>false, "data"=>[]);
+
+$cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");
+
+$dept_id = isset($_POST["dept_id"]) ? $_POST["dept_id"] : 0;
+$dept_name = isset($_POST["dept_name"]) ? $_POST["dept_name"] : '';
+$dept_location = isset($_POST["dept_location"]) ? $_POST["dept_location"] : '';
+$cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : '';
+
+if($cmd == 'Add') {
+  $sql = "insert into dept (dept_name, dept_location) values (?,?)";
+  $ar = array($dept_name, $dept_location);
+  $st = $cn->prepare($sql);
+  $data["message"] = "Can't add";
+  if($st->execute($ar)) {
+     $data["status"] = true;
+     $data["message"] = "Dept added";
+  }
+}
+if($cmd == 'Update') {
+  $sql = "update dept set  dept_name=?, dept_location=? where dept_id=?";
+  $ar = array($dept_name, $dept_location,$dept_id);
+  $st = $cn->prepare($sql);
+  $data["message"] = "Can't update";
+  if($st->execute($ar)) {
+     $data["status"] = true;
+     $data["message"] = "Dept updated";
+  }
+}
+
+if($cmd == 'Delete') {
+  $sql = "delete from dept where dept_id=?";
+  $ar = array($dept_id);
+  $st = $cn->prepare($sql);
+  $data["message"] = "Can't delete";
+  if($st->execute($ar)) {
+     $data["status"] = true;
+     $data["message"] = "Dept deleted";
+  }
+}
+
+if($cmd == 'Gets') {
+  $sql = "select * from dept";
+  $ar = array();
+  $st = $cn->prepare($sql);
+  $st->execute($ar);
+  $rows = $st->fetchall(PDO::FETCH_ASSOC);
+  if($rows) {
+    $data["status"] = true;
+    $data["data"] = $rows;
+  }
+ 
+}
+
+if($cmd == 'Get') {
+  $sql = "select * from dept where dept_id=?";
+  $ar = array($dept_id);
+  $st = $cn->prepare($sql);
+  $st->execute($ar);
+  $rows = $st->fetch(PDO::FETCH_ASSOC);
+  if($rows) {
+    $data["status"] = true;
+    $data["data"] = $rows;
+  }
+ 
+}
+
+echo json_encode( $data );
+
+dept.service.ts
+==================
+import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { Dept } from "./dept";
+
+const URL: string = "http://localhost:8080/web-api/dept.php";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DeptService {
+
+  constructor(private http: HttpClient) { }
+
+  add(dept: Dept): Observable<any> {
+  	let form = new FormData();
+  	form.append('dept_name', dept.deptName);
+  	form.append('dept_location', dept.deptLocation);
+  	form.append('cmd','Add');
+  	return this.http.post(URL,form);
+  }
+  get(dept: Dept): Observable<any> {
+    let form = new FormData();
+    form.append('dept_id',dept.deptId.toString());
+    form.append('cmd','Get');
+    return this.http.post(URL,form);
+  }
+  update(dept: Dept): Observable<any> {
+  	let form = new FormData();
+  	form.append('dept_id',dept.deptId.toString());
+  	form.append('dept_name', dept.deptName);
+  	form.append('dept_location', dept.deptLocation);
+  	form.append('cmd','Update');
+  	return this.http.post(URL,form);
+  }
+  remove(dept: Dept): Observable<any> {
+  	let form = new FormData();
+  	form.append('dept_id',dept.deptId.toString());
+  	form.append('cmd','Delete');
+  	return this.http.post(URL,form);
+  }
+  all(): Observable<any> {
+    let form = new FormData();
+  	form.append('cmd','Gets');
+  	return this.http.post(URL,form);  	
+  }
+}
+
+dept-list.component
+=====================
+import { Component, OnInit } from '@angular/core';
+import { Observable } from "rxjs";
+
+import { Dept } from "../dept";
+import { DeptService } from "../dept.service";
+
+@Component({
+  selector: 'app-dept-list',
+  templateUrl: './dept-list.component.html',
+  styleUrls: ['./dept-list.component.css']
+})
+export class DeptListComponent implements OnInit {
+
+  constructor(private deptService: DeptService) { 
+    this.getDepts();
+  }
+
+  ngOnInit() {
+  }
+
+depts : Array<Dept> = [];
+getDepts(): void {
+  	this.deptService.all()
+  	         .subscribe( result => {
+  	         	console.log( result );
+  	         	this.depts = [];
+  	         	for(let r of result.data) {
+  	         		this.depts.push( new Dept(
+                       r.dept_id, r.dept_name, r.dept_location
+  	         		 ));
+  	         	}
+ 	         });
+  }
+}
+
+dept-list.component.html
+====
+
+<h4>Depts</h4>
+<a routerLink="/dept/new">New Dept</a>
+<table class="table table-bordered">
+ <tr *ngFor="let d of depts">
+ 	<td>{{ d.deptId }}</td>
+ 	<td>{{ d.deptName }}</td>
+ 	<td>{{ d.deptLocation }}</td>
+ 	<td>
+ 		<a routerLink="/dept/{{d.deptId }}">Edit</a>
+ 	</td>
+ </tr>
+</table>
+
+dept.component.ts
+------------------
+import { Component, OnInit } from '@angular/core';
+
+import { ActivatedRoute } from "@angular/router";
+import { Location } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+import { Dept } from "../dept";
+import { DeptService } from "../dept.service";
+
+@Component({
+  selector: 'app-dept',
+  templateUrl: './dept.component.html',
+  styleUrls: ['./dept.component.css']
+})
+export class DeptComponent implements OnInit {
+
+	//field 
+	dept: Dept = new Dept();
+	message: string = "";
+
+  constructor(private deptService: DeptService,
+    private route: ActivatedRoute,
+    private location: Location) { 
+  }
+
+  ngOnInit() {
+    this.edit();
+  }
+
+  isEdit(): boolean  {
+    return this.dept.deptId == undefined;
+  }
+
+  addDept(): void {
+    this.deptService.add(this.dept)
+        .subscribe( result => {
+               console.log( result );
+               this.message = result.message;
+        });
+  }
+
+  updateDept(): void {
+    this.deptService.update(this.dept)
+        .subscribe( result => {
+               console.log( result );
+               this.message = result.message;
+        });
+  }
+  edit(): void {
+  	this.dept.deptId = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.deptService.get(this.dept).subscribe(x=>{
+      console.log(x.data);
+      this.dept.deptId = x.data.dept_id;
+      this.dept.deptName = x.data.dept_name;
+      this.dept.deptLocation = x.data.dept_location;
+    });  	
+  }
+  delDept(): void {
+  	this.deptService.remove(this.dept)
+  	         .subscribe( result => {
+  	         	console.log( result );
+  	         	this.message = result.message;
+ 	         });
+  }
+
+}
+dept.component.html
+-----
+<h4>Dept</h4>
+
+<br/><input type="text" [(ngModel)]="dept.deptName" placeholder="Name" />
+
+<br/><input type="text" 
+   [(ngModel)]="dept.deptLocation" placeholder="Location" />
+<button (click)="updateDept()" [hidden]="isEdit()">Update</button>
+<button (click)="delDept()" [hidden]="isEdit()">Delete</button>
+<button (click)="addDept()" [hidden]="!isEdit()">Add</button>
+<p>{{ message }}</p>
+
+
+

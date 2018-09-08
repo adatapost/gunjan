@@ -1,0 +1,84 @@
+The "Service" components
+=========================
+Angular application is composed of three major components/classes:
+  1. Modules,
+  2. Components and 
+  3. Services
+
+Services are such classes can be used by one or more modules as well as components. In other words "service" classes are used to share the common functionality within the application. For instance, a business logic written in one component cannot be used into another component but in that case we can define a "Service component" that consists the business logic and is used by one or more components.
+
+As we know, the "service" means long run components and they can be invoked any time in an app. The Angular uses DI Dependency Injection technique to serve the service components. Under the DI technique, your class is marked as "@Injectable" decorator or annotation and the Angular runtime take care to load that class, instantiate the class or release the service as needed.
+
+The HttpClientModule and HttpClient service classes
+-----------------------------------------------------
+These are angular API service classes can be used inside any component or non-component classes to request the RESOURCES asynchroniously (AJAX).
+
+As we also know that we cannot determine how much time will be take in order to perform a AJAX request, so, we will have to use "rxjs" -- Asynchronious JavaScript library along with service components. The Observable<T> class of "rxjs" module observe the changes in a request and perform read/write (input/output) task asynchroniously.
+
+Note: By default, the HttpClient's response data is in JSON form.
+
+
+Step-1 Import HttpClientModule in app.module.js
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from "@angular/forms";
+import  { HttpClientModule } from "@angular/common/http";
+
+import { AppComponent } from './app.component';
+import { DeptComponent } from './dept/dept.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    DeptComponent,
+  ],
+  
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule
+   ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+Step-2  Create "dept" component
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from 'rxjs';
+@Component({
+  selector: 'app-dept',
+  templateUrl: './dept.component.html',
+  styleUrls: ['./dept.component.css']
+})
+export class DeptComponent implements OnInit {
+	depts = [];
+
+  constructor(private http: HttpClient) { 
+  }
+
+  ngOnInit() {
+  }
+
+  showAll(): void {
+  	this.http.get("/assets/data/dept.json")
+  	.subscribe( result=> {
+  		console.log( result );
+  		this.depts = result;
+  	});
+
+  }
+}
+
+Step-3 Create /assets/data/dept.json file
+[{
+	"id": 1,
+	"name": "Accounting"
+},
+{
+	"id": 2,
+	"name": "Human Resource"
+}]

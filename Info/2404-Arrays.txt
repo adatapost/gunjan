@@ -1,0 +1,114 @@
+PHP Arrays
+==========
+
+There are two types of PHP arrays and also we've two syntax to create them.
+
+Types
+------  
+
+   1. Indexed array - An element has a unique index that is positive integer.
+
+   2. Associate or map - An element has a unique name that is a string and must be
+			 valid identifier.
+
+	An array can be either indexed or associate or mixed. 
+
+Syntax
+------
+
+     1. Using array() keyword e.g  $nos = array(10,20,30); // indexed array
+				   $nos = array("ten"=>10,"twenty"=>20,"last"=>30);
+     2. Using [ ] subscript e.g $nos = [10,20,30];
+                                $nos = ["ten"=>10, "twenty"=>20, "thirty"=>30];
+
+Never use simple for loop to traverse the array because PHP array can be associate or mixed hence there is not index at all. 
+
+So, we must have to use foreach loop:
+
+    Syntax-1   foreach($arrayVarName as $key=>$value) { ... }
+    Syntax-2   foreach($arrayVarName as $value) { ... }
+
+     Note: $key and $value are just name of variables will be created automatically and
+           you may use your own name instead of $key or $value.
+
+
+PHP server object debug statements
+-----------------------------------
+We can use one of the following statements to examine/determine/debug the server code and objects.
+
+var_dump( value ) - This statement produces "html/css" output to display object data.
+
+var_export( value ) - This statement produces "plain text" with PHP syntax to display 			the data.
+
+print_r( arrayVar) - This statement is only used with arrays to display content as 			plain text.
+
+Note that these statements helps us to understand the content of object without iterating or reading individual value of the object properties.
+
+Example-1
+<?php
+  $marks = array(10,2,33,44); // [10,2,33,44]
+  $marks1 = ["raj"=>10,"man"=>2","seema"=>33, "meena"=>44]; // array("raj"=>10,....)
+  var_dump( $makrs );
+  var_dump( $makrs1 );
+
+  var_export( $makrs );
+  var_export( $makrs1 );
+
+   print_r( $marks );
+   print_r( $marks1 );
+
+Example: Append an element.  Syntax:   $varName[] = value;
+
+<?php
+ $items  = []; // empty array  
+
+ // Append elements
+ $items[] = 100;
+ $items[] = "Hello";
+ $items[10] = 300;
+
+ echo "<br/>", "Total elements : ", count( $items );
+ $items[] = "500";
+
+ // Replace/Insert
+ $items[6] = 392;
+ $items[] = 4000;
+
+ //map
+ $items["no"] = 10;
+ $items["name"] = "Raj";
+ $items["makrs"] = [44,55,66,77,33];
+
+ $items[] = 55;
+ var_dump($items);
+ print_r($items);
+
+Examine whether a variable is exists Or an array element is exists?
+---------------------------------------------------------
+We have two keywords for this:
+  1. bool isset(var1,var2,array[index], ...)  - It returns true if "all" the variable 						or indexes exist s.
+
+  2. bool empty(varName) - returns true when varName is not exists or contains falsy
+			   value.
+  
+  3. unset(varName or array or array[index]) - Remove the variable/array element
+
+
+<?php
+ $no = 0;
+ if(isset($no))
+    echo $no;
+else
+    echo "Not exists";
+
+ $mno = 0;
+ if(empty($mno))
+    echo "Not exists or empty";
+ else 
+ 	echo $mno;
+
+ unset($no);  // Remove the variable
+ echo $no;
+
+
+

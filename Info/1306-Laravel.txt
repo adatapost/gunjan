@@ -1,0 +1,191 @@
+Laravel Input form and Database
+--------------------------------
+
+Tables : dept(dept_id, dept_name)
+create table emp
+(
+    emp_no int PRIMARY key AUTO_INCREMENT,
+    emp_name varchar(100) not null,
+    emp_date date,
+    dept_id int not null,
+    foreign key(dept_id) REFERENCES dept(dept_id)
+)
+
+1. Create "DeptController.php"
+
+<?php
+
+namespace App\Http\Controllers;
+
+# Add reference of two classes - DB and Request
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+
+
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class DeptController extends BaseController
+{
+    public function index() 
+    {
+    	$depts = DB::select("select * from dept");
+    	return view("dept.index", ['data'=>$depts]);
+    }
+    public function create()
+    {
+        $depts = DB::select("select * from dept");
+    	return view("dept.create",['message'=>'','depts'=>$depts]);
+    }
+    public function store(Request $request) {
+    	$dept_name = $request->input("dept_name");
+    	DB::insert("insert into dept (dept_name) values (?)",[$dept_name]);
+    	return view("dept.create",['message'=>'added']);
+    }
+
+    public function edit($id) {
+    	$dept = DB::select("select * from dept where dept_id=?",[$id]);
+        
+    	return view("dept.edit",['dept'=>$dept[0], 'message'=>'']);
+    }
+    public function update(Request $request) {
+    	$dept_id = $request->input("dept_id");
+    	$dept_name = $request->input("dept_name");
+    	DB::insert("update dept set dept_name=? where dept_id=?",[$dept_name, $dept_id]);
+
+    	return redirect("/dept/edit/$dept_id");
+    }
+
+    public function display($id) {
+    	$dept = DB::select("select * from dept where dept_id=?",[$id]);
+    	return view("dept.display",['dept'=>$dept[0], 'message'=>'']);
+    }
+    public function remove(Request $request) {
+    	$dept_id = $request->input("dept_id");
+    	 
+    	DB::insert("delete  from dept  where dept_id=?",[$dept_id]);
+
+    	return redirect("/dept/");
+    }
+}
+
+
+dept/index.blade.php
+--------------------
+@extends("layout1")
+
+@section("content")
+<h2>Department List</h2>
+<h5><a href="/dept/create">New Department</a></h5>
+<table class="table table-bordered">
+	@foreach($data as $dept)
+	 <tr>
+	 	<td>{{ $dept->dept_id}}</td>
+	 	<td>{{ $dept->dept_name}}</td>
+	 	<td>
+	 		 <a href="/dept/edit/{{ $dept->dept_id }}">Edit</a>
+	 		 <a href="/dept/display/{{ $dept->dept_id }}">Delete</a>
+	 	</td>
+	 </tr>
+	@endforeach
+</table>
+@endsection
+
+@section("title")
+<title>Manage Departments</title>
+@endsection
+
+  </body>
+</html>
+
+/dept/create.blade.php
+--------------------
+@extends("layout1")
+
+@section("title")
+<title>Create Department</title>
+@endsection
+
+@section("content")
+<h2>New Department</h2>
+<h5><a href="/dept/">Back</a></h5>
+
+<form method="post" action="/dept/store">
+	@csrf
+ <input type="text" name="dept_name" placeholder="Department Name">
+ <button>Submit</button>
+</form>
+<p>{{ $message }}</p>
+@endsection
+
+  </body>
+</html>
+
+/dept/edit.blade.php
+---------------------
+@extends("layout1")
+
+@section("title")
+<title>Create Department</title>
+@endsection
+ 
+@section("content")
+<h2>New Department</h2>
+<h5><a href="/dept/">Back</a></h5>
+
+<form method="post" action="/dept/update">
+	@csrf
+ <input type="hidden" name="dept_id" value="{{ $dept->dept_id }}">	
+ <input type="text" name="dept_name" value="{{ $dept->dept_name }}" placeholder="Department Name">
+ <button>Submit</button>
+</form>
+<p>{{ $message }}</p>
+@endsection
+
+  </body>
+</html>
+
+/dept/display.blade.php
+----------------------
+
+@extends("layout1")
+
+@section("title")
+<title>Remove Department</title>
+@endsection
+ 
+@section("content")
+<h2>Remove Department</h2>
+<h5><a href="/dept/">Back</a></h5>
+
+<form method="post" action="/dept/remove">
+	@csrf
+ <input type="hidden" name="dept_id" value="{{ $dept->dept_id }}">	
+ <h4>
+ 	Are you sure to delete  this department {{ $dept->dept_name }}
+ </h4>
+
+ <button>Submit</button>
+</form>
+@endsection
+
+  </body>
+</html>
+ 
+
+web.php (Router config)
+------------------------
+
+
+Route::get("/dept","DeptController@index");
+Route::get("/dept/create","DeptController@create");
+Route::post("/dept/store","DeptController@store");
+
+Route::get("/dept/edit/{id}","DeptController@edit");
+Route::post("/dept/update","DeptController@update");
+
+Route::get("/dept/display/{id}","DeptController@display");
+Route::post("/dept/remove","DeptController@remove");
+

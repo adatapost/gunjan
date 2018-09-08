@@ -1,0 +1,121 @@
+Manage the request & response state -- using Session & Cookie
+==============================================================
+
+The term "state" means "data". As we know that the HTTP is stateless protocol where each request consider as new or fresh request because the client or server program does not store the request/response specific data either at client or server machine.
+
+Session
+------- 
+
+It is server-side mechanism to persist the data into server memory for each connected client. In fact, PHP engine create a session object when a client's first request is received and that session object remains into server memory till the client is connected. The session object is than exposed/accessed by the $_SESSION superglobal array.
+
+Cookie
+------
+
+It is client -- web-browser's mechanism to save the data into web-browser's environment. The web-browser saves these data in the form of "cookie" where each cookie consists the key/name, value of string type, expire policy date & time, path & domain name. It is important to note that the all cookies will be travel to the server on each request for appropriate domain & path.
+In server code, we can use $_COOKIE superglobal array to read / receive the cookies.
+
+Cookie saves data as "plain-text", so do not save important data like password, pin etc in it. General web-sites saves user's meta-data, last visited page, last login status and so on. However, you may use encryption algorithm to encrypt the cookie data for your own purpose.
+
+Application of state management mechanism
+------------------------------------------
+We may use state management mechanisms for:
+  1. To persists/saves data between requests & responses (In other words, we can
+     share some sort of data)
+  2. To design the authentication & authorization system (Login and role-based      authorization). To restrict the some of the resources to some users and allow some
+     users on some resources.
+
+Example: Share data across the requests-responses
+
+create.php
+----------
+<?php
+ session_start();
+ //Add key-value pairs of data
+ $_SESSION["no"] = 10;
+ $_SESSION["name"] = "Mr.A";
+ ?>
+ <a href="create.php">Create</a>
+ <a href="delete.php">Delete</a>
+ <a href="show.php">Show</a>
+
+show.php
+--------
+<?php
+ session_start();
+ 
+ if(isset($_SESSION["no"], $_SESSION["name"])) {
+   echo $_SESSION["no"] . "   " . $_SESSION["name"]	;
+ } else {
+ 	echo "No data";
+ }
+ 
+ ?>
+ <a href="create.php">Create</a>
+ <a href="delete.php">Delete</a>
+ <a href="show.php">Show</a>
+
+delete.php
+-----------
+<?php
+ session_start();
+ 
+  unset($_SESSION["no"]);
+  unset($_SESSION["name"]);
+ 
+ ?>
+ <a href="create.php">Create</a>
+ <a href="delete.php">Delete</a>
+ <a href="show.php">Show</a>
+
+The "session_start()" function tells the PHP engine that the $_SESSION is available in current page. If session_start() is not called then you will not use the $_SESSION array.
+
+Working with cookie
+--------------------
+To create a cookie via php code, call the secookie():
+
+  setcookie("name","value", int-time-in-millis-expire-date-time, "/path")
+
+The third parameter is cookie expire date time and if it is 0 (Zero) then the web-browser will erase cookies when it is closed. If it is future date (max value is 1 year from the current date) then web-browser save cookies into disk file and persists them till expire date & time is not ellapsed. If it is negative or past date then web-browser will delete them.
+
+create.php     We will use time() function or 0 value to control the expire policy
+-----------
+<?php 
+  setcookie("no","10", time() + (1000 * 60 * 60 * 24 * 7) ,"/");
+  setcookie("name","Mr. A", time() + (1000 * 60 * 60 * 24 * 7) ,"/");
+?>
+ <a href="create.php">Create</a>
+ <a href="delete.php">Delete</a>
+ <a href="show.php">Show</a>
+
+show.php
+--------
+<?php
+  if(isset($_COOKIE["no"], $_COOKIE["name"])) {
+     echo $_COOKIE["no"] .  '  ' . $_COOKIE["name"];
+  }
+ ?>
+ <a href="create.php">Create</a>
+ <a href="delete.php">Delete</a>
+ <a href="show.php">Show</a>
+
+delete.php
+----------
+<?php
+  setcookie("no","", time() - 1 ,"/");
+  setcookie("name","", time() - 1  ,"/");
+?>
+ <a href="create.php">Create</a>
+ <a href="delete.php">Delete</a>
+ <a href="show.php">Show</a>
+
+Example: Write a class namely "StateWrapper" and add static functions to set,get, and remove session as well as cookie data.
+For example,
+
+class StateWrapper {
+  public static function set($name,$value) {
+    $_SESSION[$name] = $value;
+  }
+  .....
+}
+
+  

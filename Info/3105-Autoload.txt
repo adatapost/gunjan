@@ -1,0 +1,35 @@
+Autoloading of classes
+=======================
+
+This is the unique feature of PHP which helps the developer to resolve the "class" name and based upon the class name we can include the specified class files in our program file without referencing explicitly.
+
+Normally, every class name you type is passed to "spl_autoload_register" -- a callback function, and if the class name and the file in which the class definition is same then we can take advantage of this feature to load/include the specified class file.
+
+Note that this method will be called by PHP engine very early -- before instantiate it - so we can later create an object without adding "hard reference" to the program file.
+
+Example: Assume that we've "Lib" folder at root and contains class files  - Country.php, State.php etc
+
+Example.php
+<?php
+ //Define your function and pass it to the spl_autoload_register
+ spl_autoload_register( function($name)	 {
+    require_once "Lib/$name.php";
+ } );
+
+$c = new Country();  // Before instantiation of the classses, code in callback will be
+$s = new State();    // executed already.
+
+Example: We can also define a special "autoload.php" (you can choose your name) to load classes in different-different pages.
+
+autoload.php
+---------------
+spl_autoload_register( function($className) {
+   require_once "Lib/$className.php";
+});
+
+country-page.php
+---------
+<?php 
+  include "autoload.php"
+  $c = new Country();
+  ....

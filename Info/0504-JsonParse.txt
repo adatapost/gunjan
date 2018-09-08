@@ -1,0 +1,62 @@
+JSON object and its methods
+============================
+
+1. JSON.parse( string ) - This method returns a JSON object if string contains valid
+			  JSON string.
+
+
+Ex-1  
+
+let str = "20";
+let obj = JSON.parse(str);
+console.log( obj );      
+
+Ex-2
+
+let str = "[10,20,304,50]";  // This will be treated as array
+let arr = JSON.parse(str);
+console.log( arr );
+for(let i in arr) {
+  console.log( arr[i]);
+}
+
+Ex-3  - String char double quot " must be escape in a JSON string.
+
+let str = "[\"Raj\", \"Man\", 40, true]";   
+let obj = JSON.parse( str );
+console.log( obj );
+
+Ex-4 - JSON object 
+
+let str = "{\"no\": 10, \"name\": \"Reena\", \"status\": true }";
+let std = JSON.parse( str );
+
+console.log( std.no, std.name, std.status );
+console.log( str);
+
+2. JSON.stringfy( jsonObject ) - To convert JSON object to string
+
+Ex-1   (Prompt at Developer tool)
+
+>JSON.stringfy( 10 )
+"10"
+>JSON.stringfy( [11,22,33,44] )
+"[11,...]"
+
+>JSON.stringfy( ["Reena",'Meena',300,200,false] );
+
+>emp = { id: 10, name: "Reena", status: true }
+>JSON.stringfy( emp )
+"{\"id\": 10.... }"
+
+
+Note that the JSON format is most widely used data interchange format and the number of application frameworks including .Net framework, NodeJS, Angular IO, Android, and many more (almost all) uses JSON format to store data and configuration documents.
+
+
+
+
+
+
+
+
+

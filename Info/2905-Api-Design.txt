@@ -1,0 +1,63 @@
+Design the server components -- API Design and best practice
+=============================================================
+
+Always use the "PHP classes" to enclose your data & code.
+
+Firstly, till this date, we've created a functions.php -- a file that contains database model code. But, now and onward, we will enclose these functions into the PHP class.
+
+Example: Assume that we've "/lib" folder in a web app
+
+1. /lib/Db.php
+<?php
+ class Db {
+    public static function get_cn() {
+      return new PDO("mysql:host=localhost;dbname=your_db","user","pass");
+    }
+    public static function execute($sql, $array = null) { }
+    public static function row($sql, $array = null) {
+      .....
+      return $st->fetch(PDO::FETCH_OBJ);  // Use FETCH_OBJ or FETCH_ASSOC
+    }
+    public static function rows($sql, $array = null) { 
+        ...
+      return $st->fetchall(PDO::FETCH_OBJ);  // Use FETCH_OBJ or FETCH_ASSOC
+    }
+}
+2. /lib/Login.php ( Design the "Login" class as per the table structure )
+  login(user_id (auto), user_email, user_pass, user_type, date_created)
+<?php
+ class Login {
+   //define the fields
+   public $user_id, $user_email, $user_pass, $user_type, $date_created;
+   //constructor
+   public function __construct($user_id, $user_email, $user_pass, $user_type, $date_created) {
+     $this->user_id = $user_id;
+     ....
+   }
+  //add actions
+  public static function create_user(Login $login) { /* code to insert */  }
+  public static function change_password(Login $login,$new_pass) {  }
+  public static function delete_user($user_id) {  }
+  public static function recover_password(Login $login) {  }
+  public static function get($user_id) {   // by user_id or user_email
+     $sql = "select * from login where user_id=? or user_email=?";
+     $array( 0+$user_id, $user_id);
+      ....
+  }
+  public static function all() { /* all users */ }
+}
+3. /Lib/Country.php  == Apart from the Login, all other components has common set of
+			methods
+<?php
+class Country {
+  //fields
+  ...
+  //constructors
+  ...
+ //actions
+ public static function add($obj)  {  }
+ public static function update($obj)  {  }
+ public static function del($obj)  {  }
+ public static function get($id)  {  } 
+ public static function all()  {  } 
+}

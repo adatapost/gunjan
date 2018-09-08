@@ -1,0 +1,822 @@
+CSS Properties
+===============
+
+1. margin: value
+   margin: top right bottom left;
+   margin: auto
+
+   Property "margin" is the shorthand of "margin-left, margin-right, margin-top, and
+   margin-bottom".
+
+   margin: value;  will set margin for all four edges
+
+   margin: auto;   The browser will decide the value of margin when height & width
+		   properties are set.
+2. height: value;  
+3. width: value;   Absolute height & width
+4. min-height: value;
+5. min-width: value;  Define the preferred minimum height and width.
+
+   In absolute or fixed height & width, overflow will be displyed when content exceed
+   the size.
+
+   In preferred min width/height, height & width will be increased when content exceed
+   the specified height & width.
+
+
+   For "value", we've different measurement units in CSS and they falls into two major groups:
+
+  1. Fixed measurement and
+  2. Relative measurement
+
+ Fixed measurement units are -  px (pixel), in (inch), cm (centimeter)
+ Relative measurement units are - em (emphesis), % (percent)
+
+Example - Reset the margin (don't use unit name with 0 value)
+
+html, body, h1 {
+  margin : 0;
+}
+
+Q - h1 { margin: 0 auto; }  -- Will set top margin "0" and rest will be calculated
+				by browser if width/height is specified (otherwise
+				it will be 0)
+
+Example: Center the "component" - We need to set width and margin: auto; (left and right auto)
+
+.center-component {
+  margin: auto;
+}
+.w200 { width: 200px; }
+.w300px { width: 300px; }
+.w95p { width: 95%; }
+.border { border: 1px solid #aaa;}
+
+<div class="border center-component w95p">
+  <h1 class="w200 center-component">Welcome Guest!</h1>
+</div>
+
+
+Example: Overflow
+
+.test-overflow {
+   width: 100px;
+   height: 100px;
+   border: 1px solid #aaa;
+}
+
+<div class="test-overflow">
+  Add some lines here
+  so the content exceed the
+  100px by 100px size
+</div>
+
+Now, to control the "overflow" we've overflow CSS proeprty
+
+6. overflow: hidden | auto | scroll | none;  (default is none) 
+
+             hidden - it hides the overflow
+             scroll - adds scrollbars
+             auto   - adds scrollbars if needed
+
+Edit:
+.test-overflow {
+   overflow: auto;
+   ....
+   ....
+}
+
+7. padding: value;
+   padding: top right bottom left; 
+   padding is a short hand property of padding-left, padding-top, padding-bottom and
+   padding-right
+
+   Padding property add some "space or void" at inside the border and outside the    content (see the box model in developer tool)
+
+   In margin, component's position will be changed whereas padding add some "void"    around it.
+
+8. border: size style color;
+   border-left, border-right, border-bottom and border-top are separate for each edge
+
+    size - you may specify absolute or relative units e.g 3px or 1% etc
+    style - value can be solid, double, ridge, outline, dashed, dotted etc
+
+9.  outline: size style color; This property paint the area around the "border". The 		outline's size cannot exceed the margin otherwise outline's paint will
+		overpainted on other elements.
+   
+Example:
+
+.test {
+    border: 30px solid green;
+    margin: 20px 2px 10px 50px; /* 20px; */
+    padding: 20px;
+    width: 200px;
+    outline: 20px solid blue;
+}
+</style>
+ 
+<div class="test">
+  This is the content
+</div>	    
+    
+10. border-radius: value;  Radius for all four angles
+    border-radius: leftTop rightTop rightBottom bottomLeft;
+
+Example:
+
+.test {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  width: 200px;
+}
+<div class="test">Sample</div>
+
+11. box-shadow: xPos yPos blur #color - To add shadows around the object
+
+    Don't add "outline" while setting up the box-shadow.
+
+.test {
+  border: 1px solid #aaa;
+  width: 200px;
+  box-shadow: 3px 3px 5px #f00;
+}
+
+<div class="test">Block with shadow</div>
+
+12. text-shadow: xPos yPos blur color - Add shadows around the text
+
+.white-title {
+  font-size: 5em;
+  color: white;
+  text-shadow: 0 0 5em #aaa;
+}
+<h1 class="white-title">Hello</h1>
+
+
+13. display property - To change the display behavior of the elements.
+
+    display: none | inline | block | inline-block | flex | grid | table;
+
+    display: none;  will hide the element.
+
+ Example: Hide/show the content
+
+<style>
+   #info > #detail {
+   	  display: none;
+   }
+   #info:hover > #detail {
+   	  display: block;
+   }
+</style>
+ <div id="info">
+ 	Test
+ 	<div id="detail">
+ 		This is the detail of "Test"
+ 	</div>
+ </div>
+
+Example: Make a block element to inline
+
+<style>
+   .make-inline { display: inline; }
+   .text-red { color: red; }
+   .text-green { color: green; }
+</style>
+<h1 class="make-inline text-red">H</h1><h1 class="make-inline">ell</h1><h1 class="make-inline text-green">o</h1>
+
+<h1>Th<span class="text-red">e</span> r<span class="text-red">e</span>d sun</h1>
+ 
+ 
+Example: Define a CSS menu (Display menu items when mouse is hover)
+
+<style>
+  /* These selectors set the optional behaviors */
+  ul {
+  	border: 1px solid red;
+  	list-style: none;
+  	padding: 10px;
+  }
+   ul li {
+   	border: 1px solid #aaa;
+    padding: 10px;	
+   }
+
+  /* Following selector define Hide/show sub-menu items */
+   #menu > li {
+      display: inline-block;
+   }
+   .level-1 > ul {
+   	 display: none;
+   	 position: absolute;
+   }
+   .level-1:hover > ul {
+   	display: block;
+   }
+  </style>
+
+  <ul id="menu">
+  	<li>Item1</li>
+  	<li class="level-1">Item2
+      <ul>
+        <li>First1</li>
+        <li>First2</li>
+        <li>First3</li>
+        <li>First4</li>
+      </ul>
+  	</li>
+  	<li>Item3</li>
+  	<li>Item4</li>
+  	<li class="level-1">Item5
+     <ul>
+        <li>Last1</li>
+        <li>Lat2</li>
+        <li>Last3</li>
+        <li>LAst4</li>
+      </ul>
+  </li>
+</ul>
+
+
+The "flex" display   To change flex (flexible) layout so we can add one or more
+-------------------  any elements side by side.
+
+Wire Frame:
+
+|-------------------------|
+| Image  | WebSite title  |
+|-------------------------|
+| Menu                    |
+|-------------------------|
+| Left     |  Remaining   |
+|-------------------------|
+
+Example:
+
+<style>
+ div {
+  border: 1px solid #aaa;
+ }
+ .flex  {
+  display: flex;
+ }
+ .min-width-200 { min-width: 200px; }
+</style>
+<body>
+   <div class="flex">
+      <div>Image</div>
+      <div>WebSite Title</div>
+   </div>
+   <div>
+     Menu
+   </div>
+   <div class="flex">
+    <div class="min-width-200">Section1- short</div>
+    <div>Section2- long</div>
+   </div>
+</body>
+
+ 
+The "grid" display : This display property allow us to divide the screen 			(horizontallly) into 12 equal (same width) columns
+------------------   and also we have control to divide the vertical area of
+			screen.
+
+Example: Use following markup for different value of columns and rows templates
+
+<div class="container">
+  <div>A1</div>  
+  <div>A2</div>  
+  ....
+  <div>A20</div>
+</div>
+
+Now, 1st syntax of selector "container"
+
+div { border: 1px solid #aaa;}  
+.container {
+  display: grid;
+  grid-template-columns: 50px 100px 200px 300px auto;
+}
+
+2nd Syntax - Use nfr (n fractions)  unit 
+.container {
+   display: grid;
+   grid-template-columns: 1fr 1fr; 
+}
+
+   grid-template-columns: 1fr 1fr;  means equal width two columns
+   grid-template-columns: 1fr 1fr 1fr;  means equal width three columns
+   grid-template-columns: 1fr 4fr;  means second column's width is 4 times the 1st one
+
+3rd Syntax - Use grid-template-rows: size1, size2, ...; To set height of the row
+
+.container {
+  display: grid;
+  grid-template-columns: 150px 1fr;  /* 1st for logo and next for title */
+  grid-template-rows: 150px auto;
+}
+
+4th syntax - repeat(terms, size) - To repeat the value of columns or rows
+
+     grid-template-columns: repeat(4,1fr);
+     grid-template-rows: 100px repeat(4,1fr) 100px;
+
+5th syntax - grid-gap property and merge of rows & columns via grid-column and grid-row
+		properties
+ .container {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: auto;
+    grid-gap: 10px;
+ }
+ .merge-4 {
+    grid-column: 1 / 5; /* 1 stands for first edge, 2 for second column's edge,.. */
+ }
+ .merge-first-2 {
+    grid-column: 1 / 3;
+ }
+.merge-last-2 {
+    grid-column: 3 / 5;
+ }
+ .merge-row {
+  grid-row: 3 / 8;
+ }
+
+    <div class="container">
+      <div class="merge-4">A1</div>
+      <div class="merge-first-2">A2</div>
+      <div class="merge-last-2">A3</div>
+      <div class="merge-row">A4</div>
+      <div>A5</div>
+      <div>A6</div>
+      ........
+    
+Example:
+
+<style>
+ div {
+  border: 1px solid #aaa;
+ }
+ .container {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows:auto;
+ }
+ .merge-2-col {
+   grid-column: 1 / 3;
+ }
+  .merge-2-row {
+   grid-row: 2 / 4;
+ }
+</style>
+<body>
+    <div class="container">
+       <div class="merge-2-col">Title</div>
+       <div class="merge-2-row">Left</div>
+       <div>Right</div>
+       <div>Right</div>
+    </div>
+</body>
+
+
+14. float: left | right   - Float the element at either left or right of the edge
+15. clear: left | right | both; - Remove the float effect
+
+Note: You can use the "float" property to layout/structure your page
+
+  Note that the float and clear property must be used in order to add or remove the   float effect.
+
+Example:
+
+<style>
+   div { border: 1px solid #aaa; }
+  .float-left { float: left; }
+  .float-right { float: right; }
+  .clear { clear: both; }
+</style>
+
+<div class="float-left">A</div>
+<div class="float-left">B</div>
+<div class="float-right">C</div>
+<div class="clear">D</div>
+<div class="float-left">E</div>
+<div class="float-left">
+   <div class="clear"></div>
+   <div>M</div>
+   <div>N</div>
+</div>
+
+
+16. color: color-hex-value | named-color | rgb() | argb()  - To set text color
+  
+    Hexadecimal value must be in six hex digit length:
+
+		first two for red	0xFF0000
+		next two for green	0x00FF00
+		last two for blue	0x0000FF
+
+	In case, if three color pairs have equal or same hex char (repeated) then
+	you may remove the repeated hex and so color value will use three hex char.
+
+	e.g	0xFF00FF	is equals to	0xF0F
+		0xaabbcc			0xabc
+	rgb() is CSS function which takes three integer value in 0 to 255 range.
+
+		rgb(0-255 for red, 0-255 for green, 0-255 for blue)
+
+       rgba() takes four parameters. Last one is alpha (opacity or alpha transparency)
+	whose value must be in between 0 to 1.
+
+
+Example:
+
+.color-test {
+   color: #ff0000;  /* red */
+}
+
+<h1 class="color-test">Test</h1>
+
+Change the following values:
+
+color: #ffff00;   /* yellow */
+color: #ff0070;   /* pink */
+color: #dd3355;   or #d35
+
+color: rgb(0,0,255);  /* blue */
+color: rgb(0,80,255);  /*light blue */
+
+color: rgba(255,40,70, 0.1);   /* Transparancy  level 10%  or 0.1 */
+ 
+
+17. background-color : color-value;  You can paint the background of an object as per
+			previously defined color value.
+
+.bg-green {
+  background-color: #0f0;
+}
+.bg-blue {
+  background-color: rgb(0,0,255);
+}
+
+<div class="bg-green">Green</div>
+<div class="bg-blue">Blue</div>
+
+18. background-image: url(url);
+19. background-position: position;
+20. background-size: size-value;
+21. background-repeat: repeat-value;
+
+    background-image paint the background with specified "image" or "texture".
+    
+22. background: color image repeat-value size, .... , ...; This is short hand property  
+		of background-* proeprties. You can use "background" proeprty to
+		set image, size, repeated value and background color 
+
+NOTE: Images used in your app using background property should be exists in your current (project) directory and accessed via relative path (don't use fixed path. e.g.
+	c:\sample\hello.jpg is invalid fixed path) .
+
+Example:
+
+/app/
+    |
+    |---/css/ 
+           style.css
+    |
+    |--/images/
+            image files
+    |
+    | index.php and many more pages
+
+
+style.css
+----------
+body {
+  background: url(../images/small-star.png);
+}
+
+Example:
+
+ background: url(url) no-repeat;   Will paint the left top area of the element's
+					viewport (region).
+ background: url(url) no-repeat center center;  Center of the element's viewport
+ 
+Paint images at four angle:
+
+ background: url(...) no-repeat left top,
+             url(...) no-repeat right top,
+             url(...) no-repeat right bottom,
+             url(...) no-repeat left bottom;
+
+Paint images at four edges:
+
+   background: url(...) no-repeat left center,
+             url(...) no-repeat top center,
+             url(...) no-repeat right center,
+             url(...) no-repeat center bottom;
+
+Example: Define the image view port by setting the fixed height & width and use position value to paint that particular area.
+
+.people {
+  background: url(people.png) no-repeat 200px 200px;
+  width: 300px;
+  height: 300px;
+}
+.child {
+  background: url(people.png) no-repeat -200px -200px;   /* left = -200x top= -200xp */
+  width: 300px;
+  height: 300px;
+}
+
+<div class="child"></div>
+<div class="people"></div>
+
+Note: You can also use background-position proeprty to set fixed value for left and top
+edge of the image area.
+        
+Example: Write selectors to display a smaller fragment of an image file that contains different sets of icons.
+
+.icon {
+	height: 50px;
+	width: 50px;
+}
+.circle {
+	background: url(../images/icons.png) no-repeat 0 0;
+}
+.circle:hover {
+	background: url(../images/icons.png) no-repeat 0 -50px;
+}
+
+.rect {
+	background: url(../images/icons.png) no-repeat -50px 0;
+}
+.rect:hover {
+	background: url(../images/icons.png) no-repeat -50px -50px;
+}
+
+.triangle {
+	background: url(../images/icons.png) no-repeat -100px 0;
+}
+.triangle:hover {
+	background: url(../images/icons.png) no-repeat -100px -50px;
+}
+
+<div class="icon circle"></div> 
+  <div class="icon rect"></div>  
+  <div class="icon triangle"></div>  
+
+gradient colors via linear-gradient and radical-gradient functions
+--------------------------------------------------------------------
+
+background-color: linear-gradient(n-deg, start_color, stop_color)
+background-color: radial-gradient(circle|elipse value | at circle|eclipse, start-color,
+								stop-color)
+
+Example:
+
+.box {
+	width: 400px;
+	height: 400px;
+	background: radial-gradient(circle 100px, #fff,#f00);
+}
+.box1 {
+	width: 400px;
+	height: 400px;
+	background: linear-gradient(30deg, #fff,#f00);
+}
+<div class="box"></div>
+<div class="box1"></div>
+
+Example: Calculate the height or width using calc() function. In following example, we want to calculate the remaining height after adding header & footer areas.
+
+html, body, div {
+	margin: 0;
+}
+html, body {
+	 height: 100%;
+     min-height: 100%;	 
+}
+.container {
+	height: 100%;
+	min-height: 100%;
+}
+header {
+	height: 100px;
+	background: #d43;
+}
+footer {
+	height: 100px;
+	background: #d43;
+}
+section {
+	min-height: calc(100% - 200px);
+}
+
+<body>
+  <div class="container">
+  	<header>Header</header>
+  	<section>Section</section>
+  	<footer>Footer</footer>
+  </div>
+</body>
+
+
+23. position: static relative fixed absolute; To set element position.
+
+    Default position value is "static" for all html element. With static position, we
+    can't set left, top, right, bottom (position parameters).
+
+    With relative, fixed and absolute position, we can set all four position 	parameters.
+
+Example-1
+
+.show-heading {
+  position: relative;
+  left: 40px;
+  top: 30px;
+}
+
+<h1 class="show-heading">Relative Position Test</h1>
+<p>This is another element with static position</p>
+
+Example-2
+
+.at-left-400 {
+   position: relative;
+   left: 400px;
+}
+.at-top-300 {
+  top: 300px;
+}
+.rel-position { position: relative; }
+
+<h2 class="at-left-400">At 400px left</h2>
+<h3 class="rel-position">Also relative to previous one</h3>
+<h5 class="rel-position at-top-300">Relative to previou at top 300px</h5>
+
+
+Example-3  absolute position will be recorded when an element is rendered very first time on the web-browser and the position will be absolute (no changes in left, top, right, bottom) with respect of the body (document body).
+
+Whereas "fixed" position, left,top, right and bottom value will be constant with respect of the document window's co-ordinates.
+
+Note: Add two or more screenfull information/data into page to test these positions:
+
+.pos-absolute {
+  position: absolute;
+}
+.pos-fixed {
+  position: fixed;
+}
+.at-l20-t20 {
+  left: 20px;
+  top: 20px;
+}
+.at-b0-l0 {
+  bottom: 0px; left: 0px;
+}
+.at-b0-r0 { bottom: 0px; right: 0px; }
+.box { border: 1px solid #aaa; width: 100px; height: 100px; }
+
+....
+....
+    <div class="box pos-fixed at-b0-l0" >Box</div>
+    <div class="box pos-fixed at-b0-r0" >Box</div>
+    <div class="box pos-fixed at-l20-t20" >Box</div>
+
+
+24. font properties - To set font-family, font-size, font-style, font-weight value
+
+    font: font-family font-size; It is a short hand property.
+
+    font-family: font1, font2, font3,...., "font-family-name";
+
+	The font-family is a family of font, fonts under a specific font-family have
+        common rendering display and following are commonly used font-families:
+	
+           1. sans-serif
+	   2. serif
+           3. cursive
+	   4. monospace
+
+	Note that we cannot (as web-developers) expect that the users or clients have
+        the exact font in their machine/mobile/tablets as they appear at website 	(webapp).
+
+	So instead of setting exact font, we must have to set matching font order and
+        finally a name of family of the font.
+
+	Syntax:
+
+	font-family: 'first-font 1','second font',ThirdFont, family-name;
+
+		Enclose font-name in single or double quotes when font name contains
+		special characters or non English characters.
+
+		The web-browser, first check the "first-font 1" and if it is not exists
+		in the system (OS), then check the match for second and so on and if
+		all of the given font are not exists then it set the "family-name"
+		to tell the browser to select any font that belongs to the specified 		"family".
+
+Example-1 Test the font families
+
+<style>
+     h1 {
+        font-family: serif;
+     }
+     h2 {
+      font-family: sans-serif;
+     }
+     h3 {
+       font-family: cursive;
+     }
+     h4 {
+      font-family: monospace;
+     }
+     h5 {
+       font-family: fantasy;
+     }
+    h1, h2, h3, h4, h5 {
+       font-size: 5em;
+    }
+</style>
+   <h1>The Red Sun - Serif</h1>
+   <h2>The Red Sun - Sans-serif</h2>
+   <h3>The Red Sun - Cursive</h3>
+   <h4>The Red Sun - Monospace</h4>
+   <h5>The Red Sun - Fantasy</h5>
+
+Example-2 Setting up font-family along with selected fonts
+
+body  {
+  font-family: Arial, 'Arial Round', Georgia, sans-serif;
+}
+
+Example-3 Set the font-size.
+
+ 	Never ever use "fixed" meansurement units like px, pt, cm or in to set the
+	font-size. 
+
+	Always use relative measurement units like , dp (device pixel), % (percent)
+	and em (emphesis or weightage).
+
+  	the "em" is more suitable because we can use the smallest fraction of decimal
+	point to set the text size.
+
+	font-family and font-size are inherited property. It means changes on root
+	element's font-family and font-size will automatically inherited by the 	children.
+
+body {
+  font-size: 1.5em;  /* equivalent 150% of orginal font size */
+}
+h1 {
+  font-size: 4em;  
+}
+<p>Para1</p>
+<h1>Header</h1>
+
+Example-4 Understand the inheritance of font-size property
+
+    body {
+         font-family: serif;
+         font-size: 1.7em;
+         line-height: 1.7em;  /* space between two lines */
+     }
+     h1 {
+      font-size: 3em; /* replace the 2em which is defaule size of h1 */ 
+     }
+     h3 {
+      font-size: 2em; /* 2em + 1.7em */
+     }
+    
+    </style>
+    <h1>The Particle Science</h1>
+    <h3>Introduction to Physics</h3>
+    <p>The world came to me and keep his ..10 lines  text....</p>
+
+25. line-height: relative-unit; To add spacing between two lines of text
+
+    line-height: 150%;  is eqivalent to line-height: 1.5em;
+
+26. font-style: none | italic | oblique; To italisize the text
+27. font-weight: 100 to 900 - To add weight on font (darken the text)
+
+Example: 
+p {
+  font-style: italic; /* use oblique if italic font is not exists in system */
+  font-weight: 500;
+}
+
+28. font-variant: none | small-caps;  To add small capital letter effect to the text
+
+h1 {
+  font-size: 3em;
+  font-variant: small-caps;
+}
+
+<h1>The Appleman Pvt Ltd</h1>
+
+29. text-transform: none | uppercase | lowercase | capitalize;
+
+	To change the case   of text.
+
+30 text-decoration: underline | overline | line-thru | none; To add line at top, bottom
+			or through of the text.
+

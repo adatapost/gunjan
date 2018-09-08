@@ -1,0 +1,35 @@
+create table login
+(
+   user_id int primary key auto_increment,
+   user_email varchar(255) not null unique,
+   user_pass varchar(255) not null,
+   user_role varchar(10) not null,
+   date_created date
+);
+
+create table user_profile
+(
+  user_id int primary key,
+  full_name varchar(255) not null,
+  city varchar(40),
+  photo varchar(100),
+  foreign key (user_id) references login(user_id)
+);
+
+select 
+  login.*,
+  user_profile.* 
+  from login 
+  join user_profile on login.user_id = user_profile.user_id;
+
+
+select 
+  login.user_id,
+  login.user_email,
+  login.user_role,
+  user_profile.full_name,
+  user_profile.city,
+  user_profile.photo
+  
+  from login 
+  join user_profile on login.user_id = user_profile.user_id

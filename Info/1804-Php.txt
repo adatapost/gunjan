@@ -1,0 +1,363 @@
+PHP - A server programming environment
+=======================================
+
+PHP, MySql and Apache Web Server are three software bundled together are also know as "WAMP (for win OS)" or "LAMP (for linux)".  
+
+ > PHP is a programming language and current version is 7.x
+ > PHP language is a dynamic (same as JavaScript) language and also interpreter based.
+ > PHP Engine is software environment that provide necessary software to translate PHP
+   instructions into native code, provide core APIs and perform system level routines.
+
+ > PHP is case-insensitive language. Only the variable names are case-sensitive in
+   PHP, otherwise, everything is case-insensitive. (JavaScript is case sensitive    
+   Language.)	
+ > PHP code file must have .php extension.
+ > PHP code file uses two PHP tags to embed the PHP code:
+	1. <?php
+              //php code here
+           ?>
+
+           If your program file contains PHP code only then don't add ?> closing PHP
+	   tag. 
+
+	   Add ?> closing tag when your PHP code file contains mixed content - HTML,
+  	   CSS, JavaScript along with PHP code.
+
+	2. <?=expression?> This single expression tag writes "data/value" into response
+	   buffer.
+ > PHP variable name must begins with $ dollar sign. It is the syntax to create a  
+   variable.
+
+	e.g
+	<?php
+	  $no = 10;
+	  $name = "Reena";
+ > PHP dynamic language hence there is no named datatypes as exists in other languages
+	like int, float , double etc.
+
+	But, there are implicit or internal data type which are expressed via literals
+	and following are commonly used literals:
+
+	1. for number (integer or real)	- numberic value e.g 10, 10.20, 0, 0.0,
+								1.2E+2
+		e.g	$n = 10;  is consider as int
+			$n = 10.10 is consider as real or double
+
+	2. for boolean -- use true or false
+			Or use zero as false
+
+		Like JavaScript, PHP uses following value as "falsy" value:
+			0
+			0.0
+			""
+			''
+			null
+			false
+	3. for string - there are four syntax to express strings in PHP
+		1. single quoted string
+		2. double quoted string
+		3. HEREDOC (double quoted string with free text)
+		4. NOWDOC (single quoted free text)
+
+	4. for missing object - null - The null is used when an object is not exists.
+
+	5. for array object -  [ ] - Just like JavaScript, PHP also uses array 
+	   subscript or array() keyword to define an array.
+        6. for function object - function keyword is used to define the function
+
+Example: print, echo statements
+	 print(), echo() and printf() functions
+
+<?php
+ $no = 10;
+ $name = "Reena";
+
+ //echo statement - Except variable everyting is case-insensitive
+ echo $no," " , $name, "<br/>";
+ ECHO "<p>","No ",$no, "Name", $name, "</p>";
+ 
+ //echo() function
+ echo($no);   // takes single argument
+ 
+ //print statement
+ print $no;
+ //print() function
+ print($no);
+
+ //print formatted data
+ printf("<p>This is my roll %d and I'am %s</p>",$no,$name);
+ ?>
+ <h4><?=$no?></h4>
+ <h4><?=$name?></h4>
+
+Example: Embed PHP code in HTML code
+
+<select>
+ <?php
+   for($no=1;$no<=10;$no++) {
+     echo "<option>",$no,"</option>";
+   }
+ ?>
+</select>
+
+Example: Split the PHP code block
+
+<table border="1">
+  <?php for($row=1;$row<=10;$row++) { ?>
+   	 <tr>
+   	 	<?php
+   	 	  for($col=1;$col<=10;$col++) {
+   	 	  	?>
+   	 	  	 <td>
+   	 	  	 	<a href="#" onclick="changeBk(this)">
+   	 	  	 	   <?=($row*$col)?>
+   	 	  	     </a>
+   	 	  	 </td>
+   	 	  	<?php
+   	 	  }
+   	 	?>
+   	 </tr>
+  <?php } ?>
+</table>	
+
+<script>
+  function changeBk(anc) {
+  	console.dir( anc.parentElement.style.background = "red" );
+  }
+</script>	
+
+The strings
+===========
+
+We've four syntax to define the string object.
+
+1. Single quoted string : 
+
+    > It cannot expand the variables
+    > It automatically escapes the backslash chars \n \t etc.
+    > We can embed double quoted in it
+
+2. Double quoted string :
+     > It expands the variables
+     > Cannot escape the backslash -- we must have to escape manually by adding an
+	extra baclskash \
+     > We can embed single quoted in it.
+
+Example:
+
+<?php
+ $str1 = 'This is the "single" quoted string';
+ $str2 = "This is the 'double' quoted string";
+
+ $str3= 'This is the \'single\' quoted string';
+ $str4= "This is the \"single\" quoted string";
+
+ $no = 10;
+ $name = "Reena";
+
+ $str5 = 'Hello! my name is $name and $no is my roll number';
+ $str6 = "Hello! my name is $name and $no is my roll number";
+
+ 
+ echo $str1,"<br/>",$str2, "<br/>", $str3, "<br/>" , $str4,
+      "<br/>",$str5, "<br/>", $str6;
+
+$path1 = "c:\new folder\test";
+$path2 = 'c:\new folder\test';
+$path3 = "c:\\new folder\\test";
+echo "<br/>", $path1, "<br/>", $path2, "<br/>", $path3;      
+
+HEREDOC and NOWDOC Syntax
+---------------------------
+
+<<<BLOCK_NAME
+   ..... your text goes here
+   ....
+BLOCK_NAME;  <--- The BLOCK_NAME is used defined name and should be written in capital to avoid the conflict with other names. The double quoted or HEREDOC syntax can be written as:
+
+<<<"BLOCK"
+   ...
+BLOCK;
+
+OR
+
+<<<BLOCK
+   ..
+BLOCK;
+
+And Single quoted NOWDOC uses single quoted BLOCK NAME
+<<<'BLOCK'
+  ....
+BLOCK;
+
+IMPORTANT ** The close or end block name must appear at very first column of the newline. If end block is not defined properly then syntax error will be appear.
+
+HEREDOC and NOWDOC syntax are mainly used to define the data templates or free-text (text that contains whitespace, special chars and expressions).
+
+Example:
+
+<?php
+$roll = 10;
+$name = "Meena";
+$str1=<<<START
+This
+    is
+        the 
+            free text. That 
+            include "double" and
+            'single'  quotes and also expand
+            the variables - Roll : $roll 
+                            Name : $name
+                            (This is HEREDOC Syntax)
+START;
+
+$str2=<<<'START'
+This
+    is
+        the 
+            free text. That 
+            include "double" and
+            'single'  quotes and also expand
+            the variables - Roll : $roll 
+                            Name : $name
+                            (This is NOWDOC Syntax)
+START;
+
+$is_logged = false;
+$login_form = <<<ONE
+  <form method="post">
+    <p>Username<p>
+    <p><input type="text" /></p>
+    <p>Password</p>
+    <p><input type="password"></p>
+    <p><button>Login</button></p>
+  </form>
+ONE;
+
+echo $str1;
+?>
+<pre><?=$str1?></pre>
+<pre><?=$str2?></pre>
+
+<!-- <div><?=$login_form?></div> -->
+
+<?php
+ if($is_logged) {
+ 	echo "Welcome Guest!!!";
+ } else {
+ 	echo $login_form;
+ }
+?>
+
+
+Embed data to the HTML tags - set attributes and CSS properties
+--------------------------------------------------------------
+
+1. Show data interactively
+
+<?php
+ $no = 10;
+ $name  = "Reena";
+ $address ="12 - PQR Society\n10, R.P Road\nMehsana";
+ $gender = "Male";
+ ?>
+
+ <input type="number" value="<?=$no?>">
+ <input type="text" value="<?=$name?>">
+ <textarea rows="5" cols="20"><?=$address?></textarea>
+
+ <p><input type="radio" 
+ 	name="gender" <?= $gender== 'Male' ? "checked" : ""?> 
+ 	value="Male"> Male </p>
+ <p><input type="radio" 
+ 	name="gender" <?= $gender== 'Female' ? "checked" : ""?>  
+ 	value="Female"> Female </p>
+
+2. Based upon the values checked or unckecked the checkboxes:
+
+<?php
+ $read = "y";
+ $play = "y";
+ $write = "n"
+ $swim  = "n";
+?>
+
+<input type="checkbox" <?=$read=="y" ? "checked" : "" /> Read </br>
+
+3. We've dropdown list of country and select "India" as default selection
+
+<select>
+  <option value="A">USA</option>
+  <option value="B" selected>India</option>
+  <option value="C">Nepal</option>
+</select>
+
+4. We've listbox having city name. 
+
+ <select size="5" multiple>
+    <option selected>Mehsana</option>
+    <option>Visnagar</option>
+    <option selected>Patan</option>
+ </select>
+
+[For downdown and listboxes we must have to use PHP array and selection criteria to hightlight or show selected items.]
+
+Example:
+
+<?php
+ $countries = ["USA","India","Nepal","UK"];
+ $selected_country = "India";
+?>
+
+<select>
+ <?php
+  foreach($countries as $country) {
+     $sel = $selected_country == $country ? "selected" : "";
+     echo "<option $sel>$country</option>";
+  }
+ ?>
+</select>     
+
+Example: JavaScript code to update css properties
+
+<?php
+ $countries = ["USA","India","Nepal","UK"];
+ $selected_country = "UK";
+?>
+
+<select onchange="doSetBack()">
+ <?php
+  foreach($countries as $country) {
+     $sel = $selected_country == $country ? "selected" : "";
+     echo "<option $sel>$country</option>";
+  }
+ ?>
+</select>    
+<?php
+ foreach($countries as $c) {
+ 	echo "<button onclick=\"doSel('$c')\">$c</button>";
+ }
+?>
+<script>
+	function doSel(v) {
+		document.querySelector("select").value = v;
+		buttonBackground(v);		
+	}
+	function doSetBack() {
+		let countryDom = document.querySelector("select");
+		buttonBackground( countryDom.value );
+	}
+
+	function buttonBackground(value) {
+		let btns = document.querySelectorAll("button");
+		for(let i in btns) {
+			let b = btns.item(i);
+			if(b.innerHTML == value) {
+				b.style.backgroundColor = "blue";
+			} else {
+				b.style.backgroundColor = "";
+			}
+		}
+	}
+</script> 
+     

@@ -1,0 +1,295 @@
+The jQuery - a JavaScript open source library
+==============================================
+
+The "jQuery" is the most popular JavaScript library for:
+  1. Working with DOMs,
+  2. Setting DOM properties, Styles etc
+  3. AJAX Routines and so on
+
+ In fact, we can do all these things with pure JavaScript code but the jQuery helps us
+ to improve the productivity.
+
+ First of all download the jQuery.js from the jquery.org website.
+
+ There will be two .js files:
+  1. for production -- It is minified or compressed that is used with production.
+  2. for developers to learn/understand/contribute the jQuery code -- uncompressed
+	file.
+
+In order to use the jQuery: 
+  1. Add "jquery.js" files in your project under "js" or "script" folder
+  2. Embed the jquery.js via <script> in different web documents.
+  3. The $ or jQuery are two variables that represent the jQuery object.
+  4. jquery uses CSS style selectors or document.querySelector() style to select the
+     DOM(s).
+
+Example:
+
+<script src="js/jquery-3.3.1.js"></script>
+<h1>Hello World</h1>
+<h1>Sample Site</h1>
+<button id="btn">This is sample button</button>
+<h3 class="test">Welcome to jQuery</h3>
+
+<script>
+  $("h1").css("color","red");
+  $("#btn").css("color","green");
+  jQuery(".test").css("color","yellow");
+  $("*").css("border","1px solid blue");
+</script>
+
+$("tagName") = element selector
+$("#id") = ID selector
+$(".name")  = Class selector
+$("element[attr=value]") = Attribute selector
+$("selector1 > selector2") = Child selector
+ and so on...
+
+Methods/Functions
+-------------------
+
+1. css("property","value") - Set CSS property
+2. css("property")  - Get CSS property
+
+3. html("HTML content") - Set innerHTML value
+4. html()		- Get innerHTML value
+
+5. val(value)		- Set Value to input
+6. val()		- Get value from input
+
+7. text(value)		- Set innerText value
+8. text()		- Get innerText value
+
+9. attr("name",value)   - Set attribute
+10. attr("name")	- Get attribute
+
+11. hide() or hide(delay) - Hide the objects
+12. show() or show(delay) - Show the objects
+13. toggle() or toggle(delay) - Hide or show the objects
+
+14. addClass("cssClass")
+15. removeClass("cssClass")
+16. toggleClass("cssClas")
+
+17. $("<element>") - Create a new DOM
+18. existingDom.append( newDom ) -- Append a newly created DOM into existing dom.
+19. newDom.appendTo( "existingDom )- -- DO --
+
+Example-1 - Invoke chain of actions in a single statement because each method returns jQuery object.
+
+<script src="js/jquery-3.3.1.js"></script>
+<h1>Hello World</h1>
+  
+<script>
+  $("h1")
+    .css("color","red")
+    .css("background-color","yellow")
+    .css("border","10px solid blue")
+    .html("This is the power of jQuery")
+    .hide(1000)
+    .show(1000);
+</script>
+ 
+Example-2
+
+<input type="text" id="no"/>
+
+<script>
+  $("#no").val("100");
+</script>
+
+Example-3 Create some objects
+
+<div id="output"></div>
+
+<script>
+ let h1 = $("<h1>");
+ h1.html("This is head1");
+ 
+ h1.appendTo("#output");
+
+ let h2 = $("<h2>").html("This is head2");
+ h2.appendTo("#output");
+
+ $("<h3>").html("This is head3.").appendTo("#output");
+</script>
+
+Example-4 Create some objects
+<div id="output"></div>
+<script>
+  $("#output").append(  $("<h1>").html("Head1") );
+  
+  let ol = $("<ol>");
+  let cities = ["Meh","Pat","Raj"];
+  let combo = $("<select>");
+  for(let i in cities) {
+     ol.append( $("<li>").html(cities[i]) );
+     combo.append( $("<option>").html(cities[i]) );
+  }
+  ol.appendTo("#output");
+  combo.appendTo("#output");
+</script>
+
+Event names in jQuery
+----------------------
+In JavaScript event names have "on" prefix whereas in jQuery they don't. Just use "click", "keypress", "mouseover" and so on.
+
+<button id="btn1">Test</button>
+<script>
+ $("#btn1").click( ()=> console.log('Clicked') );
+</script>
+
+jQuery AJAX functions $.post and $.get
+--------------------------------------
+$.post("url",callback) and $.get("url",callback) functions implicitly uses XMLHttpRequest object to handle POST and GET request respectively.
+
+There is an extention of $.get called dom.load() which request the resource and fill the innerHTML of the DOM by the resource output.
+
+Edit the previously designed webapp where we've requested resources home.html, about.html etc via  AJAX call.
+
+Replace code of "index.html"
+
+<script src="js/jquery-3.3.1.js"></script>
+<h1>Site Name</h1>
+<a href="#" onclick="doOpen('home.html')">Home</a>
+<a href="#" onclick="doOpen('about.html')">About us</a>
+<hr/>
+<div id="output"></div>
+
+<script>
+ function doOpen(page) {
+     $("#output").load(page);
+ }
+</script>
+
+
+Example: Request the php resource to read the content
+
+<div id="dt"></div>
+<script>
+  $("#dt").load("current-date.php");
+</script>
+
+current-date.php
+----------------
+<?php echo date("d-m-Y h:i:s a") ?>
+
+Example: Pass two numbers to "nos.php" along with operator (+ * / - ) and PHP program returns the result.
+
+nos.php
+--------
+<?php
+  //Receive the post data
+  if( isset($_POST["no1"], $_POST["no2"], $_POST["opr"]) ) {
+     //convert no1 and no2 string into numbers
+     $no1 = 0.0 + $_POST["no1"];
+     $no2 = 0.0 + $_POST["no2"];
+     $opr = $_POST["opr"];
+     $result = "";
+     if($opr == "+") {
+          $result = $no1+$no2;
+     } else if($opr == "-") {
+          $result = $no1-$no2;
+     } else if($opr == "*") {
+          $result = $no1 * no2;
+     } else if($opr == "/") {
+          $result = $no1 / $no2;
+     }
+      
+  } else {
+     $result="Error - Invalid data";
+  }
+ echo $result;
+?>
+
+num.html
+--------
+<input type="number" id="no1" />
+<input type="number" id="no2" />
+<select id="opr">
+  <option value="+">Addition</option>
+  <option value="-">Subtraction</option>
+  <option value="/">Division</option>
+  <option value="*>Multiplication</option>
+</select>
+<button onclick="doCalc()">Calculate</button>
+<div id="result"></div>
+<script src="js/jquery-3.3.1.js"></script>
+<script>
+ function doCalc() {
+  var data = {
+     "no1": $("#no1").val(),
+     "no2": $("#no2").val(),
+     "opr": $("#opr").val()
+  };
+  $.post("nos.php", data, function(out) {
+     $("#result").html(out);
+  });
+ }
+</script>
+
+Example: Update the nos.php which now returns sum, sub, mul and div of two numbers in the form of JSON
+
+<?php
+  $data = ["sum"=>0,"div"=>0,"sub"=>0,"mul"=>0];
+  //Receive the post data
+  if( isset($_POST["no1"], $_POST["no2"]) ) {
+     
+     $no1 = 0.0 + $_POST["no1"];
+     $no2 = 0.0 + $_POST["no2"];
+     $data["sum"] = $no1+$no2;
+     $data["div"] = $no1/$no2;
+     $data["sub"] = $no1-$no2;
+     $data["mul"] = $no1*$no2;
+  }
+ echo encode_json($data);
+?>
+
+And update num.html
+--------------------
+<input type="number" id="no1" />
+<input type="number" id="no2" />
+ 
+<button onclick="doCalc()">Calculate</button>
+<div id="result"></div>
+<script src="js/jquery-3.3.1.js"></script>
+
+<script>
+ function doCalc() {
+  var data = {
+     "no1": $("#no1").val(),
+     "no2": $("#no2").val()
+  };
+  $.post("nos.php", data, function(out) {
+      console.log(out);      
+      let obj = JSON.parse(out);
+      $("#result").html(obj.sum + " " + obj.sub + " " + obj.div + " " + obj.mul);
+  });
+ }
+     
+Example: country.php returns the list of countries
+country.php
+=============
+<?php
+ echo json_encode(["India","Nepal","UK"]);
+
+and populate the <select> dropdown.
+
+Now, there is another program state.php 
+state.php
+----------
+<?php
+ if(isset($_POST["country"])) {
+    $c = $_POST["country"];
+    if($c=="India") {
+        echo json_encode(["Guj","Raj"]);
+    } else if($c=="Nepal") {
+        echo json_encode(["Kat","Bhi"]);
+    } else if($c=="UK") {
+       echo json_encode(["Eng","Man"]);
+   }
+ }
+If user select country then populate the state <select> dropdown using state.php
+
+
+

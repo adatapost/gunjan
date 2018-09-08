@@ -1,0 +1,152 @@
+GD - Graphics Device Library
+=============================
+
+GS offers primitive painting in memory and some basics of drawing or image processing actions. In short, we can create or update graphics or image on-fly.
+
+Example: Program demonstrate the GD functions and sequence to call the functions in order to create an image.
+
+sample.php
+------------
+<?php
+ //1. Create or open an image/drawing
+ $img = imagecreate(300,200);
+
+ //2. Set background of newly created drawing
+ $red = imagecolorallocate($img, 255, 0, 0);
+
+ //3. Obtain the text color
+ $white = imagecolorallocate($img, 255,255,255);
+ $yellow = imagecolorallocate($img, 255,255,0);
+ 
+ //4. Draw something on canvas
+ imageline($img,0,0,300,200,$white);
+ imageline($img,0,200,300,0,$yellow);
+
+ $font_size = 50;
+ $angle = 90;
+ $x_pos = 50;
+ $y_pos = 200;
+ $font = 'C:\Windows\Fonts\Arial.ttf';
+ $text = "Hello";
+ imagettftext($img,$font_size,$angle,$x_pos,$y_pos,$yellow,$font, $text);
+
+
+ //5. Final step - to write image into response buffer
+ header("content-type: image/png");
+ imagepng($img);   // imagegif($img); imagejpeg($img)
+
+
+Now, to show the image, we can type URL at addressbar or embed the url with <img tag.
+
+show.php
+--------
+<h3>Image1</h3>
+<img src="sample.php" alt='Image' />
+
+
+Example: Passing text to image resource (Captcha code )
+
+captcha.php
+------------
+<?php
+ $img = imagecreate(70,30);
+
+ $back_red = imagecolorallocate($img, 255, 0, 0);
+ $text_white = imagecolorallocate($img, 255,255,255);
+ 
+ $font_size = 15;
+ $angle = 0;
+ $x_pos = 4;
+ $y_pos = 20;
+ $font = 'C:\Windows\Fonts\Arial.ttf';
+ $text = "Hello";
+ if(isset($_GET["text"])) {
+ 	$text = $_GET["text"];
+ }
+ imagettftext($img,$font_size,$angle,$x_pos,$y_pos,$text_white,$font, $text);
+
+ header("content-type: image/png");
+ imagepng($img);   // imagegif($img); imagejpg($img)
+
+show.php
+--------
+<?php
+  function randomText() {
+     $str = "ABCDEFGHIJLMNOPQRSTUWZYXavcdsbeqsmjhlnpyrd09123456";
+     $result = '';
+     for($i=0;$i<5;$i++) {
+     	$x = rand(0, strlen( $str )-1);
+        $result = $result . $str[$x];
+     }
+     return $result;
+  }
+  $random = randomText();
+?>  
+<h3>Buttons</h3>
+<img src="captcha.php?text=Home" alt='On-fly Graphics' />
+<img src="captcha.php?text=About" alt='On-fly Graphics' />
+<img src="captcha.php?text=<?=$random?>" alt='On-fly Graphics' />
+
+Example: Use the "captcha.php" in login.php (or anyother form)
+
+<?php
+  session_start();
+
+  function randomText() {
+     $str = "ABCDEFGHIJLMNOPQRSTUWZYXavcdsbeqsmjhlnpyrd09123456";
+     $result = '';
+     for($i=0;$i<5;$i++) {
+     	$x = rand(0, strlen( $str )-1);
+        $result = $result . $str[$x];
+     }
+     return $result;
+  }
+
+  $cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
+  $captcha = isset($_POST["captcha"]) ? $_POST["captcha"] : "";
+  $user_name = isset($_POST["user_name"]) ? $_POST["user_name"] : "";
+  $message = "";
+
+  if(!isset($_SESSION["captcha"])) {
+     $_SESSION["captcha"] = randomText();
+  }
+  if($cmd == "Login")  {
+     if($_SESSION["captcha"] == $captcha) {
+     	//DB compare actions
+     	$message = "Done!";
+     } else {
+     	$message = "Imvalid Captcha!!!";
+     	
+     }
+     $_SESSION["captcha"] = randomText();
+  }
+?>  
+<form method="post">
+	<p>User name</p>
+	<p><input type="text" name="user_name"></p>
+
+	<p><img src="captcha.php?text=<?=$_SESSION["captcha"]?>" /></p>
+	<p>Enter captcha - Human Verification code</p>
+	<p><input type="text" name="captcha"></p>
+	<p><?=$message?></p>
+	<p><button name="cmd" value="Login">Login</button></p>
+</form>	
+
+
+class Date {
+   public static function now() {
+     $dt = DateTime("",...);
+     return $dt->format('d-m-Y h:i:s a')
+   }
+   public static function now_date() {
+     $dt = DateTime("",...);
+     return $dt->format('d-m-Y')
+   }
+   public static function to_iso($str_date) {
+     $dt = DateTime($str_date,...);
+     return $dt->format('Y-m-d')
+   }   
+   public static function add_days($dt, $n) {
+   }
+}
+

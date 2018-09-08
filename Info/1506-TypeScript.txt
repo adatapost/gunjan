@@ -1,0 +1,294 @@
+TypeScript Language
+===================
+
+The "TypeScript" is syntatic sugar of JavaScript and this "TypeScript" language is introduced to write full length code in JavaScript via TypeScript --- So, every JavaScript program is a "TypeScript" program.
+
+Syntatic sugar means the "TypeScript" provide convinent syntax (as found in popular programming languages - Java, C# etc) for declaring variables, creating functions & classes.
+
+JavaScript, especially ES5 syntax are too complex (need sound know-how of JavaScript) to write full length code. For instance, you use "function" keyword to define a function as well as "class" and also "closure". But, in TypeScript, we 've "class" keyword to define the class.
+
+TypeScript language can be installed via npm :
+
+npm install -g typescript
+
+TypeScript source code must be saved in .ts extension files.
+
+The "Transpiler - TypeScript to JavaScript conversion" is done by the "tsc" tool (or compiler). 
+
+Example: Create TypeScript code file and use "tsc" transpiler to produce .js file
+
+hello.ts
+---------
+// Declare the variables - always use let keyword 
+let stat: boolean = false;
+let roll: number = 10;
+let firstName: string  = "Reena";
+
+console.log( stat, roll, firstName);
+
+Now, run tsc tool
+>tsc hello   
+   will produce hello.js and to run hello.js,
+>node hello
+
+OR
+>tsc hello && node hello
+
+
+TypeScript project and compilation of source files
+=================================================
+A "TypeScript" project is a file system folder that contains a special "tsconfig.json" file. The "tsc" command help us to create "tsconfig.json" and it automatically process the all .ts files and compiled them into .js files.
+
+
+1. Create a project folder
+>md app1 
+>cd app1
+\app1>tsc --init    
+      This command will create "tsconfig.json"
+
+Now, add two or more .ts files in "app1" folder:
+
+first.ts
+---------
+let firstName: string = "Reena";
+let age: number = 10
+
+second.ts
+----------
+let roll: number = 5
+let firstName: string ="Seema";
+
+now, to compile both (all) .ts files,
+\app1>tsc
+
+    This command will check the syntax of all source .ts files and display errors or warnings if there are some syntax issues. Produce .js files otherwise.
+	
+DataTypes
+==========
+We've following simple datatypes (as exists in JavaScipt):
+
+1. number 
+2. string
+3. boolean
+4. any
+
+Syntax to declare variables:   let varName: typeName = initialValue;
+
+Syntax to declare array:       let varName: typeName[] = [initialvalue];
+
+sample.ts
+---------
+let nos: number[] = [10,20,30,40];
+let cities: string[] = ["Meh","Patan","Rajkot"];
+
+for(let i in nos) {
+   console.log( nos[i] );
+}
+for(let i in cities) {
+   console.log( cities[i] );
+}
+
+>tsc sample && node sample
+
+Now, if you write.
+  let nos: number[] = [10,20,"30",50];  TypeSCript will throws and error because
+					array is of number type and you're tring to
+					set non numer value.
+
+
+The let, and const keyword  - Declare a variable
+==========================
+
+Always use let or const keyword to create variables. TypeScript also allow us to write JavaScript and hence we can use "var" too but avoid it.
+
+const keyword creates constant variable -- one can't change the value once it is created.
+
+Example:
+
+let amount: number = 10000.00;
+let productName: string = "Pencil Box";
+const tax: number = 0.05;
+
+/* We can't change the taxt value,
+   tax  = 0.3 is illegal
+*/
+
+console.log(amount, productName, tax);
+
+Array declaration 
+====================
+Syntax:
+
+   let|const varName: typeName[] = [...];
+   let|const varName: Array<typeName> = [...];
+
+  Second syntax is known as "Generics" or "Type parameter".
+
+Example:
+
+let cities: string[] = ["Mehsana","Patan","Rajkot"];
+let names: Array<string> = ["Man","Tan","Raj"];
+
+for(let index in cities) {
+   console.log( index, cities[index] );
+}
+
+for(let index in names) {
+   console.log( index, names[index] );
+}
+
+/* for..in and
+   for..of are two loops used to traverse the collections.
+
+   for..of fetch an element from the collection one after one whereas for..in
+   fetch the index of an element.
+*/
+
+for(let city of cities) {
+   console.log( city );
+}
+
+for(let name of names) {
+   console.log( name );
+}
+
+Type interference  and "any" datatype
+---------------------------------------
+The "tsc" automatically assign the "type" to the variable based upon the assigned value's datatype and this is known as type interference.
+
+let no = 10;   is equivalent to let no: number = 10;
+let s1 = "Hello" is equivalent to let s1: string = "Hello";
+
+If you wish that your variable can hold any value like it is with "JavaScript", we must have to use "any" datatype.
+
+Example:
+
+let a: any  = "Hello";   /* Can store string */
+a = 90;                  /* Can store number */
+
+let b = 10;   /* is equivalent to let b: number = 10 */
+b = "Hello"   /* So, this will throws an error */
+
+console.log(a,b);
+
+let items: any[] = ["Help",1000,false,3003.33, new Date()];
+for(let item:any of items) {
+   console.log(item);
+}
+
+Array destructuring
+===================
+De-structuring syntax allows array elements to be assigned to individual variables.
+  Syntax:
+      let [var1,var2,...] = arrayVar;
+     
+Example:
+
+let emp: any[] = [10,"Man", 1000.00];
+console.log( emp );
+let [n1,n2] = emp;
+console.log( n1, n2);
+
+Define a type for each element - A Tuple representation
+---------------------------------------------------------
+A Tuple is collection of items packed with array syntax.
+
+let emp: [number, string] =  [10,"Man"];
+console.log( emp );
+let [n1, n2]: [number, string] = emp;
+console.log( n1, n2);
+
+The object de-structuring 
+--------------------------
+Assign object properties to variables.
+
+Syntax:   let {var1, var2,....} = obj;
+
+Example:
+
+let emp = {
+  no: 10,
+  firstName: "Mr.A",
+  salary: 20000
+};
+
+let {no, firstName, salary} = emp;
+console.log(no, firstName, salary);
+console.log(emp.no, emp.firstName, emp.salary);
+
+The Spread operator ...array_object
+------------------------------------
+Like destructuring, the ... spread operator spread the array into another array or object.
+
+Example:
+let no1: number[] = [11,22,33];
+let no2: number[] = [10,20,40];
+
+let no3: number[] = [900,200,...no1,600,700,...no2]
+console.log( no2 );  /* 900 200 11 22 33 600 700 10 20 40  */
+
+The functions -- function keyword
+==================================
+Syntax:
+
+ function functionName( arg1:type1, arg: type2, ... ): returntype {
+    ....
+ }
+
+Example:
+
+function add(no1: number, no2: number): number {
+  return no1+no2;
+}
+function createEmp(id: number, empName: string): any {
+   return [id, empName];  // or return { id:id, empName: empName};
+}
+
+console.log( add(10,20) );  /* add("10",20);  will throws an error */
+
+console.log( createEmp(10,"Reena") );
+
+The void keyword - to specify that function don't returns.
+---------------------------------------------------------
+function sayHello(name: string) : void {
+   console.log("Welcome !", name);
+}
+
+sayHello("Reena");
+
+The optional parameter --- paramName?: type
+---------------------------------------------
+A ? question mark after the paramName will consider as "undefined" when value is not supplied to the parameter.
+
+function sayHello(name?: string): void {
+   if(name) {
+     console.log("Welcome, ",name);
+   } else {
+     console.log("Hi! Guest");
+   }
+}
+
+sayHello("Reena");
+sayHello();       /* value of name parameter will be 'undefined' - a falsy value */
+
+The default parameter - assign default value to parameter
+---------------------------------------------------------
+function sayHello(name: string = "Guest"): void {
+   console.log("Welcome, ",name);
+}
+
+sayHello("Reena");
+sayHello();     
+     
+
+
+
+
+
+
+
+
+
+
+
+

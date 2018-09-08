@@ -1,0 +1,162 @@
+Write the concise code to handle the AJAX requests/responses:
+
+      function post(url, callback_function) {
+         var xhr =new XMLHttpRequest();
+         xhr.open("post", url);
+
+         xhr.onreadystatechange = ((xhr)=>{
+           return function() {	 
+             if(xhr.DONE == xhr.readyState) {
+           	callback_function(xhr.responseText);
+           }
+          }
+         })(xhr);
+        
+         xhr.send();
+	}
+
+        //call the function
+	post("news.html",function(result) {
+           console.log( result );
+           document.querySelector("#output").innerHTML = result;
+	});
+
+Example: Save the post() code into ajax.js and request the  current-date.php on each second using setInterval( function, millis) function.
+
+current-date.php
+----------------
+<?php
+  echo date("d-m-Y H:i:s a");
+
+index.html
+---------
+
+<script src="ajax.js"></script>
+<div id="dt"></div>
+
+<script>
+  setInterval( ()=> { 
+     post("current-date.php", (result)=> {
+        document.querySelector("#dt").innerHTML = result;
+     });
+  }, 1000);
+</script>
+
+
+Example: Write a code to start or stop the timer which is set via "setInterval()" function.
+
+The setInterval() returns a unique timerId which will be used by clearInterval(timerId) to terminate the timer.
+
+<div id="countDom"></div>
+
+<button onclick="doStart()">Start</button>
+<button onclick="doStart()">Stop</button>
+
+<script>
+  let count = 0;
+  var timerId;
+
+  function doStart() {
+    timerId = setInterval( ()=>{
+      count++;
+      document.querySelector("#countDom").innerHTML = count;
+    }, 1000);
+  }
+  
+ function doStop() {
+    clearInterval(timerId);
+ }
+</script>
+ 
+Example: Scroll the image one after one using the timer.
+
+Example: Call the function after some amount of time using the "setTimeout" function.
+
+The setTimeout( callback-function, millis ) will call the callback-function after the ellapse of given time in millis.
+
+<div id="one"></div>
+<div id="two"></div>
+
+<script>
+ setTimeout( ()=>document.querySelector("#one").innerHTML = "Hello" , 2000);
+ setTimeout( ()=>document.querySelector("#two").innerHTML = "Everyone" , 4000);
+</script>
+
+Example-JavaScript animate example
+
+<style>
+  #test {
+  	background: #e40;
+  	height: 300px;
+  	width: 300px;
+  }
+</style>
+<div id="test"></div>
+
+<script>
+  let mWidth = 300;
+  let factor = 3;
+  let max = 300;
+  let millis = 4;
+  let test = document.querySelector("#test");
+
+  setTimeout( decreaseSize, millis);
+
+  function decreaseSize() {
+    mWidth -= factor;
+    test.style.width = mWidth + "px";
+    test.style.height = mWidth + "px";
+
+    if(mWidth>factor)
+      setTimeout( decreaseSize, millis);
+   else 
+   	  setTimeout( increseSize, millis);
+  }
+
+  function increseSize() {
+  	mWidth += factor;
+    test.style.width = mWidth + "px";
+    test.style.height = mWidth + "px";
+
+    if(mWidth<max)
+      setTimeout( increseSize, millis);
+  }
+</script>	
+
+
+Example: Passing data to the PHP program using AJAX routine.
+
+
+To pass the data, we must have to create the "FormData" object and pass that object to the xhr.send(data) method of XMLHttpRequest object.
+
+Step-1 Create emp.php to receive the client data
+
+<?php
+$no = $_POST["no"];
+$name = $_POST["name"];
+echo "Data received $no and $name";
+
+
+Step-2 Create AJAX request from your client page
+
+<h4>Home</h4>
+<script src="ajax.js"></script>
+<script>
+ //Collect the data
+ let data = new FormData();
+ data.set("no","10");
+ data.set("name","Reena");
+
+  //Request the resource
+  post("emp.php",(r)=>{
+     console.log(r);
+  },data);
+</script> 
+
+Step-3 Update post(url,function,data) in ajax.js
+function post(url,callback_function, data ) {
+  ....
+  ....
+  xhr.send(data);
+  ...
+}

@@ -1,0 +1,42 @@
+Angular JS
+==========
+
+A framework to develop client applications using HTML and TypeScript. 
+
+Angular is MVC application design framework. The Angular core library is entirely written in "TypeScript" language.
+
+Installation/setup of angular environment
+==========================================
+
+In order to use the Angular IO/JS, we need to install following components/tools in given order:
+
+1. NodeJS
+2. Git
+3. TypeScript and
+4. Angular/CLI - Command Line Interface tool
+
+Angular/CLI tool is a helper tool for the developers that they don't have to write configuration code, or create directory structure and files -- programs, html,css, as per Angular's naming conventions. This tool automatically manages number of things for us including:
+
+   1. Create a new project e.g   >ng new project-name
+   2. Update an exiting project with dependencies e.g > ng update
+   3. Start the development server e.g >ng start
+   4. Unit test the components/code e.g >ng test
+   5. Compile and bundle the project e.g >ng build
+   6. To open the online help. e.g >ng doc <helpTopic>
+
+How to create a new project?
+-----------------------------
+Use >ng command to manage the project.
+
+>ng new project-name  
+
+Note: Project name should be in lower letter without whitespaces. Use hyphen (don't use underscore) to separate the project name.
+e.g
+>ng new blog
+
+This command will create a folder named "blog" and copy all necessary angular as well as node libraries in it.
+
+\blog>dir    <-- will display the project structure
+
+ 
+

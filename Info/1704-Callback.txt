@@ -1,0 +1,65 @@
+The callbacks with array object
+===============================
+The callback allow us to write a piece of code anywhere and later attach it to the objects or plug to the existing code.
+
+For instance, the array.sort() automatically sort the simple data but it wont sort the complex objects because the sort() cannot determine implicitly that what criteria should be used to sort the data.
+
+Example:
+
+ let nos = [22,3,4,6,7,8,9,2,122,32];
+ nos.sort();   // will sort data in ascending order  but we want these data sorted
+	       // out in descending order
+
+ The sort callback takes two parameters. Two consecutive value from an array and the return value will be 1 (positive or >0) if first object value is greater than second,
+                     -1 (negative or <0) if first < second or
+                     0 if first == second.
+
+ nos.sort( (p,q) => p-q );  //desending order
+
+Example: array.forEach() callback - to iterate the all elements of an array
+ 
+  let nos = [22,33,2,4,45,6,7,4,,2];
+  nos.forEach( (ele, index) => console.log( ele, index) );
+
+Example: array.filter() callabck - takes two parameter and returns true if you want to 
+				   allow this element to be added into the new list or
+				   return false if not included.
+
+ //filter number between 10 to 20
+ nos.filter( (no)=> no>10 && no<20) )
+ //filter number above 30
+ nos.filter( (no) => no>30);
+
+Example: Assume that we've some records of products
+let products = [ {
+  "name": "....",
+  "category": "Pen",
+  "price": 3.3,
+  "unit": "Piece",
+  "available": true
+ }, {...}, {... }... ];
+
+ //Now, sort the products by name
+ products.sort ( p,q)=> p.name.localeCompare(q.name) );
+ //forEach callback
+ let printEles = (p)=> console.log(p.name, p.category, p.price, p.available,p.price,
+				p.unit);
+ //print the products
+ products.forEach( printEles );
+
+ //sort by name in descending order
+ products.sort ( p,q)=> q.name.localeCompare(p.name) ); 
+ products.forEach( printEles );
+
+ //filter the data
+ let items = products.filter ( (p) => p.avaialble );
+ items.forEach( printEles );
+ 
+ items = products.filter ( (p) => p.category == "Pencil" );
+ items.forEach( printEles );
+
+ items = products.filter ( (p) => p.startWith("a") ).sort( (p,q) => p.price-q.price);
+ items.forEach( printEles );
+
+ 
+ 

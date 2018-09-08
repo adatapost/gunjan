@@ -1,0 +1,192 @@
+Design a database controller to expose basic services to non-browser as well as browser client
+-----------------------------------------------------------------------
+
+JavaScript program or Android (or any mobile client) needs a coherent data that may be passed to the server and also retrieve in a common data exchange format and we have two standard data exchange/interchange formats - XML and JSON. Apart from the XML, the JSON has simple yet effective data exchange format.
+
+Number of server programming (especially database apps), uses JSON as base data interchange format when small amount of data is to be transported between two ends.
+
+Example: We will create some sort of APIs or controller program that receives data from client, process accordingly and returns data in JSON form.
+
+1. country-api.php   ( create a folder say "api"  and save xxxxxx-api.php in it)
+------------------
+
+<?php
+  require_once "../lib/db-functions.php";
+  $output = ["status"=>false,
+             "message"=>"",
+             "data"=>null];
+
+  $country_id = 0 + post("country_id");
+  $country_name = post("country_name");
+  $cmd = post("cmd");
+
+  if($cmd == "Add") {
+  	$sql = "insert into country (country_name) values (?)";
+  	$data = array($country_name);
+  	if(execute($sql,$data)) {
+  		$output["status"] = true;
+  		$output["message"] = "Added";
+  	}
+  }
+  else
+  if($cmd == "Update") {
+  	$sql = "update country set country_name=? where country_id=?";
+  	$data = array($country_name,$country_id);
+  	if(execute($sql,$data)) {
+  		$output["status"] = true;
+  		$output["message"] = "Updated";
+  	}
+  }
+  else
+  if($cmd == "Delete") {
+  	$sql = "delete from country where country_id=?";
+  	$data = array($country_id);
+  	if(execute($sql,$data)) {
+  		$output["status"] = true;
+  		$output["message"] = "Deleted";
+  	}
+  }
+  else
+  if($cmd == "Get") {
+  	$sql = "select * from country where country_id=?";
+  	$data = array($country_id);
+  	if($r = row($sql,$data)) {
+  		$output["status"] = true;
+  		$output["data"] = $r;
+  	}
+  }
+  else
+  if($cmd == "Gets") {
+  	$sql = "select * from country";
+  	if($r = rows($sql)) {
+  		$output["status"] = true;
+  		$output["data"] = $r;
+  	}
+  }
+ 
+  header("content-type: application/json");
+  echo json_encode($output);
+
+2. Create /site/admin/country.php   (Client code)
+<?php $title="Country"?>
+<?php include_once "templates/header.php" ?>
+
+<h3>Country</h3>
+
+<input type="text" id="country_name" placeholder="Country">
+
+<button type="button" id="btnAdd" onclick="doAction(1)">Add</button>
+<button type="button" id="btnUpdate" onclick="doAction(2)">Update</button>
+<button type="button" id="btnDelete" onclick="doAction(3)">Delete</button>
+
+<p id="message"></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>  
+<script>
+  //Globals
+   let country_id = 0;
+   let country_name = "";
+
+
+  // Events
+   function doAction(action) {
+     switch (action) {
+       case 1:
+         add( $("#country_name").val() );
+         break;
+       case 2:
+         update(country_id , $("#country_name").val());
+         break;
+       case 3:
+         remove( country_id );
+         break;
+       default:
+         // statements_def
+         break;
+     }
+     
+   }
+
+ 
+  //Client APIs
+  function add(country_name) {
+    let data = { "country_name": country_name , "cmd": "Add" };
+    $.post("../api/country-api.php", data, function(result) {
+    
+     if(result.status) 
+        $("#message").html("Added");
+      else 
+        $("#message").html("Can't add");
+
+     gets();
+    });
+  }
+  function update(country_id,country_name) {
+    let data = { "country_name": country_name,
+     "country_id": country_id,
+     "cmd": "Update" };
+     console.log( data );
+    $.post("../api/country-api.php", data, function(result) {
+     
+     $("#message").html( result.status ? "Updated" : "Can't update" );
+     gets();
+    });
+  }
+  function remove(country_id) {
+    let data = { "country_id": country_id,
+     "cmd": "Delete" };
+    $.post("../api/country-api.php", data, function(result) {
+     $("#message").html( result.status ? "Removed" : "Can't remove" );
+     gets();
+    });
+  }
+ function get(country_id) {
+    let data = { "country_id": country_id,
+     "cmd": "Get" };
+    $.post("../api/country-api.php", data, function(result) {
+       
+    });
+  }
+  
+ function gets() {
+   data = { "cmd": "Gets" };
+   $.post("../api/country-api.php", data, function(result) {
+      
+      $("#tbody").empty();
+      for(let i in result.data) {
+        let tr = $("<tr>");
+        let d = result.data[i];
+        tr.append( $("<td>").html(d.country_id) );
+        tr.append( $("<td>").html(d.country_name) );
+        let btn = $("<button>").html("Edit");
+        tr.append( $("<td>").append(btn) );
+        tr.appendTo( "#tbody" );
+
+        //closure
+        btn.click( function() {
+          country_id = result.data[i].country_id;
+          country_name = result.data[i].country_name;
+          $("#country_name").val( country_name );
+
+        });
+      }
+   });
+ }
+
+ gets();
+
+</script>  
+
+<?php include_once "templates/footer.php" ?>
+
+
+

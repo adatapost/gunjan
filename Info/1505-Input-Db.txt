@@ -1,0 +1,425 @@
+Example: Create country.php, state.php and city.php to perform add/remove/update and list records.
+
+1. /lib/db-functions.php
+
+<?php
+    function get_cn() {
+    	return new PDO("mysql:host=localhost;dbname=emp_db","root","");
+    }
+    function execute($sql,$data=null) {
+    	$cn=get_cn();
+    	$st=$cn->prepare($sql);
+    	$st->execute($data);
+    	$err=$st->errorInfo();
+    	return !$err[1];
+    }
+    function rows($sql,$data=null) {
+    	$cn=get_cn();
+    	$st=$cn->prepare($sql);
+    	$st->execute($data);
+    	return $st->fetchall();
+    }
+    function post($key) {
+        if(isset($_POST[$key])) return $_POST[$key];
+        return "";
+    }
+    function get($key) {
+        if(isset($_GET[$key])) return $_GET[$key];
+        return "";
+    }
+
+
+//Fetch single row
+ function row($sql, $data = null) {
+    $cn = get_cn();
+    $st = $cn->prepare( $sql );
+    $st->execute( $data );
+    return $st->fetch();
+ }
+
+ 
+
+2.  country.php
+
+<?php $title="Country"?>
+<?php include_once "templates/header.php" ?>
+<?php
+ $country_id = 0 + post("country_id");
+ $country_name = post("country_name");
+ $cmd = post("cmd");
+ $message = "";
+ $is_edit = false;
+ 
+ //Actions
+ if($cmd == "Add") {
+ 	$sql = "insert into country (country_name) values (?)";
+ 	$data = array($country_name);
+ 	$message =  execute($sql,$data) ? "Added successfully" : "Can't add";
+
+ }
+ else
+ if($cmd == "Update") {
+ 	$sql = "update country set country_name=? where country_id=?";
+ 	$data = array($country_name,$country_id);
+ 	$message =  execute($sql,$data) ? "Updated successfully" : "Can't update";
+ 	$is_edit = true;
+
+ }
+ else
+ if($cmd == "Delete") {
+ 	$sql = "delete from country  where country_id=?";
+ 	$data = array($country_id);
+ 	$message =  execute($sql,$data) ? "Deleted successfully" : "Can't delete";
+ 	$cmd = "Cancel";
+ }
+ else
+ if($cmd == "Search") {
+ 	$sql = "select * from country  where country_id=?";
+ 	$data = array($country_id);
+ 	$row =  row($sql,$data);
+ 	if($row) {
+ 		$country_id = $row["country_id"];
+ 		$country_name = $row["country_name"];
+ 		$is_edit = true;
+ 	}
+ }
+ 
+ 	if($cmd == "Cancel") {
+ 		$country_id = "";
+ 		$country_name = "";
+ 		$is_edit = false;
+
+ 	}
+ 
+
+ //Fetch all countries
+ $countries = rows("select * from country order by country_name");
+?>
+<div>
+  <h3>Country</h3>
+  <form method="post">
+    <input type="hidden" name="country_id" value="<?=$country_id?>" />
+    <p><input type="text" placeholder="Country Name" 
+    	name="country_name"
+    	value="<?=$country_name?>" 
+    	/></p>
+    	<p>
+    		<?php
+    		 if($is_edit) {
+    		 	?>
+    		 	<button name="cmd" value="Update">Update</button>
+    		    <button name="cmd" value="Delete">Delete</button>
+    		    <?php
+    		 } else {
+    		 	?>
+    		 	<button name="cmd" value="Add">Add</button>
+    		 	<?php
+    		 }
+    		?>
+    		<button name="cmd" value="Cancel">Cancel</button>
+    	</p>
+    	<p><?=$message?></p>
+  </form>
+
+  <table>
+  	<tr>
+  		<th>Country</th>
+  		<th>Action</th>
+  	</tr>
+  	<?php 
+  	  foreach ($countries as $c) {
+  	  	?>
+       <tr>
+       	<td><?=$c["country_name"]?></td>
+       	<td>
+       		<form method="post">
+       			<input type="hidden" 
+       			name="country_id" 
+       			value="<?=$c[0]?>" />
+       			<button name="cmd" value="Search">Edit</button>
+       		</form>
+       	</td>
+       </tr>
+  	  	<?php
+  	  }
+  	 ?>
+  </table>
+</div>	
+
+<?php include_once "templates/footer.php" ?>
+
+
+3. state.php
+
+<?php
+ $title = "State";
+ include_once 'templates/header.php';
+
+ $state_id = 0 + post("state_id");
+ $state_name = post("state_name");
+ $country_id = 0 + post("country_id");
+ $cmd = post("cmd");
+ $message = "";
+ $is_edit = false;
+
+//Actions
+ if($cmd == "Add") {
+  $sql = "insert into state (state_name,country_id) values (?,?)";
+  $data = array($state_name,$country_id);
+  $message =  execute($sql,$data) ? "Added successfully" : "Can't add";
+
+ }
+ else
+ if($cmd == "Update") {
+  $sql = "update state set state_name=? where state_id=?";
+  $data = array($state_name,$state_id);
+  $message =  execute($sql,$data) ? "Updated successfully" : "Can't update";
+  $is_edit = true;
+
+ }
+ else
+ if($cmd == "Delete") {
+  $sql = "delete from state  where state_id=?";
+  $data = array($state_id);
+  $message =  execute($sql,$data) ? "Deleted successfully" : "Can't delete";
+  $cmd = "Cancel";
+ }
+ else
+ if($cmd == "Search") {
+  $sql = "select * from state  where state_id=?";
+  $data = array($state_id);
+  $row =  row($sql,$data);
+  if($row) {
+    $country_id = $row["country_id"];
+    $state_name = $row["state_name"];
+    $state_id = $row["state_id"];
+    $is_edit = true;
+  }
+ }
+ 
+  if($cmd == "Cancel") {
+    $country_id = "";
+    $state_name = "";
+    $state_id = "";
+    $is_edit = false;
+
+  }
+
+ //Fetch countries & states
+ $countries = rows("select * from country order by country_name");
+ $states = rows("select * from state where country_id=?",array($country_id));
+?>
+<div>
+  <h3>State</h3>
+  <form method="post" id="form1">
+      <input type="hidden" name="state_id" value="<?=$state_id?>" />
+      <p>Country</p>
+      <p>
+        <select name="country_id" onchange="form1.submit()">
+        	<option value="">Choose</option>
+        	<?php
+              foreach ($countries as $c) {
+              	$sel = $c["country_id"] == $country_id ? "selected" : "";
+              	echo "<option value='$c[0]' $sel>$c[1]</option>";
+              }
+        	 ?>
+        </select>
+      </p>
+      <p><input type="text" name="state_name" 
+      	value="<?=$state_name?>" 
+      	placeholder="State Name"></p>
+
+      	<p>
+    		<?php
+    		 if($is_edit) {
+    		 	?>
+    		 	<button name="cmd" value="Update">Update</button>
+    		    <button name="cmd" value="Delete">Delete</button>
+    		    <?php
+    		 } else {
+    		 	?>
+    		 	<button name="cmd" value="Add">Add</button>
+    		 	<?php
+    		 }
+    		?>
+    		<button name="cmd" value="Cancel">Cancel</button>
+    	</p>
+    	<p><?=$message?></p>
+  </form>
+</div>	
+
+<table>
+    <tr>
+      <th>State</th>
+      <th>Action</th>
+    </tr>
+    <?php 
+      foreach ($states as $c) {
+        ?>
+       <tr>
+        <td><?=$c["state_name"]?></td>
+        <td>
+          <form method="post">
+            <input type="hidden" 
+            name="state_id" 
+            value="<?=$c[0]?>" />
+            <button name="cmd" value="Search">Edit</button>
+          </form>
+        </td>
+       </tr>
+        <?php
+      }
+     ?>
+  </table>
+
+<?php  include_once 'templates/footer.php'; ?> 
+
+4. city.php
+
+<?php
+ $title = "City";
+ include_once 'templates/header.php';
+
+ $state_id = 0 + post("state_id");
+ $city_name = post("city_name");
+ $country_id = 0 + post("country_id");
+ $city_id = 0 + post("city_id");
+ $cmd = post("cmd");
+ $message = "";
+ $is_edit = false;
+
+//Actions
+ if($cmd == "Add") {
+  $sql = "insert into city (city_name,state_id) values (?,?)";
+  $data = array($city_name,$state_id);
+  $message =  execute($sql,$data) ? "Added successfully" : "Can't add";
+
+ }
+ else
+ if($cmd == "Update") {
+  $sql = "update city set city_name=? where city_id=?";
+  $data = array($city_name,$city_id);
+  $message =  execute($sql,$data) ? "Updated successfully" : "Can't update";
+  $is_edit = true;
+
+ }
+ else
+ if($cmd == "Delete") {
+  $sql = "delete from city  where city_id=?";
+  $data = array($city_id);
+  $message =  execute($sql,$data) ? "Deleted successfully" : "Can't delete";
+  $cmd = "Cancel";
+ }
+ else
+ if($cmd == "Search") {
+  $sql = "select * from city  where city_id=?";
+  $data = array($city_id);
+  $row =  row($sql,$data);
+  if($row) {
+    
+    $city_name = $row["city_name"];
+    $state_id = $row["state_id"];
+    $city_id = $row["city_id"];
+    $is_edit = true;
+  }
+ }
+ 
+  if($cmd == "Cancel") {
+    $country_id = "";
+    $city_name = "";
+    $state_id = "";
+    $city_id = "";
+    $is_edit = false;
+
+  }
+
+ //Fetch countries & states
+ $countries = rows("select * from country order by country_name");
+ $states = rows("select * from state where country_id=?",array($country_id));
+ $cities = rows("select * from city where state_id=?",array($state_id));
+?>
+<div>
+  <h3>State</h3>
+  <form method="post" id="form1">
+      <input type="hidden" name="city_id" value="<?=$city_id?>" />
+      <p>Country</p>
+      <p>
+        <select name="country_id" onchange="form1.submit()">
+        	<option value="">Choose</option>
+        	<?php
+              foreach ($countries as $c) {
+              	$sel = $c["country_id"] == $country_id ? "selected" : "";
+              	echo "<option value='$c[0]' $sel>$c[1]</option>";
+              }
+        	 ?>
+        </select>
+      </p>
+
+      <p>State</p>
+      <p>
+        <select name="state_id" onchange="form1.submit()">
+          <option value="">Choose</option>
+          <?php
+              foreach ($states as $c) {
+                $sel = $c["state_id"] == $state_id ? "selected" : "";
+                echo "<option value='$c[0]' $sel>$c[1]</option>";
+              }
+           ?>
+        </select>
+      </p>
+      <p><input type="text" name="city_name" 
+      	value="<?=$city_name?>" 
+      	placeholder="City Name"></p>
+
+      	<p>
+    		<?php
+    		 if($is_edit) {
+    		 	?>
+    		 	<button name="cmd" value="Update">Update</button>
+    		    <button name="cmd" value="Delete">Delete</button>
+    		    <?php
+    		 } else {
+    		 	?>
+    		 	<button name="cmd" value="Add">Add</button>
+    		 	<?php
+    		 }
+    		?>
+    		<button name="cmd" value="Cancel">Cancel</button>
+    	</p>
+    	<p><?=$message?></p>
+  </form>
+</div>	
+
+<table>
+    <tr>
+      <th>City</th>
+      <th>Action</th>
+    </tr>
+    <?php 
+      foreach ($cities as $c) {
+        ?>
+       <tr>
+        <td><?=$c["city_name"]?></td>
+        <td>
+          <form method="post">
+            <input type="hidden" 
+            name="city_id" 
+            value="<?=$c[0]?>" />
+
+            <input type="hidden" 
+            name="country_id" value="<?=$country_id?>" />
+            <input type="hidden" 
+            name="state_id" value="<?=$state_id?>" />
+            <button name="cmd" value="Search">Edit</button>
+          </form>
+        </td>
+       </tr>
+        <?php
+      }
+     ?>
+  </table>
+
+<?php  include_once 'templates/footer.php'; ?> 
+
+
+

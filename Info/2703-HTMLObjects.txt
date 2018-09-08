@@ -1,0 +1,179 @@
+7. document.createElement("elementName") - It creates an object of given element and 					   returns the object reference.
+
+   Note that the newly created HTML object cannot be appear on the screen until it 
+   is not added into the document tree or an existing HTML object.
+
+8. obj.appendChild( object ) -- This is the method through which we can append (at the 	end of the list) the newly created object.
+9. obj.remove() - Removes the current object from the document tree
+10. obj.removeChild( object)  - Remove the child node.
+11. obj.parent  - Returns the reference of parent node
+
+Example: Add some objects programatically
+<div id="result"></div>
+
+<script>
+  let result = document.querySelector("#result");
+  
+  //create a text fiekd
+  let p1 = document.createElement("input");
+  p1.setAttribute("type","text");
+
+  //create a heading h1
+  let p2 = document.createElement("h1");
+  p2.innerHTML = "Welcome!!!";
+
+  //Now, attach these newly created objects into existing dom #result
+   result.appendChild( p1 );
+   result.appendChild( p2 );
+</script>
+ 
+Example: Populate the countries
+
+<select id="country">
+  <option value="">Choose</option>
+</select>
+
+<script>
+  let countries = ["India","Nepal","UK"];
+  let country = document.querySelector("#country");
+
+  for(let x in countries) {
+    let op = document.createElement("option");
+    op.innerHTML = countries[x];
+    country.appendChild( op );
+  }
+</script>
+
+Example: Input "countryName" and add it into <select> dom
+
+Country : _______________  [Add]
+
+[      V]  <-- select object
+
+
+Example: Input "countryName" and add it to the div container as a radio button item.
+
+<input type="text" id="country">
+	<button onclick="doAdd()">Add</button>
+    <div id="result"></div>
+
+<script>
+  let result = document.querySelector("#result");
+  let country = document.querySelector("#country");
+
+  function doAdd() {
+  	 let p = document.createElement("p");
+  	 let span = document.createElement("span");
+  	 span.innerHTML = country.value;
+
+     let rad = document.createElement("input");
+     rad.setAttribute("type","radio");
+     rad.setAttribute("name","country");
+
+     p.appendChild(rad);
+     p.appendChild(span);
+
+     result.appendChild( p ) ;
+  }
+</script>
+
+Example: Create 5 x 5 cells of table
+ 
+Example: Create 5 x 5 cells of table and handle the event of "td" to change the background color when it is clicked.
+
+Example: Store the data into table object
+
+Product: _____
+Qty    : _____
+Rate   : _____
+[Add]
+
+---------------------------------
+Name  Qty   Rate             Amount
+------------------------------------
+Pencil 4	5		20
+...
+...
+...
+------------------------------------
+                  Total         xxxxx
+
+ Amount in words: Rs. xxx hundred and 
+                      xxx.
+
+Example: Program to display amount in words.
+
+Example: Program to validate the form elements:
+
+No: ________      (must be positive number)
+Name: _________   (length must be in between 5 to 50)
+
+[Submit] <--- Handle the click event of submit and check the value of input elements.
+              validate them display appropriate message on the screen.
+
+		Note: You may add gender, birth date, email, password, textarea for
+			address, dropdown for country in above form.
+
+Example: Use the Question & Quiz class to display all questions on single page. (No next or prev buttons).
+Example: Use the Product & Cart class to display all products, rate, amount, qty in the form of HTML <table>.
+Example: Display "Family" members using Person and Family class objects.
+
+e.g (I'd like to suggest - ul )
+  * A
+     * P
+        *R
+        *T
+     * Q 
+Though, you may use <table>.
+Example: Populate [Country V], [State V] and [City V] Dropdown list as user select the country, and a state.
+
+
+Example:
+
+ <style>
+    	table {
+    		border-collapse: collapse;
+    		border: 1px solid #aaa;
+    	}
+    	td , th{
+    	 border: 1px solid #aaa;
+    	 padding: 10px;	
+    	}
+    </style>
+
+   <input type="text" id="name" placeholder="Name" />
+   <input type="text" id="age" placeholder="Age" />
+   <button onclick="doAdd()">Add</button>
+    <table>
+    	<thead>
+    		<tr><th>Name</th><th>Age</th><th></th></tr>
+    	</thead>
+    	<tbody id="rows"></tbody>
+    </table>
+<script>
+    let rows = document.querySelector("#rows");
+    function doAdd() {
+    	var tr = document.createElement("tr");
+    	var td1 = document.createElement("td");
+    	var td2 = document.createElement("td");
+    	var td3 = document.createElement("td");
+        var link = document.createElement("a");
+
+        link.innerHTML = "Delete";
+        link.setAttribute("href","#");
+        link.onclick = (function(row) {
+           return function() {
+           	 row.remove();
+           }
+        })(tr)
+
+        td1.innerHTML = document.querySelector("#name").value;
+        td2.innerHTML = document.querySelector("#age").value;
+        td3.appendChild( link );
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        rows.appendChild(tr);
+    }
+</script>

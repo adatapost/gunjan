@@ -1,0 +1,179 @@
+The superglobals or global arrays in PHP
+=========================================
+
+Following pre-defined arrays in PHP can be used anywhere -- inside the class, method, function or page scope (level).
+
+1. $_POST 	This array is populated by the PHP engine when it receives the client
+		request of POST method
+
+2. $_GET	This array will be populated when PHP engine receives the GET client
+		request.
+
+3. $_REQUEST	This array will be populated when PHP engine either receives GET or 		POST request.
+
+4. $_FILES	This array will be populated when PHP engine receives files or binary
+		content in the form of attachment with POST request.
+5. $_SESSION    This array represent the client data into server memory. This array
+		will be created automatically when client first time approach the web
+		app and remains alive till the client (browser) is opened/active.
+6. $_COOKIE	This array represent the cookies.
+
+7. $GLOBALS	This array represent all page-scope varialbes (variables created in a
+		page are added automatically to the $GLOBALS array).
+8. $SERVER_VARIABLE - This array represent PHP, Apache and MySQL server configuration
+		      as well as request/response data.
+9. $_ENV		This array represents the environment variables of the 			operating system. e.g Path and many other.
+
+
+Examples  - Receive client data
+======== 
+
+1. In order to receive the client data, first examine the element present in the array or not.
+2. Secondly, if element is present then read the value into appropriate variable with type conversion if required. Use fallback (default) value if element is not exists.
+
+Following example is consider as best practice to read the POST request:
+
+sample.php
+----------
+<?php
+  //create necessary variables
+  $no = 0;
+  $name = "";
+  $bdate = "";
+
+  $message = "";
+  $cmd = "";
+
+  //Read the $_POST elements 
+  if(isset($_POST["no"])) {
+    $no = $_POST["no"] + 0;  // convert to number
+  } 
+  $name = isset($_POST["name"]) ? $_POST["name"] : "";
+  $bdate = isset($_POST["bdate"]) ? $_POST["bdate"] : "";
+  $cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";  
+
+  //ACtions on data
+  if($cmd == "Add") {
+     $message = "Data recived $no, $name, $bdate for $cmd action";
+  }
+  else
+  if($cmd == "Update") {
+     $message = "Data recived $no, $name, $bdate for $cmd action";
+  }
+?>
+<form method="post">
+  <p>No <input type="number" name="no"/> </p> 
+  <p>No <input type="text" name="name"/> </p>
+  <p>No <input type="date" name="bdate"/> </p>
+  <p><?=$message?></p>
+  <p>
+    <button name="cmd" value="Add">Add new record</button>
+    <button name="cmd" value="Update">Update record</button>
+  </p>
+</form>
+ 
+
+Example: Update the previous program to embed the data into <input> form elements:
+....
+<p>No <input type="number" value="<?=$no?>" ....</p>
+       ....                value="<?=$name?>" ....
+
+Embed data into <form> input elements so we can reuse same data on multiple requests
+------------------------------------------------------------------------------------
+Example - 1 Write a code which heightlight the submitted button in a <form> having Add, Delete, Update, Cancel buttons.
+
+<?php
+   $cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
+?>
+<style>
+ .highlight {
+ 	background: green;
+ }
+</style>
+<form method="post">
+  <p>
+    <button name="cmd" 
+    <?=$cmd=="Add" ? "class='highlight'" : ""?> value="Add">Add</button>
+    <button name="cmd" 
+    <?=$cmd=="Update" ? "class='highlight'" : ""?>
+    value="Update">Update</button>
+  </p>
+</form>
+  
+Example-2 We've an array that consists four student records. Write code to show one by one record when user press Next or Previous submit button.
+
+[Note: You may also use quiz-questions..]
+
+
+ <?php
+   $students = array(
+   	 array(10,"Reena"),
+   	 array(12,"Meena"),
+   );
+   $cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
+   $index = 0 +  isset($_POST["index"]) ?  $_POST["index"] : "";
+
+   $count = count($students);
+
+   if($cmd == "Next") {
+   	$index++;
+   }
+   if($cmd == "Prev") {
+   	$index--;
+   }
+
+   if($index<0) 
+     $index = $count - 1;
+   if($index>=$count)
+     $index = 0;
+?>
+ <div>Roll : <?=$students[$index][0]?></div>
+ <div>Name : <?=$students[$index][1]?></div>
+<form method="post">
+  <input type="hidden" name="index" value="<?=$index?>">
+  <button name="cmd" value="Prev">Previous</button>
+  <button name="cmd" value="Next">Next</button>
+</form>
+
+Example: Read and embed data 
+
+Name : __________
+Gender: ( ) Female ( ) Male
+Country : ______ V
+Hobbies : [ ] Read
+          [ ] Write
+          [ ] Play
+          
+   [Submit]
+
+Receive multiple values - array
+================================
+
+ The name attribute value of input element must use [] subscript as suffix.
+   e.g  name="no[]"  or name="product[]"
+
+Example:
+ <?php
+    $nos = isset($_POST["no"]) ? $_POST["no"] : array(0,0,0,0);
+    var_dump($nos);
+?>
+<form method="post">
+   <?php 
+     foreach ($nos as $v) {
+     	echo "<input type='number' name='no[]' value='$v'></br/>";
+     }
+  ?>
+<!-- OR
+    <input type="number" name="no[]" value="<?=$nos[0]?>"></br/>
+    <input type="number" name="no[]" value="<?=$nos[0]?>"></br/>
+    <input type="number" name="no[]" value="<?=$nos[0]?>"></br/>
+    <input type="number" name="no[]" value="<?=$nos[0]?>"></br/>
+-->
+    <button>Submit</button>
+</form>
+
+
+
+
+
+

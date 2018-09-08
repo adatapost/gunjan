@@ -1,0 +1,48 @@
+The bootstrap CSS framework
+===========================
+This is the most commonly used CSS fraework which uses jQuery and popper.js (for tooltips) to define structural behavior of the web components.
+
+First of all, we can download the bootstrap css and js files from getbootstrap.com Or we can use CDN resources too.
+
+[Note: Also download the jquery and popper.js. However, there is a bootstrap.bundle.js which includes the popper.js]
+
+How to boostrap (plug) the bootstrap framework?
+-----------------------
+1. Download the zip, extract it and copy css and js folders (along with jquery) in    your project.
+2. Embed the .js and .css resources into your document as per specified order.
+
+ <head>
+    <meta charset="utf-8">
+    <meta name="viewport" 
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+     <title>BootStrap</title>
+     <link rel="stylesheet" href="css/bootstrap.min.css"/>
+     
+     <!-- User's css placed after the boostrap css -->
+     <link rel="stylesheet" href="css/style.css"/>	
+</head>
+<body>
+  <div class="container">
+    <header><h1>This is the title </header>
+  </div>
+
+ <!-- 1. Embed jQuery.js first and 2. Embed the bootstrap.js -->
+ <script src="js/jquery-3.3.1.js"></script>
+ <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
+Example: 12 columns grid in boostrap
+
+<div class="container">
+  <div class="row">
+     <div class="col">Equal sized column</div>
+     <div class="col">Equal sized column</div>
+   </div>
+  <div class="row">
+     <div class="col">Equal sized column</div>
+     <div class="col">Equal sized column</div>
+     <div class="col">Equal sized column</div>
+     <div class="col">Equal sized column</div>
+   </div>
+</div>

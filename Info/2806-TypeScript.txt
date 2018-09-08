@@ -1,0 +1,277 @@
+The Generator & Iterator  - TypeScript & ES6 feature
+========================
+
+Note: We need to set "target: ES6" switch/option in order to use this feature in TypeScript.
+
+What is Generator?
+ 
+   It is an object that hold collection of other objects which are addeded via "yield"    keyword.
+
+What is an Iterator?
+
+   It is an object that has methods to traverse/visit the elements of "Generators" or    "Collections" or "Arrays".
+
+   We've for..in and for..of "Iterator" loops to traverse the elements.
+
+How to create Generator in TS and ES (Common Syntax)?
+----------------------------------------------------
+
+function* generator_name(parameters....) {
+   .....
+   yield value; 
+   .....
+}
+
+Example:
+
+function* get_nos() {
+  yield 10;
+  yield 20;
+  for(let i=1;i<=5;i++) {
+     yield i;
+  }
+}
+
+//Obtain generator object and traverse them via iterator loop
+for(let no of get_nos()) {
+   console.log(no);
+}
+
+//Alternate way to traverse the generator list
+let nos = get_nos();
+let no = nos.next();
+while( !no.done ) {
+  console.log(no.value);
+  no = nos.next();
+}
+
+Define generators for Emp collection class "Emps"
+============================================
+
+class Emp {
+   name:string = ""	
+   salary:number = 0;
+   dept: string = "";
+
+   constructor(name: string = "", salary: number = 0, dept: string = "") {
+   	  this.dept = dept;
+   	  this.name = name;
+   	  this.salary = salary;
+   }
+}
+
+class Emps {
+	emps: Emp[] = [];
+	constructor(emps: Emp[]) {
+		this.emps = emps;
+	}
+
+	*get_by_dept(dept: string) {
+		for(let e of this.emps) {
+			if(e.dept == dept) {
+				yield e;
+			}
+		}
+	}
+
+    // Receive compare function
+	*predicate(cmp:any,value: any)  {
+		for(let e of this.emps) {
+			if(cmp(e, value)) {
+				yield e;
+			}
+		}
+	}
+}
+// Test -1
+let emps = new Emps([new Emp("A",400,"Acc"),
+	new Emp("Q",40,"Fin"),
+	new Emp("BA",600,"HR"),
+	new Emp("A",20,"Fin"),
+	new Emp("B",86,"HR"),
+	new Emp("Z",100,"Acc")]);
+
+let coll = emps.get_by_dept("HR");
+for(let emp of coll) {
+	console.log(emp.name, emp.dept, emp.salary);
+}
+console.log("---");  
+coll = emps.predicate( ((p: any,n: any)=>p.salary<n), 100)  ;
+for(let emp of coll) {
+	console.log(emp.name, emp.dept, emp.salary);
+}
+console.log("---");
+coll = emps.predicate( ((p: any,n: any)=>p.name.startsWith(n)), "B")  ;
+for(let emp of coll) {
+	console.log(emp.name, emp.dept, emp.salary);
+}
+
+Example: Define a User collections -- 'Users' class. 
+
+class User {
+   email: string = "";
+   pass: string = "";
+   isActive: boolean = false;
+   created: Date = new Date();
+   lastLogin: Date = new Date();
+   role: string = "";
+   profilePhoto: string  = "";
+}
+
+Add following generators and predicate methods:
+
+get_user_by_roll(roll);
+get_active_users()
+get_inactive_users()
+getAllUsersHaveProfilePhoto()
+getLastLoginUsersByMonthNumber(monthNo)
+lastWeekLoggedUsers()  or lastLoggedUsers(lastDays = 7)
+listAllAccountsHavingAgeInBetweenDays(start,end) e.g 1,50 days
+
+Example: Passing a function to another function by setting parameters and returns type.
+
+If you use "any" type then you may pass "any" value including an object of complex type, function type or primitive type.
+
+If you wish that your method takes exact a function whose parameters & return type must match the given contract then use following syntax:
+
+ 
+function test(cmd: {(n1: number, n2: number): boolean} ) {
+   console.log( cmd(10,20) );
+   console.log( cmd(20,1) );
+}
+
+test( (p,q)=>p>q );
+
+Symbol type
+============
+
+The "Symbol" is a primitive type like number, string or boolean. The Symbol() construct is used to create a symbol object.
+
+
+The Symbol() object always returns unique content and the unique content of Symbol cannot be read or view via any terms but it gaurantee that the object has unique value.
+In other words, no one know what the value a symbol object has but it ensures us that the value must be unique.
+
+This symbol is mainly used to create an object properties whose keys/properties you want to hide for one or more reasons, especially for security purpose. You don't want users can dump the object content with some special properties.
+
+Example:
+
+let s1 = Symbol();   //  Returns symbol object 
+let s2 = Symbol();   //  Returns symbol object 
+let s3 = Symbol("password") //Returns symbol object 
+
+console.log( s1 == s2 );  // False - they've unique content
+console.log(s1, s2, s3);  // Can't dump/view the content of symbols
+
+//Use of symbols
+
+let emp: any = {};
+emp[s1] = "Credit Card Information";
+emp[s2] = "Pin";
+emp[s3] = "Password";
+emp["id"] = 10
+
+console.log(emp);
+
+// Symbol properties are hidden and cannot be dump or stringfy
+console.log(JSON.stringify(emp));
+
+// Read the object properties - within the program
+console.log(emp[s1]);
+console.log(emp[s3]);
+
+
+The Modules
+============
+
+The "Module" is technique to create a local namespace for all functions, variables, classes, interfaces exists in a program file -- .js or .ts file. All functions, variables, classes, enums, interfaces (all entities) exists in a source code file are automatically added into the module object itself and these entities (functions, classes, variables etc) are not visible/available to other module except some of these entities are marked as "export entities".
+
+The "export" keyword tells the module system that the "export entities" can be visible in other module if that export entity is "import" via module import techniques -- we've two modules systems -- CommonJS and Require.js (node).
+
+Bascially, the "Module System" is introduced to define a new namespace and export those entities to other modules which are really needed. In JavaScript, every entity is created into "window" namespace. The module system is a way to create a unique namespace and put some of the entities under this unique namespace so the other modules can use them.
+
+Steps to create modules and how to import them
+----------------------------------------------
+
+1. Create a folder say "app1" and add "first.ts"
+
+export let n1: number = 10
+export function testIt(): void {
+	console.log("testIt from first module");
+}
+
+2. Add another file "second.ts"
+
+export let n1: number = 20
+export function testIt(): void {
+	console.log("testIt from second module");
+}
+
+Note: The "export" keyword define a file as a "module". If your code file hasn't any export entity then this file wont be consider as module.
+
+3. Use the exported entities into "test.js" -- here we have to import all or few of the
+exported entities.
+
+import * as alias from "./moduleName";
+
+    This syntax import all exported entities with special "alias or namespace" name.
+
+    The module name must enclosed with single/double quotes and must begins with ./
+
+import {entity1,entity2} from "./moduleName";  will import specified entity from the given module.
+
+test.ts
+----------
+import * as one from "./first"  
+import * as two from "./second"  
+
+console.log( one.n1 );
+console.log( two.n1 );
+
+one.testIt();
+two.testIt();
+
+OR, we can import some of the exported entities
+
+test.ts
+----------
+import { testIt } from "./first"
+import { n1, testIt as a1} from "./second"
+
+testIt();
+console.log( n1 );
+a1()
+
+Export the entities via single export { entity1,entity2,...} declaration
+-------------------------------------------------------------------------
+The export { } object must appear at the end of module (bottom):
+
+second.ts
+---------
+let n1: number = 20
+function testIt(): void {
+	console.log("testIt from second module");
+}
+
+export {n1, testIt};   // Will export two entities
+
+Rename the exported entity:
+--------------------------
+ export { entity as newName, entity2 as newName2 }
+
+ Now, you have to import the module's entities with newName.
+
+
+second.ts
+----------
+.....
+export {n1 as num, testIt as help }
+
+test.ts
+--------
+import { num, help } from "./second"
+
+
+
+
+
+

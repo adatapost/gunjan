@@ -1,0 +1,204 @@
+Creating components classes and component templates 
+====================================================
+
+By default, app component class is already exists with a new project. Now, we want to create separate for component for each entity.
+
+ For instance,
+   Components for student, course, timetable, etc.
+
+Example: Product app contains "category", "product", "customer" components.
+
+Step-1 : create a "customer" component
+
+>ng generate component customer
+   
+   This will create a folder named "customer" under the /app folder and all component
+   class, css and template files will be saved in it.
+
+Also create two other components,
+>ng generate component category
+>ng generate component product
+
+Step-2 Now, attach the one of the three component's view to the app-root (or main) DOM.
+
+  -> Open app.component.html
+  
+   <h1>Product App</h1>
+   <hr/>
+   <app-customer></app-customer> 
+OR
+    <app-product></app-product>
+
+Example: 1 Design the customer compnent to represent customer data and allow some actions on them.
+
+Step-1 Create customer.ts class
+>ng generate class customer
+
+export class Customer {
+	id: number;
+	name: string;
+	email: string;
+	password: string;
+	active: boolean;
+	birthDate: Date;
+
+	constructor(id: number = 0,
+	name: string = '',
+	email: string = '',
+	password: string = '',
+	active: boolean = true,
+	birthDate: Date = new Date(0)) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.active = active;
+		this.birthDate = birthDate;
+	}
+
+}
+
+Step-2 Add bootstrap CDN links into "index.html" located outside the app folder.
+
+Step-3 Code in app-component.html 
+
+<div class="container">
+	<header>
+		<h1>Product app</h1>
+	</header>
+	<nav>
+	</nav>
+	<div>
+		<app-customer></app-customer>
+	</div>
+</div>
+
+Step-4 Design the customer.component.html
+
+<div class="row">
+  <div class="col-10 center">
+    <div class="card">
+    	<div class="card-header">
+    		<h4>Customers</h4>
+    	</div>
+    	<div class="card-body">
+    		<!-- Customer -->
+    		<fieldset>
+    			<legend>Customer</legend>
+    			<div>
+    				<label class="label-control">Id
+    				<input class="form-control" type="number" [(ngModel)]="cust.id" />
+    				</label>
+    			</div>
+    			<div>
+    				<label class="label-control">Name
+    				<input class="form-control" type="text" 
+    				[(ngModel)]="cust.name" />
+    				</label>
+    			</div>
+    			<div>
+    				<label class="label-control">Email
+    				<input class="form-control" type="email" 
+    				[(ngModel)]="cust.email" />
+    				</label>
+    			</div>
+    			<div>
+    				<label class="label-control">Password
+    				<input class="form-control" type="text" 
+    				[(ngModel)]="cust.password" />
+    				</label>
+    			</div>
+    			<div>
+    				<label class="label-control">Active
+    				<input class="form-control" type="checkbox" 
+    				[(ngModel)]="cust.active" />
+    				</label>
+    			</div>
+    			<div>
+    				<label class="label-control">Birth Date
+    				<input class="form-control" type="date" 
+    				[(ngModel)]="cust.birthDate" />
+    				</label>
+    			</div>
+    			<p>
+    				<button 
+    				(click)="custAdd()" 
+    				class="btn btn-sm btn-info">Add</button>
+    				<button 
+    				(click)="custCan()" 
+    				class="btn btn-sm btn-info">Cancel</button>
+    			</p>
+    		</fieldset>
+    		
+
+    		<!-- Customer List -->
+    		<table class="table table-bordered">
+    			<tr *ngFor="let c of custs">
+    			  <td>{{c.id}}</td>
+    			  <td>{{c.name}}</td>
+    			  <td>{{c.email}}</td>
+    			  <td>{{c.password}}</td>
+    			  <td>{{c.active}}</td>
+    			  <td>{{c.birthDate}}</td>
+    			  <td>
+    			  	 <button 
+    			  	 (click)="custEdit(c)" 
+    			  	 class="btn btn-sm btn-info">Edit</button>
+    			  	 <button 
+    			  	 (click)="custDel(c)" 
+    			  	 class="btn btn-sm btn-danger">Delete</button>
+    			  </td>
+    			</tr>
+    		</table>
+    	</div>
+    	<div class="card-footer">
+    		<em>Customer Component Example</em>
+    	</div>
+    </div>
+  </div>
+</div>	
+
+Step-5 Define the fields and event handlers into customer.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+import { Customer } from "../customer";
+
+@Component({
+  selector: 'app-customer',
+  templateUrl: './customer.component.html',
+  styleUrls: ['./customer.component.css']
+})
+export class CustomerComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  // Fields
+  cust: Customer = new Customer();
+  custs: Array<Customer> = []; // new Customer(1,"a","a@a.com","pass",true, new Date(Date.parse("2001-10-2"))) 
+
+  // Event handlers
+  custAdd() : void {
+  	let t: Customer = new Customer(this.cust.id, this.cust.name, this.cust.email, 
+  		this.cust.password, this.cust.active, this.cust.birthDate);
+  	this.custs.push( t );
+
+  }
+  custCan() : void {
+    this.cust = new Customer();
+  }
+  custEdit(c:Customer) : void {
+  	this.cust = c;
+  }
+  custDel(c:Customer) : void {
+  	let index = this.custs.indexOf(c);
+  	if(index!=-1) {
+  		this.custs.splice(index,1);
+  	}
+  }
+}
+
+  

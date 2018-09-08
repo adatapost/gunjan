@@ -1,0 +1,49 @@
+The XMLHttpRequest Object
+=========================
+
+To request the web-resources programatically and also send the data to the server programs.
+
+This kind of communication is also known as AJAX - Asyncronious JavaScript And XML - where request and request data and response and response data being sent and received backgroundly or asynchroniously.
+
+To request web-resources (files or programs at server location):
+ 1. assume that we've following files at /www/mywebapp  folder 
+
+    1. my-data.json
+[{"no": 10,"name": "Reena"},{"no":22, "name": "Meena"}]
+    2. site.json
+    { "name": "The Appleman Pvt Ltd", "owner: " ABC" }
+    3. sample.php
+       <?php echo "Welcome to PHP. To day is " . date("d-m-Y");
+    4. sample.txt
+        This is a text file.
+    5. index.html <--- Add code to request different resources backgroundly.
+                      
+     So, code in index.html:
+<script>
+    //1. Create XHR object
+    let xhr = new XMLHttpRequest();
+
+    //2. Set URL and Request method (GET or POST)
+    xhr.open("post","my-data.json");
+
+    //3. Set the callback - The XHR returns status code in the form of readyState 
+    //   property and if readyState == 4 (xhr.DONE) then we've returned output/result
+    //   in "xhr.responseText" proeprty
+
+    xhr.onreadystatechange = ()=> {
+    	console.log( xhr.DONE , xhr.readyState);
+        if(xhr.DONE == xhr.readyState) {
+             console.log( xhr.responseText );
+             // let obj = JSON.parse(xhr.responseText);
+             // console.dir( obj );
+         }
+     };
+
+   //4. Tell the XHR to start the request
+    xhr.send();
+</script>	
+
+
+  
+ 
+

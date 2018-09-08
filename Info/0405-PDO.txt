@@ -1,0 +1,87 @@
+PDO - PHP Data Access Object Class Library
+===========================================
+
+This is database integration API which works with any known database and numbers of frameworks laravel, phpcake, wordpress and many more uses PDO library.
+
+In order to use the PDO, we must have to use two classes:
+ 1. PDO and
+ 2. PDOStatement
+
+The PDO constructor takes database connection string which includes:
+
+     1. database product name e.g oracle, mysql, mssql
+     2. host ipaddress or friendly domain name
+     3. database port , user and password
+
+Syntax:
+
+  $cn = new PDO("mysql:host=localhost;dbname=your_db_name","user_name","password")
+
+  For example, suppose if we've "emp_db" database then:
+ 
+   $cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");  statement will           establish the database connection.
+
+   The PDO() object then allow us to create the PDOStatement instance by calling    prepare() method. The prepare() method takes SQL Statement as argument.
+
+   PDO compile your SQL statement and leave placeholder open to receive the data. The placeholder or parameter is added using ? (question mark) symbol.
+
+Example: Assume we've emp(emp_id,emp_name,bdate) table
+
+<?php
+  $cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");
+  $st = $cn->prepare("insert into emp values (?,?,?)"); // create a PDOStatement
+  
+  $st->execute( array(10,'Reena','2002-10-20') ); //Three values for three placeholders
+?>
+
+Example: Improvised PDO example
+
+<?php
+  $cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");
+
+  $sql = "update emp set emp_name=?, bdate=? where emp_id=?";
+  $data = array('Seema Shah','10-19-2002',10);
+
+  $st = $cn->prepare($sql);
+  $st->execute( $data );
+
+  //Obtain error object
+  $err = $st->errorInfo();
+  //var_dump($err);
+  if($err[1]) {
+    echo "Failed : " . $err[2];
+  } else {
+  	echo "Success";
+  }
+?>
+
+The fetch(options) - fetch one record at a time
+The fetchAll(options) - fetch all records at once
+--------------------------------------------------
+
+<?php
+  $cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");
+
+  $sql = "select * from emp where emp_id=?";
+  $data = array(10);
+
+  $st = $cn->prepare($sql);
+  $st->execute( $data );
+
+  //fetch a record -- $st->fetch();
+  //$mixed = $st->fetch();
+  //var_dump($mixed);
+
+  //$map = $st->fetch(PDO::FETCH_ASSOC);
+  //var_dump($map);
+
+  //$indexed = $st->fetch(PDO::FETCH_NUM);
+  //var_dump($indexed);
+
+   $obj = $st->fetch(PDO::FETCH_OBJ);
+   var_dump($obj);
+?>
+
+
+
+ 

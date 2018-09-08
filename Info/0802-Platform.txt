@@ -1,0 +1,205 @@
+The Web Platform
+==============================================================================
+
+Basic Terminologies
+---------------------
+
+1. Platform Or Framework
+
+It is a computing environment through which we can develop, deploy and execute the applications.
+
+The operating system is the core/fundamental platform and we used C or C++ language to write code on the OS platform.
+
+We've number of sub or sub-sub platforms for ease in software development & deployment.
+
+Mostly (almost all) sub or sub-sub platforms are written in C++ (or C) Language. JavaScript, Web-browsers, PHP, MySql, Java, .NET etc are written using C++.
+
+2. The Web Platform
+
+   It is composed of two platforms - Server platform (PHP, JSP/Servlet, ASP.NET etc)    and Client platform (Web browers or desktop app including mobile apps).
+
+    
+   What is "Server" program?  A program exposes or offers services to other programs
+				is called "Server or Service program".
+
+   What about "Client" program? A program that consumes the services of "server 	program" is called "Client program".
+
+
+   Note that there must be a network between client & server program communication. Each program in client-server achritecture have a IP-address and port number for identity. So,  "a-client","b-client",.... etc clients request the server program based
+upon their unique identity and vice-versa, server program respond the clients accordingly.
+
+ For instance
+
+ Client1 (10.10.1.1:9000) ----> Request --->|
+ Client2 (10.10.1.1:9002) ----> Request --->|--->  Server Program
+ Client3 (10.10.1.1:9003) ----> Request --->|<---  Process the request and returns
+ Client4 (10.10.1.11:9000) ----> Request--->|      output/response
+                                                    (129.11.22.1:1234)
+
+ There are total  2 x 65536 PORTS avaialble to address the uniqueness of running program.  65536 for TCP and 65536 for UDP protocols are automatically assigned by the OS.  There are some pre-defined or reserved PORTS for OS services -- first 1024 PORTs are reserved for different services including 80 PORT for web server, 21 PORT for SMTP,
+7 PORT for timer etc.
+
+Web Server or Http Server
+==========================
+
+Http is the common communication protocol that is installed over the TCP/IP and it is implemented by the Web-browsers, Http Libraries and Web/Http Servers.
+The "Apache", "IIS", "nginx" are name of most commonly used Http Servers. we've installed "Apache Http Server" with WAMP tool.
+
+"The main job of Http server is to listen the clients, recevie the requests (instructions + data), validate the requests, and if request is not valid then dispatch error message to the concern client. The Http Server forward the request to the Application Server if request is valid. Application Server -- PHP, Java, .NET etc, execute the requested resources/programs, uses other servers (email or database server), produce output and return the proceduced result back to Http Server and then Http Server return back to concern Client".
+
+General URI to request the different servers:
+
+   http://10.1.1.1:80/resource-name     -- Http Server will listen
+   ftp://10.1.1.1:4323/resource-name    -- File Transfer Protcol FTP server will listen
+   10.1.1.1:4545                        -- The core protocol TCP/IP will be consider
+					   as comunication (Low level protcol).
+					   It can be database server or mail server
+					   or file server etc.
+
+
+
+Client1
+Client2 ---> Request ---> Http Server (Web Server)
+......  <--- Response --- 
+......                        |  ^   
+                              V  |   ( Request & Response )
+                          Application Server (PHP)
+                           MyApp1, MyApp2, ....       ---->  Mail 
+                              |  ^                    <----  Server
+                              V  |
+                             Database Server (MySql, Oracle)
+                          
+
+
+Note:  Domain name represent the IP-Address+PORT e.g google.com is a friendly name of ip-address:port pattern. (e.g http://122.1.1.2:80 is equivalent to google.com)
+
+Know Application Servers
+=========================
+PHP, ASP.NET, JSP/Servlet, Python, Ruby-on-rails, NodeJs etc are example of Application servers.
+
+NodeJS is a server environment mostly written in C and JavaScript language. The NodeJS also uses Node Package Manager (NPM) tool to download or update the JavaScript libraries or sub-sub-sub platforms (eg. AngularJs, EmberJs, Css Frameworks (BootStrap))
+
+The Client Platform (Web)
+============================
+Web-browser or Http Client software connect the Http Server, make requests and receive the result (output).
+
+A web-browser is the most complex software in our system and it is made up of number of tools, APIs, and languages.
+
+Basically a web-browser has:
+
+    1. HTML parser (Language implementation)
+       To parse, validate and execute the HTML objects
+    2. XML parser 
+    3. CSS Style Language
+    4. JavaScript Programming language
+    5. Graphics Render Engine 
+    6. Developer tools for debugging the apps
+
+HTML Parser
+-----------
+HTML Parser is a software that correctly reads, parse, validate and/or create HTML objects based upon the HTML element standard. 
+HTML Parser activities are exposed to us in the form of "Document Object Model" programing library or interface. 
+
+When web-browser receive the "result" from web-server, it starts the HTML parser first, the HTML parser convert each & every HTML tag into an object of validated elements. The HTML objects then arranged into the document tree also called DOM-Tree; just like a tree, branches and leaves.
+
+<html> 			<---- Root or main object
+  <head>..</head>       <---- First child of <html>
+  <body>..</body>       <---- Second child of <html>
+</html>
+
+ Further, we've some tags inside <head> and <body> and so on.
+
+What is HTML (HyperText Markup Language)?
+
+ It is markup language to present data on the web.
+
+ HTML is a standard that is proposed or recommend by the world wide web consortium  (w3c.org) and other open source groups.
+
+ Current HTML standard is 5.x (5.2) or HTML5.
+
+  Different web-browser vendors (google, microsoft, mozilla etc) implement the HTML
+  standards time to time with their browser releases.
+
+  In fact, normally, a web-browser has implementation of nearlly all HTML standards and that is why we have to instruct the browser to which standard of parser should be selected to parse the document content.
+
+<!doctype html>   <--- This is called "pre-processing" instruction and it is for the
+			web-browser to run or start parsing in "Standard Mode".
+
+			If <!doctype > is not mentioned then your web-browser will be
+			started in "Dirty or Quirk Mode" which surprise us with strange
+			behaviors.
+
+			<!doctype html> instructs the browser to use latest & stable
+			implementation of HTML parser, CSS parser and JavaScript 
+			runtime.
+
+Example:
+
+<!DOCTYPE html>  <!-- Remove this line and see what happens in different browsers-->
+<html>
+<head>
+	<title>Test Page</title>
+    <style>
+    	html {
+    		background: black;
+    	}
+    	body {
+    		background: yellow;
+    	}
+    	h1 {
+    		background: green;
+    	}
+    </style>
+</head>
+<body>
+  <h1>This is a test</h1>
+</body>
+</html>
+
+Note: Open the developer tool by pressing Ctrl+Shift+I or F12 (Or goto menu). You can see the document sturcture of currently parsed document via "Element" section. JavaScript debug/code via "Console" section and requested documents via "Network" section.
+
+HTML Elements & Tags
+====================
+HTML Element is a type or class. Element describe the nature of object and we can also say it is a datatype.
+
+The tag or markup is way to write markup syntax.
+
+For instance we've five tags of 2 elements :
+
+  <p>First</p>
+  <div>Second</div>
+  <p>Third</p>
+  <p>Fourth</p>
+  <div>Sixth</div>
+
+ p and div are elements and any element name written inside < > symbol is known as tag.
+
+Naming conventions and basic rules to define the tags
+=====================================================
+Always use lowercase to write/code the tag (howerver you may write it in mixed or caps only but for the sake of simplicity & consistency use lowercase).
+
+Enclosed attribute value with single or double quotes especially when attribute value contains whitespaces or special characters.
+
+Use HTML entities for those special characters that confuse the HTML parser.
+  For example,
+
+#include <stdio.h>  --- HTML parser consider <stdio.h> as tag however it is not a valid 				tag.
+
+So, use &lt; for <
+        &gt; for >  
+
+#include &lt;stdio.h&gt;
+<p>Mr. &amp; Miss Abc</p>
+<p>&copy; Abc Ltd</p>
+<p title='hello how are you?'>Move mouse pointer here to see tooltip.</p>
+
+Tags must be nested. It means every open tag has appropriate close tag. However you may define it as empty if there is not inner data/text/html.
+
+<p>This is sample para and it must have appropriate close</p>
+<input type=text>  It is valid too because it hasn't close tag syntax however we can use, <input type=text /> empty tag /> syntax too.
+
+<div/> <--- This is invalid because it must require a close tag
+
+		   
+
+

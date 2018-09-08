@@ -1,0 +1,241 @@
+Use the "server" resources via HttpClientModule
+================================================
+
+The HttpClient class has two methods namely:
+  1. get("url") and
+  2. post("url",data: FormData)
+
+We can request server resources via either "get" or "post" methods of HttpClient class.
+
+** IMPORTANT **
+
+   The 'get' or 'post' always returns JSON object, so the server resource must return
+   the JSON object of JSON list.
+
+
+Steps
+=====
+
+Step-1 Assume that we've dept(dept_id, dept_name, dept_location) table in mysql database named "emp_db"
+
+create table dept
+(
+  dept_id int primary key auto_increment,
+  dept_name varchar(40) not null unique,
+  dept_location varchar(40) not null
+)
+
+Step-2 We've a folder named "web-api" under the "www" of WAMP tool folder.
+Step-3 We've a dept.php file in it.   
+
+
+dept.php
+------------
+<?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
+
+$data = array("message"=>"", "status"=>false, "data"=>[]);
+
+$cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");
+
+$dept_id = isset($_POST["dept_id"]) ? $_POST["dept_id"] : 0;
+$dept_name = isset($_POST["dept_name"]) ? $_POST["dept_name"] : '';
+$dept_location = isset($_POST["dept_location"]) ? $_POST["dept_location"] : '';
+$cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : '';
+
+if($cmd == 'Add') {
+  $sql = "insert into dept (dept_name, dept_location) values (?,?)";
+  $ar = array($dept_name, $dept_location);
+  $st = $cn->prepare($sql);
+  $data["message"] = "Can't add";
+  if($st->execute($ar)) {
+     $data["status"] = true;
+     $data["message"] = "Dept added";
+  }
+}
+
+echo json_encode( $data );
+
+
+NOTE: Basically server environment don't support CROSS WebSite REQUESTS/RESPONSES. But we can force the server environment to allow cross website domain by adding headers:
+
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
+
+OR
+
+header('Access-Control-Allow-Origin: http://www.example.com');
+header('Access-Control-Allow-Headers: http://www.example.com');
+
+
+Step-4 Client code -- dept.component.ts
+
+
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+import { Dept } from "../dept";
+
+@Component({
+  selector: 'app-dept',
+  templateUrl: './dept.component.html',
+  styleUrls: ['./dept.component.css']
+})
+export class DeptComponent implements OnInit {
+
+	//field 
+	dept: Dept = new Dept();
+	message: string = "";
+	depts: Array<Dept> = [];
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+  }
+
+  addDept(): void {
+
+  	let data = new FormData();
+  	data.append("dept_name","Accounting");
+  	data.append("dept_location","Mumbai");
+  	data.append("cmd","Add");
+  	this.http.post("http://localhost:8080/web-api/dept.php",data)
+  	         .subscribe( result => {
+  	         	console.log( result );
+  	         	this.message = result.message;
+  	         });
+
+  }
+
+}
+
+Step-5 dept.component.html
+
+<h4>Dept</h4>
+
+<button (click)="addDept()">Add</button>
+<p>{{ message }}</p>
+
+============================================================
+
+Example: Edit the previous example to add UI to perform input and also display the data.
+
+1. dept.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+import { Dept } from "../dept";
+
+@Component({
+  selector: 'app-dept',
+  templateUrl: './dept.component.html',
+  styleUrls: ['./dept.component.css']
+})
+export class DeptComponent implements OnInit {
+
+	//field 
+	dept: Dept = new Dept();
+	message: string = "";
+	depts: Array<Dept> = [];
+
+  constructor(private http: HttpClient) { 
+    this.getDepts();
+  }
+
+  ngOnInit() {
+  }
+
+  addDept(): void {
+  	let data = new FormData();
+  	data.append("dept_name",this.dept.deptName);
+  	data.append("dept_location",this.dept.deptLocation);
+  	data.append("cmd","Add");
+  	this.http.post("http://localhost:8080/web-api/dept.php",data)
+  	         .subscribe( result => {
+  	         	console.log( result );
+  	         	this.message = result.message;
+  	         	this.getDepts();
+ 	         });
+  }
+  editDept(d: Dept): void {
+  	this.dept.deptId = d.deptId;
+  	this.dept.deptName = d.deptName;
+  	this.dept.deptLocation = d.deptLocation;
+  	this.message = "";
+  }
+
+  delDept(d: any): void {
+  	let data = new FormData();
+  	data.append("dept_id",d.deptId.toString());
+ 	data.append("cmd","Delete");
+  	this.http.post("http://localhost:8080/web-api/dept.php",data)
+  	         .subscribe( result => {
+  	         	console.log( result );
+  	         	this.message = result.message;
+  	         	this.getDepts();
+ 	         });
+  }
+
+  getDepts(): void {
+  	let data = new FormData();
+  	data.append("cmd","Gets");
+  	this.http.post("http://localhost:8080/web-api/dept.php",data)
+  	         .subscribe( result => {
+  	         	console.log( result );
+  	         	this.depts = [];
+  	         	for(let r of result.data) {
+  	         		this.depts.push( new Dept(
+                       r.dept_id, r.dept_name, r.dept_location
+  	         		 ));
+  	         	}
+ 	         });
+  }
+
+}
+
+
+2. dept.ts
+
+export class Dept {
+	deptId: number;
+	deptName: string;
+	deptLocation: string;
+
+	constructor(deptId: number = 0,	
+		deptName: string = '', 
+		deptLocation: string = '') {
+		this.deptId = deptId;
+		this.deptName = deptName;
+		this.deptLocation = deptLocation;
+	}
+}
+
+
+3. dept.component.html
+<h4>Dept</h4>
+
+<br/><input type="text" [(ngModel)]="dept.deptName" placeholder="Name" />
+
+<br/><input type="text" 
+   [(ngModel)]="dept.deptLocation" placeholder="Location" />
+<button (click)="addDept()">Add</button>
+<p>{{ message }}</p>
+
+<table class="table table-bordered">
+ <tr *ngFor="let d of depts">
+ 	<td>{{ d.deptId }}</td>
+ 	<td>{{ d.deptName }}</td>
+ 	<td>{{ d.deptLocation }}</td>
+ 	<td>
+ 		<button (click)="editDept(d)">Edit</button>
+ 		<button (click)="delDept(d)">Delete</button>
+ 	</td>
+ </tr>
+</table>
+
+

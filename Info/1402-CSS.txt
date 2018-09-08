@@ -1,0 +1,413 @@
+Cascade Stylesheet Language
+===========================
+
+It is style language to style the HTML objects. ie. setting up text color, background color, position, font style, animation, spacing - margin - padding and many  more.
+
+Like HTML, CSS is specification based language. The current specification is known as CSS 2.3 or CSS3. CSS specification is not a single one but there are number of specifications that constitute the CSS specification. In CSS standard, we've different modules and each module has a specification. These CSS modules are color module, background module, font/text module, animation module etc.
+
+
+Each module has set of properties (CSS properties).
+
+Each property is composed via propertyName-propertyValue pair.
+
+CSS Language is case-sensitive and property-value must be in lowercase letter only.
+
+Note that HTML is not a case-sensitive but CSS & JavaScript are case-sensitive language.
+
+
+
+How to glue or apply the CSS properties to the HTML objects?
+============================================================
+
+By default, each html object has default set of CSS properties when it is constructed/created by the HTML parser.
+
+As we know that HTML parser create HTML object of each HTML tag written inside the web document and also each HTML object has a "style" object which contains "default" value of CSS properties.
+   For example,   <p>Hello World</p>  
+
+                 Will be first transform into an "object" and with text color black
+		 and background as white color along with default fant family, size
+		 and style etc.
+
+ There are two ways to glue the CSS properties:
+   1. Via style attribute. 
+          Example: <p style="color: red; background-color: yellow">Welcome</p>
+   2. Via CSS selectors
+
+          CSS selector is a way or mechanism to apply one or more CSS properties
+          to one or more html objects. There are number of different purpose 
+	  selectors. In short, CSS selectors define a "group" properties (collection
+	  of CSS properties).
+				
+          You may define "CSS Selectors" inside the current document by adding
+	  <style> html tag:
+
+	  <style>
+             p {
+               color: red;
+               background-color: yellow;
+             }
+          </style>
+
+           <p>All paragraphs in the document</p>
+           <p>have common set of CSS properties value</p>
+           <p>due to use of CSS Selector (element selector).</p>
+
+          If you want to use CSS selectors in more than one pages the add CSS selectors 
+	  code into "external" file or programs and later you may attach that external
+	  file or program to the web document via <link> html tag.
+      
+             <link rel="stylesheet" href="/your-css-external-resource-url" >
+             <link href="url" rel="stylesheet" />
+
+
+      How to define the CSS selectors -- basic rules and coding standard
+      -------------------------------------------------------------------
+                   |-------------- one space between selector name and {
+                   V
+      selector-name {
+         property-name: value;     <---- Use spacebar to indent the property and also
+                                         add single space after property-name:
+      }
+
+      For, custom CSS selectors, use hyphen ( - ) as a name separator. Avoid the use
+      of _ (underscore).
+
+       For example,
+
+            .my-box {
+               ...
+            }
+            .first-para {
+               ...
+            }
+
+      Use /* comments */ syntax to add the comments.
+
+        For example,
+
+          /* For mobile screens */
+          .mo-width-100 {
+              width: 100px;
+          }
+
+CSS Selectors
+==============
+
+1. * universal selector
+
+   To glue CSS properties to all HTML objects (including HTML, body etc)
+   Note: Universal selector is mainly used with sibling, child etc selectors.
+
+Example:
+
+<style>
+  * {
+   border: 1px solid #aaa;
+  }
+</style>
+
+<h1>Head1</h1>
+<p>Para1</p>
+<div>Div1</div>
+
+2. id selector - This selector is defined with # (hash) followed by the unique name and
+		 it is glued via "id" attribute of HTML object.
+
+<style>
+  #error {
+    color: red;
+  }
+</style>
+
+ <h3>Attention</h3>
+ <h3 id="error">This is due to so and so ..</h3>
+ <p id="error"><em>This is due to ...</em></p>
+
+3. class selector - This selector is defined with . (dot) followed by the unique name
+		    and it is glued/attached via "class" attribute of HTML object.
+
+		   The "class" selector can be used mutiple times and also an object
+		   (html) has one or more "class" selectors (multiple class selectors)
+
+<style>
+  .text-red {
+    color: red;
+  }
+  .text-blue {
+    color: blue;
+  }
+  .box-black {
+    border: 1px solid #000;
+  }
+ .box-green {
+    border: 1px solid #0f0;
+  }
+  .bk-yellow { 
+     background-color: yellow;
+  }
+</style>
+
+<p class="bk-yellow text-blue">Hello World</p>
+<h1 class="box-green bk-yellow text-red">Hello World</h1>
+<button class="box-black bk-yellow">OK</button>
+<div class="box-green">Green box</div>
+
+Note: Avoid specific purpose selector (especially class selector):
+
+Here is a specific purpose class selector:
+
+.my-circle {
+  width: 300px;
+  height: 300px;
+  border: 1px solid black;
+  background-color: red;
+  border-radius: 90px 90px 90px 90px;
+}
+
+<div class="my-circle"></div>
+
+And following selectors does the same as above with "general" purpose selectors.
+
+<style>
+ .w200 { width: 200px; }   
+ .w300 { width: 300px; }
+ .h200 { height: 200px; }   
+ .h300 { height: 300px; }
+ .bk-red { background-color: red; }
+ .bk-yellow { background-color: yellow; }
+ .circle { border-radius: 50%; }
+ .round-20px { border-radius: 20px; }
+ .border-red { border: 1px solid red; }
+ .border-black { border: 1px solid black; }
+</style>
+
+<div class="circle border-red w300 h300 bk-red"></div>
+<div class="circle border-black w200 h200"></div>
+<h1 class="bk-red round-20px">Hello</h1>
+
+Where to add <style> markup or <link> markup to glue the CSS selectors?
+----------------------------------------------------------------------
+The HTML parser parse the entire document in top-down fashion and it is important for the HTML parser to set style (or selectors) at the time of creation of HTML objects -- and this kind of process is known "progressive rendering". It means we must have to define the CSS Selectors before the <body> object and sub-objects are created.
+
+The best place to add <link> and <style> is the <head> tag:
+
+ <head>
+   <meta charset="utf-8">
+   <title>...</title>
+   <link ....>
+   <link ....>
+   <style>  
+      ...
+   </style>
+ </head>
+
+
+4. type or element or tag selector - The element name is used to as selector and all
+					tag belongs to that "element" will have 
+					common CSS properties.
+
+body {
+  font-size: 1.2em;
+}
+
+p {
+  font-style: italic;
+}
+
+h1 {
+ color: red;
+}
+
+5. Attribute selector -- The attribute of html object (attribute-name = "value") is used to prepare this selector.
+
+elementName[attribute=value] {
+  ..
+}
+
+Example:
+
+ <style>
+  p[name="help"] {
+  	color: red;
+  }
+  input[type="text"] {
+  	background: blue;
+  }
+  input[type="email"] {
+  	background: green;
+  }
+</style>
+  <p>Para1</p>
+  <p name="help">Para1</p>
+  <div name="help">This is div</div>
+  <input type="text" />
+  <input type="email" />
+
+6. Children or descdent selector - To select all chidren/descdent all the given selector. 
+
+Syntax:
+
+selector1  selector2 {
+  /* TODO */
+}
+
+All "selector2" which are descdent of "selector1" are glue with given CSS properties.
+
+<style>
+#info p {
+  color: red;
+}
+#info .test {
+  color: blue;
+}
+</style>
+
+<div id="info">
+   <p>Para1</p>
+   <div class="test">
+   	 Test1
+   	 <p>Para2</p>
+   	 <div>
+   	   <p>Para3</p>
+   	   <div class="test">Test2</div>
+   	 </div>
+   </div>
+   <p>Para4</p>	  	
+</div>
+<p>Para5</p>
+
+
+7. Child selector 
+
+Sytnax:
+
+ selector1 > selector2 {
+   /* TODO */
+ }
+
+ To select "selector2" in "selector1" but direct children (not all just as we use children selector)
+
+Example:
+
+<style>
+  #info > p {
+    color: red;
+  }
+</style>
+...
+... (previous code/markup)
+
+8. Adjascent sibling or spouse selector
+
+Syntax:
+
+selector1 + selector2 {
+  /* TODO */
+}
+Select the "selector2" which is a first sibling of "selector1"
+
+Example:
+
+<style>
+ h3 + p {
+ 	color: red;
+ }
+</style>
+
+<h3>Title1</h3>
+<p>Desc1</p> 
+<p>Desc1</p> 
+<h3>Title2</h3>
+<p>Desc2</p> 
+<h3>Title3</h3>
+<p>Desc3</p> 
+
+9. General sibling  
+Syntax:
+  selector1 ~ selector2 { }  -- All "sibling" of type "selector2" of "selector1".
+
+10. Pseudo selector - There are varities of pseudo selectors and they select the objects based upon the defined 'actions'.
+
+For instanace, To change the selected text color or other properties of the document:
+
+::selection {
+   background-color: green;
+}
+
+pseudo selector is used and following three selectors which are assigned to a - anchor
+(hyperlink)  a:link, a:visited, a:active are used when appropriate actions performed on anchors.
+
+The "selector:hover" is used with any selector (general purpose pseudo selector) which is designated with mouse or selection device pointer is set on or over on them.
+
+Example:
+
+<style>
+  a:link {
+     color: green;
+  }
+  a:visited {
+  	 color: black;
+  }
+  a:active {  /* When mouse button is hold down */
+  	background-color: red;
+  }
+</style>
+
+<a href="index.php">Home</a>
+<a href="about.php">About</a>
+<a href="contact.php">Contact</a>
+
+Example:
+
+#info:hover { background-color: red; }
+p:hover { background-color: green; }
+
+<div id="info">Info</div>
+<p>Para1</p>
+
+Example: Multiple selectors have common set of CSS properties
+
+<style>
+ p, button, #info, .test {
+ 	color:  red;
+ }
+ html, body, h1 {
+    margin: 0;
+ }
+</style>
+<div id="info">Test</div>
+<p>Para1</p>
+<button>Button1</button>
+<div class="test">Div</div>
+
+Example:   #info > * { color: red; }  - all "*" in #info selector will paint text as
+					red color and because "color" is inherited
+					property, the children of the first-child
+					will have same text color.
+
+ #info > * {
+  	border: 1px solid blue;   /* Not inherited property */
+  	color: red;               /* Inherited property */
+  }
+</style>
+<section id="info">
+  <p>Test1</p>
+  <div>
+    <p>Test2</p>
+    <div>Div1</div>
+    <div><p>Test3</p></div>
+  </div>
+   <h4>Test4</p>
+</section>
+
+In this example,
+  <p>
+  <div> and
+  <h4>  will have border and red text but the red color is inherited by the children
+	of <div>.
+
+
+					
+
+ 
+              

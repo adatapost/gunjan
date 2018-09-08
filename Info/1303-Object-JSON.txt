@@ -1,0 +1,182 @@
+The custom object
+------------------
+
+We will have to create the custom object when we want to store our own set of data -- may be complex data.
+
+There are numbers of ways to define the custom or user-defined object but here we will use JSON syntax - JavaScript Object Notation to define the custom objects.
+
+An object in JavaScript contains:
+  1. properties and
+  2. methods/functions
+
+ Syntax : (JSON Syntax)
+
+  {
+    "propertyName1": value1,
+    "propertyName2": value2,
+    .....
+  }
+
+ A pair of { } defines an object.
+
+     let emp = {};   This is an empty object (no properties at all)
+
+ Each object might contains one or more properties. 
+
+ A property has a name which will be expressed in "string" type and a value, that is 
+ (the value) can be of any type.
+
+      let emp = {
+         "id": 10,
+         "name": "Reena",
+         "address": {
+               "street": "1st",
+               "city": "Mehsana"
+          },
+         "age": 20
+       };
+
+ To access the properties (their data):
+   1. Use . member access operator  e.g  emp.id , emp.name, emp.address.street etc
+   2. Use [ ] subscript operator e.g emp["id"], emp["address"]["city"] = "Patan"
+
+Note that the . member access or [] subscript are two ways to access the any JavaScript object including HTML, CSS and SVG.
+  
+  For example,
+  
+    var str = "Hello";
+   console.log(str["length"]);
+   console.log(str.length);
+
+Example:  Represent roll, name and marks of five subjects
+<script>
+  var std = {
+     "roll": 10,
+     "name": "Reena",
+     "marks": [33,44,55,66,77]
+  };
+
+  //Read the value
+  console.dir( std );  // dump the object - all properties
+  console.log( std );
+
+  console.log( std.roll, std.name, std.marks);
+  for(i in std["marks"]) 
+     console.log(i, std["marks"][i]);
+ 
+  //Change the property
+
+  std.roll = 7;
+  std.name = "Reena Shah";
+  std.marks[1] = 68;
+</script>  
+
+Example: Add and remove properties
+<script>
+ var emp = { };
+ //add new properties
+ emp.id = 10,
+ emp.name = "Meena";
+ emp.address = { };
+ emp.address.city = "Patan";
+ emp.address.pin = 384003;
+ console.log( emp );
+ console.log( emp["id"], emp.name, emp["address"]["city"]);
+
+ //Delete a property  'delete obj.propertyName'
+
+ delete emp.id;
+ delete emp.address.city;
+ console.log( emp );
+</script>
+
+Example: Write code to represent some product objects
+
+<script>
+   var products = [];     //create an array to hold project objects - container
+   products.push( { id: 10, name: "Pen", rate: 2.5, qty: 20 });
+   products.push( { "id": 20, "name": "Pencil HB6", "rate": 5, "qty": 50});
+
+   console.log( products );
+
+   console.log('Iterate one by one product...');
+   for(let i in products) {
+      var p = products[i];
+      console.log( p.id, p.name, p.rate, p.qty, p.qty * p.rate);
+   }
+</script>
+
+Example: Adding different properties into an object -- including the functions.
+
+In order to use object properties into the object functions, we must have to qualify that object property with "this" keyword. The "this" keyword represent memory address of current object.
+
+<script>
+    var product = {
+    	id: 10,
+    	name: "Rotomac Pencil",
+    	qty: 20,
+    	rate: 5.5,
+    	_discount : 0,
+    	available: true,
+    	setDiscount: function(discount) {
+            this._discount = discount;
+    	},
+    	amount: function() {
+    		return this.qty * this.rate;
+    	},
+    	discount: function() {
+    		return this.amount() * this._discount;
+    	},
+    	net: function() {
+    		return this.amount() - this.discount();
+    	}
+    };
+
+    console.log ( product );
+    product.setDiscount(0.03);
+    console.log( product.id, product.name, product.amount(), product.discount(), product.net());
+</script>
+
+Example: Define an object which define properties to add, delete, get and print products.
+
+<script>
+    var cart = {
+        items: [],
+        add: function(product) {
+        	this.items.push( product );
+        },
+        print: function() {
+        	for(let i in this.items) {
+        		let p = this.items[i];
+        		console.log( p.id, p.name );
+        	}
+        },
+        del: function(index) {
+           this.items.splice(index,1);
+        },
+        get: function(index) {
+           return this.items[index];
+        },
+        count: function() {
+        	return this.items.length;
+        }
+    };
+
+    console.log( cart );
+
+    cart.print();
+    cart.add( {id: 11, name: "Pen"});
+    cart.add( {id: 2, name: "Pencil"});
+    cart.add( {id: 25, name: "Books"});
+
+    cart.get(0).id = 200;  //change/update 1st object
+    cart.print();
+   
+    cart.del(1);           //delete 2nd object
+    console.log('After deletion');
+    cart.print();
+    console.log( cart.count());
+    console.log( cart.get(0));
+</script>
+
+

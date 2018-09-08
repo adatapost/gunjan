@@ -1,0 +1,78 @@
+Master-Transactions forms
+===========================
+
+1.  Tables
+
+create table dept
+(
+  dept_id int primary key auto_increment,
+  dept_name varchar(50) not null unique
+)
+
+create table emp
+(
+  emp_id int primary key auto_increment,
+  emp_name varchar(100) not null,
+  emp_salary decimal(18,2) not null,
+  emp_date date not null,
+  emp_photo varchar(100) not null,
+  dept_id int not null,
+  city_id int not null,
+  foreign key (dept_id) references dept(dept_id),
+  foreign key (city_id) references city(city_id)
+)
+
+2. Tables
+
+category(id,name)
+product(product_id,product_name,unit,rate,qty,photo,available, category_id)
+customer(customer_id, name,address)
+sale_master(sale_id, sale_date,customer_id)
+sale_detail(detail_id, sale_id, product_id,qty,rate)
+
+Edit: 
+create table login
+( 
+  user_id int primary key auto_increment,
+  user_email varchar(255) not null unique,
+  user_pass varchar(255) not null,
+  user_type varchar(10) not null,
+  date_created date
+)
+
+create table customer
+(
+  user_id int primary key,
+  name varchar(100) not null,
+  address varchar(255) not null,
+  foreign key(user_id) references login(user_id)
+ )
+
+Create /register.php, /login.php, /changepass.php and /recover.php pages at root of your webapp.
+
+Register
+--------
+Email: _____
+Password: __________
+Confirm Password: ____________
+Full Name: _____________
+Address:________________
+[Submit]
+
+
+select 
+login.*,
+customer.customer_name,
+customer.address
+from login
+join customer on customer.user_id = login.user_id 
+
+Create a view -- To save the SELECT query into database under the unique name.
+
+create view view_user as 
+select 
+login.*,
+customer.customer_name,
+customer.address
+from login
+join customer on customer.user_id = login.user_id 

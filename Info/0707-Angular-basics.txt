@@ -1,0 +1,521 @@
+Working with template and component class
+=====================================
+
+The angular component is a class which is annotate or decorate with @Component along with component configuration properties.
+
+@Component({properties})
+export class MyComponent { }
+
+Syntax:
+@Component({
+  selector: 'dom-name',
+  template: `inline-template via string interpolcation`,
+  templateUrl: 'location of .html file - a url',  
+  styles = [ ],
+  styleUrls = [ ]
+})
+export class MyComponent { }
+
+The "selector" property reference the DOM which connect the component class to the HTML DOM.
+
+The "selector" property
+-------------------------
+The selector name should be written lowercase and it must be a valid identifier. 
+It is good practice to use - hyphen to separate the name. e.g app-root etc.
+
+The "template" or "templateUrl" proeprty
+----------------------------------------
+There are two ways to define the UI elements which are children of "selector" dom:
+  1. Inline templating via "template" property - In this mode, we've to write markup
+	inside the component class via string interpolation syntax.
+	This approach is useful when we have small amount of view code and we don't
+	want to separate .html file.
+
+  2. External templating via templateUrl property -- This is very effective way to 	sepatate the component code from the user interface. Always use the templateUrl
+	templating because we can add as many as lines of markup without messing up the
+ 	code in component class.
+
+1. This example demonstrate how to use inline template and use the fields/data from the component class into the view.  
+
+{{ expression }} - This is angular syntax to write or interpolcation or bind the component data into the template.
+
+You may use any king of tag inside the template except the <script>.
+
+
+import { Component } from '@angular/core';
+
+@Component({
+   selector: 'app-root',
+   template: `
+    <br/>No : {{ no }}
+    <br/>Name : {{ name }}
+   `
+})
+export class AppComponent {
+	//fields
+	no: number = 10;
+	name: string = "Mr.A";
+}
+
+
+2.  Create a class called "Emp.ts" under the app folder by issuing the following comand:
+your_app>ng generate class Emp
+
+emp.ts
+--------
+export class Emp {
+	no: number;
+	name: string;
+
+	constructor(no: number, name: string) {
+		this.no = no;
+		this.name = name;
+	}
+
+	getEmp(): string {
+		return `${this.no}  ${this.name}`;  // interpolation string
+	}
+
+	getInput(): string {
+		return `
+		 <p><label>Id: 
+		        <input type='number' value='{{this.no}}' /><label></p>
+		 <p><label>Name: 
+		        <input type='text' value='{{this.name}}' /><label></p>
+		`;
+	}
+}
+and code in app.component.ts
+============================
+import { Component } from '@angular/core';
+import { Emp } from "./emp";
+
+@Component({
+   selector: 'app-root',
+   template: `
+    <br/>No : {{ no }}
+    <br/>Name : {{ name }}
+    <hr/>
+    <p>Employee id : {{ emp.no }} and name {{ emp.name }}</p>
+    <hr/>
+    <p>Employee info : {{ emp.getEmp() }}</p>
+    <hr/>
+    <p>{{ emp.getInput() }}</p>
+   `
+})
+export class AppComponent {
+	//fields
+	no: number = 10;
+	name: string = "Mr.A";
+
+	emp: Emp  = new Emp(20,"Reena");
+}
+
+3. Create "Product" class 
+
+This example uses <element [hidden]="false|true" /> attribute which hides or shows the dOM based upon the boolean expression value.
+
+  <div [hidden]="false"> </div>  -- Visible
+  <div [hidden]="true"> </div>  -- Invisible
+
+export class Product {
+	id: number;
+	name: string;
+	isAvailable: boolean;
+	qty: number;
+	rate: number;
+
+	constructor(id: number = 0, name: string = "", 
+		isAvailable: boolean= false, 
+		qty: number= 0, rate:number = 0 ) {
+		this.id = id;
+		this.name = name;
+		this.isAvailable = isAvailable;
+		this.qty = qty;
+		this.rate = rate;
+	}
+	amount(): number {
+		return this.qty * this.rate;
+	}
+}
+
+
+import { Component } from '@angular/core';
+import { Product } from "./product";
+
+@Component({
+   selector: 'app-root',
+   template: `
+   <h1 [hidden]="hide">ABC Ltd</h1>
+   <div [hidden]="!product.isAvailable">
+      <br/>Id : {{ product.id }}
+      <br/>Name : {{ product.name }}
+      <br/>Qty : {{ product.qty }}
+      <br/>Rate: {{ product.rate }}
+      <br/>Amount : {{ product.amount() }}
+   </div>
+`   
+})
+export class AppComponent {
+   hide: boolean = true;
+	 product: Product = new Product(10,"Pencil",false,10,2);
+}
+
+Template data binding
+=====================
+
+To attach data of an object (or fields) to the HTML markup is called data binding.
+
+There are two syntax to bind the data in angular template (View):
+
+   1. One way data binding which will be defined via:
+       {{ express }} Or  <tagName [attribute]="fieldName"></tagName>
+
+   2. Two way data binding which will be defined via:
+        [(ngModel)] = "property/fieldName"
+
+      The two-way data binding must require the <input> element and the "FormModule".
+
+
+
+Example: We've no, name and status fields in Component class. This example demonstrate how to perform two-ways binding?
+
+Step-1  Open the app.module.ts and import the "@angular/forms".
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from "@angular/forms";  <--------------
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+  ],
+  exports: [],
+  imports: [
+    BrowserModule,
+    FormsModule  <------------------
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+Step-2  Code in app.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+   selector: 'app-root',
+   template: 
+`
+<p>
+ One way databinding: 
+ No: {{ no }} Name : {{ name }}
+</p>
+<hr/>
+<p>
+  One way databinding:
+  <input type="number" [value] = "no" />
+  <input type="text" [value] = "name" />
+  Pass/Fail : <input type="checkbox" [checked]="+status" />
+  We can also use <input type="number" value="{{no}}" />
+</p>  
+
+<h2>Two way bindings</h2>
+<br/>No : <input type="number" [(ngModel)]="no" />
+<br/>Name : <input type="text" [(ngModel)]="name" />
+<br/>Pass/Fail : <input type="checkbox" [(ngModel)]="status" />
+    
+`   
+})
+export class AppComponent {
+  no: number = 10;
+  name: string = "Reena";
+  status: boolean = true;
+}
+
+Example: Use "external template" for the previous program.
+
+Step-1  open app.component.ts and replace 'template' property with 'templateUrl'
+
+import { Component } from '@angular/core';
+
+@Component({
+   selector: 'app-root',
+   templateUrl: './app.component.html'   
+})
+export class AppComponent {
+  no: number = 10;
+  name: string = "Reena";
+  status: boolean = true;
+}
+
+Step-2 open external template URL app.component.html
+
+<h2>Data Binding Example</h2>
+<h3>One way ===&gt; </h3>
+<br/>No {{ no }}
+<br/>Name {{ name }}
+<br/>Status {{ status ? 'Pass' : 'Fail' }}
+<h3>One way ===&gt; </h3>
+<br/>No <input type="number" disabled="disabled" [value]="no" /> 
+<br/>Name <input type="text" disabled="disabled"  [value]="name" /> 
+<br/>Status <input type="checkbox" disabled="disabled" [checked]="status" /> 
+
+<h3>Two way ===&gt; </h3>
+<br/>No <input type="number"  [(ngModel)]="no" /> 
+<br/>Name <input type="text"  [(ngModel)]="name" /> 
+<br/>Status <input type="checkbox"  [(ngModel)]="status" /> 
+
+Example: Input two numeric data and perform addition.
+
+Step-1:
+
+import { Component } from '@angular/core';
+
+@Component({
+   selector: 'app-root',
+   templateUrl: './app.component.html'   
+})
+export class AppComponent {
+  no1: number = 0;
+  no2: number = 0;
+  
+  add(): number {
+     return this.no1 + this.no2;
+  }
+
+  series(): string {
+     let s1: string = "";
+     for(let i=this.no1;i<=this.no2;i++) {
+        s1 = s1 + i;
+      }
+     return s1;
+  }
+}
+
+Step-2 
+
+<input type="number" [(ngModel)]="no1">
+<input type="number" [(ngModel)]="no2">
+<div>{{ no1+no2 }}</div>
+<div>{{ no1-no2 }}</div>
+<div>{{ no1*no2 }}</div>
+<div>{{ no1/no2 }}</div>
+<div>{{ series() }}</div>
+<div>{{ add() }}</div>
+
+Example: Represent student object
+
+export class Student {
+	roll: number;
+	name: string;
+	english: number;
+	maths: number;
+	science: number;
+
+	constructor(roll: number =0, 
+		name: string = "", 
+		english: number=0, 
+		maths: number=0, 
+		science: number = 0) {
+		this.roll = roll;
+		this.name = name;
+		this.maths = maths;
+		this.english = english;
+		this.science = science
+	}
+	total(): number { 
+		return this.maths + this.science + this.english;
+	}
+	per(): number {
+		return this.total() / 3;
+	}
+	grade(): string {
+		let p = this.per();
+		if(p>=70) return "A";
+		if(p>=60) return "B";
+		if(p>=50) return "C";
+		return "D";
+	}
+	resultSelector(): string {
+		let g = this.grade();
+		if(g=="A") return "green-text";
+		if(g=="B") return "light-green-text";
+		if(g=="C") return "blue-text";
+		return "red-text";
+	}
+}
+
+import { Component } from '@angular/core';
+import { Student } from "./student";
+
+@Component({
+   selector: 'app-root',
+   templateUrl: './app.component.html',
+   styleUrls: ['./app.component.css'] 
+})
+export class AppComponent {
+  std: Student = new Student();
+}
+
+ 
+<br/>Roll : <input type="number" [(ngModel)]="std.roll" />
+<br/>Name : <input type="text" [(ngModel)]="std.name" />
+<br/>English : <input type="number" [(ngModel)]="std.english" />
+              <input type="range" min="0" max="100" [(ngModel)]="std.english" />
+<br/>Maths : <input type="number" [(ngModel)]="std.maths" />
+              <input type="range" min="0" max="100" [(ngModel)]="std.maths" />
+<br/>Science : <input type="number" [(ngModel)]="std.science" />
+               <input type="range" min="0" max="100" [(ngModel)]="std.science" />
+<br/>Total {{ std.total() }}
+<br/>Percentage {{ std.per() }}
+<br/>
+  <div [class]="std.resultSelector()">
+     Grade {{ std.grade() }}
+  </div>
+
+
+.green-text {
+	color: green;
+}
+.light-green-text {
+	color: lightgreen;
+}
+.blue-text {
+	color: blue;
+}
+.red-text {
+	color: red;
+}
+
+Binding the events
+===================
+Angular template uses (eventName)="handlerMethod()" syntax to bind the event handler to the specific event.
+
+ e.b <button (click)="doThis()"></button>
+
+app.component.ts  (component file)
+------------------
+export class AppComponent {
+   hello(): void {
+   	alert("This is the handler for 'click' event!!!!");
+   }
+}
+
+app.component.html (template)
+-------------------
+<button (click)="hello()">OK!</button>
+<div (click)="hello()">Click here too!!!</div>
+
+Example: We've three buttons - [Red][Green][Blue]. Write code to change the background of DOM when one of the button is clicked and also use <select> to bind the field so we can also change the background whenever that selection of select DOM is changed.
+
+1. component file
+
+export class AppComponent {
+   //fields
+   classSelector: string = "blue";
+   //handler
+   changeColor(classSelector: string): void {
+   	   this.classSelector = classSelector;
+   }
+}
+
+2. component template file
+
+<button (click)="changeColor('red')">Red</button>
+<button (click)="changeColor('green')">Green</button>
+<button (click)="changeColor('blue')">Blue</button>
+
+<div [class]="classSelector">This is the test DOM</div>
+<select [value]="classSelector">
+	<option value="red">Red</option>
+	<option value="green">Green</option>
+	<option value="blue">Blue</option>
+</select>	
+<select [(ngModel)]="classSelector">
+	<option value="red">Red</option>
+	<option value="green">Green</option>
+	<option value="blue">Blue</option>
+</select>
+
+3. component css file
+
+.green {
+	background: green;
+}
+.red {
+	background: red;
+}
+.blue {
+	background: blue;
+}
+
+
+*ngIf and *ngFor angular directive
+===================================
+
+*ngIf is a conditional statement (Simple if) and *ngFor is a iterator/generator loop.
+
+Syntax:  <elementName *ngIf="condition" ....>
+         <elementName *ngFor="let e of iterator/generator" ....>
+
+ countries = ["India","Nepal","UK"];
+
+ for(let country of countries) {
+    if(country == "India") {
+    }
+ }
+
+Example: 
+
+1. component file
+
+export class AppComponent {
+   countries: Array<string> = ["India","Nepal","UK"];
+   country: string = "";
+   isLogged: boolean = false;
+}
+
+2. component template file
+
+<div *ngIf="!isLogged">
+	<h3>Login</h3>
+	<input type="email" placeholder="Email"/>
+	<input type="password" placeholder="Password" />
+</div>
+<div *ngIf="isLogged">
+	<h3>Welcome user!!!</h3>
+</div>
+
+<ul>
+	<li *ngFor="let c of countries">{{c}}</li>
+</ul>
+
+<select [(ngModel)]="country">
+	<option value="">Choose</option>
+	<option *ngFor="let c of countries">{{c}}</option>
+</select>	
+<div *ngIf="country.length>0">
+	Selected country : {{ country }}
+</div>	
+	<input type="text"  [(ngModel)]="country">
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

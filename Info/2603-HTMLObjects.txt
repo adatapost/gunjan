@@ -1,0 +1,125 @@
+5. document.querySelector("selector-pattern");
+6. document.querySelectorAll("selector-pattern");
+
+These two methods lookup the HTML objects based upon the given "selector-pattern".
+
+Selector pattern uses "CSS" style selectors to select the HTML objects from the DOM tree.
+
+We can use CSS style selectors:
+   *      universal, 
+   #id    id selector
+   .class class selector
+   children selector
+   child selector
+   sibling and many more selectors.
+
+The document.querySelector() returns single and first HTML object  from the list and returns null if there is no such match.
+
+The document.querySelectorAll() returns a nodeList (list of HTML objects).
+
+Example: Set boder to all html objects in a page
+
+...
+<script> 
+  var list = document.querySelectorAll("*");
+  for(let i=0;i<list.length;i++) {
+     list.item(i).style.border = "1px solid red";
+  }
+</script>
+
+Example: Use document.querySelector() instead of document.getElementById
+
+<input type="number" id="no1" onkeyup="calcIt()"/> English <br/>
+<input type="number" id="no2" onkeyup="calcIt()"/> Maths <br/>
+<input type="number" id="no3" onkeyup="calcIt()"/> Science<br/>
+<div id="result"></div>
+
+<script>
+  function calcIt() {
+    
+    let n1 = parseFloat( document.querySelector("#no1").value ) || 0;
+    let n2 = parseFloat( document.querySelector("#no2").value ) || 0;
+    let n3 = parseFloat( document.querySelector("#no3").value ) || 0;
+    let total = n1 + n2 + n3;
+    let per = total / 3;
+    document.querySelector("#result").innerHTML = "Total : " + total + "<br/>PErcent : " + per;
+  }
+</script>
+
+Example: Update previous example --- use the querySelectorAll()
+
+....
+<script>
+  function calcIt() {
+    // Attribute Selector
+    var list  = document.querySelectorAll("input[type=number]")
+    let n1 = parseFloat( list.item(0).value ) || 0;
+    let n2 = parseFloat( list.item(1).value ) || 0;
+    let n3 = parseFloat( list.item(2).value ) || 0;
+    ......
+  }
+</script>
+
+Example: Calculator
+
+--------------------
+[ 1 ] [ 2 ]  [3 ]
+[ 4 ] [ 5 ]  
+....
+[ + ] [ - ] [ * ] [ / ] [ = ]
+
+
+Example: CSS class style selector
+
+<div class="hello"></div>
+
+<script>
+  document.querySelector(".hello")
+          .innerHTML = "Hello! This is .class selector";
+</script>
+
+Example: Sibling selector
+
+<h2>Chapter - 1</h2>
+<div>Desc - 1</div>
+<h2>Chapter - 2</h2>
+<div>Desc - 2</div>
+
+<script>
+  let list = document.querySelectorAll("h2+div");
+  //change the text color
+  ..
+</script>
+
+
+Example: Define small functions to read the dom and udate/read values:
+
+....
+....
+<script>
+   function select(selector) {
+   	 return document.querySelector( selector );
+   }
+   function getInt(selector) {
+   	  return parseInt( select(selector).value ) || 0;
+   }
+   function setInt(selector,value) {
+   	  select(selector).value = value;
+   }
+   function setHtml(selector,value) {
+   	  select(selector).innerHTML = value;
+   }
+
+   select("#no1").value = "2000";
+   setInt("#no2","50");
+   select("input[type=email]").value = "a@a.com";
+   let n1 = getInt("#no1");
+   console.log( n1, typeof(n1));
+
+   function calcIt() {
+   	 let total = getInt("#no1") + getInt("#no2") + getInt("#no3");
+   	 //select("#result").innerHTML = total;
+     setHtml("#result","Total : " + total.toString().bold());
+   }
+</script>
+

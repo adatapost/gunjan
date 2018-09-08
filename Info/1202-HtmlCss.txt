@@ -1,0 +1,450 @@
+HTML Elements
+==============
+
+Mostly, all HTML elements falls into two groups - 1) Inline elements and 2) Block Elements, based upon the "display" behaviors.
+
+Note that there are others display behaviors but others are depends upon these two - inline & block behaviors.
+
+Block elements
+--------------
+Elements whose "width" share the parent elements' width. That means they are placed line by line and their width will be parent's width.
+However, we can change their height & width via CSS properties.
+
+Inline elements
+----------------
+These elements are placed one after one just like the "text in editor". The height & width of inline elements are calculated by the browsers as per the data/content they hold. Note that we can't change their height & width.
+
+Example:
+
+<!doctype html>
+<title>Check display behavior</title>
+<style>
+  * {
+    border: 1px solid red;
+  }
+</style>
+<body>
+  <p>Paragraph</p>
+  <span>Span</span>
+  <code>Code</code>
+  <label>Label</label>
+  <div>Div</div>
+</body>
+
+Elements span, em, u, i, b, strong, code, label, abbr are example of inline elements.
+Elements div, p , header, footer and many more are example of block elements.
+Elements like input, textarea etc are example of mixed inline-block behavior.
+
+Heading elements
+-----------------
+Elements h1,h2,h3...h6 are block elements which describe the different sizes of text from large size to small.
+
+Best Practice: It is important to note that you must have to choose appropriate header
+		elements. 
+	For instance, if your page uses h2 element to define the headings then you
+			can't use h1 element after that. This kind of order of element
+			is consider best practice.
+
+ <h1>Head1</h1>
+ <h2>Head2</h2>  is valid markup
+
+Whitespaces
+------------
+Whitespace (blanks, spacebar, enter key, backspace, tag etc) are converted into single whitespace by the HTML parser. It means whitespaces are ignored by the parser and add one whitespace instead of multiple.
+
+Example:
+
+<a href="#">Home</a><a href="#">About us</a><a href="#">Login</a>
+
+OR add one or more whitespace between markup or text and see what happen?
+
+
+You may use &nbsp; entity for a blank (space).
+
+Semantic elements
+------------------
+These elements have no special usage. It means these elements can be used for any purpose to enclose the text or tags.
+
+
+Elements div, header, footer, section, article, nav, aside, span, label are example of semantic elements and these element's don't have special graphical appearence.
+
+Example: Define a card
+
+<div class="card">
+  <div class="heading"></div>
+  <div class="body"></div>
+  <div class="footer"></div>
+</div>
+
+Or you may use meaningful semantic tags
+
+<article class="card">
+  <header class="heading"></header>
+  <section class="body"></section>
+  <footer class="footer"></footer>
+</article>
+
+Embed elements
+--------------
+
+These elements insert resource into the object and they have either "src" or "source" or "href" attribute to refer the resource document or program.
+
+Note: <a href=""> is not an embed element
+
+Example are:
+
+<img src="url" />
+<picture src="url" />
+<script src="javascript code"></script>
+<link href="css or other resources" />
+<video src="url"></video>
+<audio src="url"></audio>
+<embed src="url"></embed>
+<object src="url"></object> [Note: object & embed are exist in old HTML specifications to embed video/audio or other resources]
+
+
+Text elements
+--------------
+These elements contains plain text and don't support nesting of block elements but they support inline as nested elements (children).
+
+<p>
+  This is text element
+</p>
+
+But, we can't use like this:
+<p>
+  <div>This is incorrect</div>
+</p>
+
+However, p element contains/include inline and inline-block elements:
+<p
+ Enter the no : <input type="number" />
+</p>
+
+Text elements are : p, strong, label, span, code, kbd, abbr, em, i, u, b etc
+
+Hyperlink - anchor element
+--------------------------
+This element is inline but it has childen of inline and block element.
+<a href="#">
+  <h1>This is title of image</h1>
+  <img src="url">
+  <h5>Footer of the image</h5>
+  <div>Details description of the image</div>
+</a>
+
+<a name="bookmark"> is used to define the bookmark in web-document and you may navigate throught hyperlink <a href="yourpage#yourbookmark">Text</a> markup.
+
+Example: (Add page full text in each para)
+
+<a name="top"></a>
+<h3><a href="#chap1">Chapter1</a></h3>
+<h3><a href="#chap2">Chapter2</a></h3>
+...
+...
+...here is long text for chapter1
+<a name="chap1"></a>
+...
+...
+...
+<a name="chap2"></a>
+....
+....
+<a href="#top">Top</a>
+
+Meta elements
+---------------
+These elements pass the instructions to the web-browser or they repesent data which will helps the crawlers (search engines) to read specific set of data within the page including page language, country, language etc.
+
+The <head> and its childen represent the metadata:
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title of the page</title>
+</head>
+
+<meta charset> tells the browsers/search engines about the page charset. By default charset is "ANSI" and it represents only English characters.
+UTF-8 represents unicode or universal text -- character set of  all languages.
+
+You may use "lang" attribute of <html> to instruct the browsers about the country/language settings.
+
+<html lang="en">
+...
+<body> 
+ <q>This will be a smart quote</q>
+
+
+But changes in lang="fr" will add quotes as per country/culture given to it.
+
+The <base> tag is used to define a root relative reference of document.
+
+<head>
+  ...
+  ...
+  <base href="http://www.example.com/sample/">
+</head>
+<body>
+  <a href="page1">Page</a>  <--- "page1" relative reference will be translated at
+				  http://www.example.com/sample/page1 (absolute path)
+</body>
+
+<meta> element to define mobile-first behavior
+-----------------------------------------------
+We can tell the web-browsers in PC, laptop, tablets or mobile to re-paint the content of webpage whenever the screen size & resolution changes.
+
+<head>
+ ...
+        <title>Mobile First</title>
+	<meta name="viewport" 
+	      content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<!-- Instructions for google search engine -->
+	<meta name="country" content="India">
+	<meta name="author" content="Mr. A">
+
+The form/input elements
+-----------------------
+The form or input elements receive the user input either by typing something or by selecting something.
+
+1. <input type="number" /> - Number input
+2. <input type="text" />   - Single line input
+3. <input type="email" />  - Email
+4. <input type="date" />   - Date
+5. <input type="search" /> - Search
+6. <input type="color" /> -  Color
+7. <input type="tel" />   - Telephone
+8. <input type="url" />   - Url
+9. <input type="file" />  - File selector
+10. <input type="hidden" /> - Hidden input
+11. <input type="radio"> - Radio button
+12. <input type="checkbox"> - Checkbox
+13. <input type="button | submit | reset | image"> - Button 
+					   	   - Submit button
+					           - Image submit button
+						   - Reset button
+14. You should use <button> instead of <input type="button"> because it
+	offers more control then <input> button:
+
+	<button type="button|submit|reset">
+            here goes the content and it can be anything 
+	    including images
+        </button>
+
+   The "button" type don't postback (submit) the form. They do nothing except you
+	attach JavaScript code with it (events).
+
+   The "reset" clear the UI area.
+   The "submit" type submit/postback the form data.
+15. <input type="password" > - Password
+16. <textarea></textarea> -  Multiline text
+17. <select>  - Dropdown or combobox
+       <option value="value1">Display Text1</option>
+       .... 
+    </select>						
+18. <select size="6">  - listbox
+       <option value="value1">Display Text1</option>
+       .... 
+    </select>
+
+
+19. <form> - The form element is mainly used to gether the name-value pairs of data
+	     from the given input elements. 
+
+	     There are two ways to post the data using "form" element:
+		1. Using <form> markup and
+                2. Using JavaScript programming ( We will use this feature later and
+			it is known as AJAX forms)
+
+  So, the syntax of <form> :
+
+ <form method="post | get"
+       id="unique identifier"
+       action="postback or submit url"
+       enctype="encode type">
+
+     <input type="number" name="no"/>
+                           ^
+                           | ---- name attribute is mandatory for input elements
+                           V
+     <input type="text" name="name" />
+     .....
+ </form>
+
+  Suppose, user type 30 in number textbox and "Abc" in text textbox then <form> collects the name-value pair in following forms:
+
+           no=30&name=Abc    <--- Collection of name-value pairs
+
+ If "name" is not given, then no data will be in collection without the name.
+
+Example - Best practice to use <label> element with input element. If labels are used according to following ways, user of the page easily get focus while tapping/clicking on labels.
+
+<form>
+ <p><label>No <input type="number" name="no"/> </label></p>
+ <p><label>Name <input type="text" name="name"/> </label></p>
+</form>
+
+Or
+
+<form>
+ <p><label for="no">No</label></p>
+ <p><input type="number" name="no" id="no" /></p>  <!-- id attribute is required -->
+ 
+ <p><label for="name">Name</label></p>
+ <p><input type="text" name="name" id="name" /></p>
+</form>
+
+<label for="id of the respective input">Text....</label> is used when <input> is placed outside the <label>.
+
+Example: <fieldset> element to enclose the <form> -- This is the common practice to embed form into fieldset:
+
+<fieldset>
+  <legend>New Employee</legend>
+  <form> 
+    ... as per your form requirement/previous example
+  </form>
+</fieldset>
+
+20. <input type="range" > - Number selector. It select value between given range (max 				value and min value).
+
+ e.g 
+
+  <input type="range" max="100" min="1" value="25">
+
+Example: Radio buttons - Use common name for all radio buttons to create a group.
+
+<br/>Male <input type="radio" name="gender" value="M" />
+<br/>Female <input type="radio" name="gender" value="F" />
+
+[Note: Only one item/option will be selected among the group]
+
+Example: Use unique (different) name attribute value for "checkboxes". There may be one or more checkboxes checked.
+Hobbies:
+<br/>Play cricket <input type="checkbox" name="cricket" value="cricket"/>
+<br/>Play chess <input type="checkbox" name="chess" value="chess"/>
+
+Example: Dropdown using <select> - to select single item at a time.
+
+    <select>
+      <option value="">Choose..</option>
+      <option value="Mehsana">Mehsana</option>
+   </select>	
+Example: Dropdown using <datalist> and <input type="text"> to select or type new text
+
+    <input type="text" list="city">   <!--- list="id of datalist" -->
+
+    <!--- Define the datalist -->
+    <datalist id="city">
+    	<option>Mehsana</option>
+    	<option>Surat</option>
+    	<option>Patan</option>
+    </datalist>
+
+Example: Listbox (single or multiple selection)
+
+     <select size="3">
+       <option>Mehsana</option>
+       <option>Surat</option>
+       <option>Visnaagr</option>
+       <option>Rajkot</option>
+     </select>	
+     <select size="3" multiple="multiple">
+       <option>Mehsana</option>
+       <option>Surat</option>
+       <option>Visnaagr</option>
+       <option>Rajkot</option>
+     </select>
+
+Example: Add "dim" text into input area -- placeholder attribute
+
+ <p><input type="email" placeholder="Type your email"/></p>
+ <p><textarea placeholder="Your address"></textarea></p>
+
+The <table> elements - table, tr, td, th, thead, tfoot, tbody
+--------------------------------------------------------------
+
+thead, tbody and tfoot are optional.
+
+<table>
+ <thead>
+   <tr>
+    <th>No</th> 
+    <th>Name</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr><td>1</td><td>Miss A</td></tr>
+  <tr><td>2</td><td>Miss B</td></tr>
+ </tbody>
+ <tfoot>
+   <tr><td colspan="2">Footer</td></tr>
+ </tfoot>
+</table>
+
+To merge two or more columns, use colspan attribute of <td> element.
+To merge two or more columns of rows, use rowspan attribute of <td> element (td or th elements).
+
+Example: colspan and rowspan attributes of th or td
+
+<style>
+  table {
+  	border-collapse: collapse;
+  }
+  table, td, th {
+  	border: 1px solid #aaa;
+  }
+  td, th {
+  	padding: 10px;
+  }
+</style>
+<table>
+  <tr>
+  	<td colspan="3"></td>
+  </tr>
+  <tr>
+  	<td></td>
+  	<td colspan="2"></td>
+  </tr>
+  <tr>
+  	<td rowspan="3"></td>
+  	<td></td>
+  	<td rowspan="2"></td>
+  </tr>
+  <tr>
+  	<td></td>
+  </tr>
+  <tr>
+  	<td></td>
+  	<td></td>
+  </tr>
+</table>
+
+The List elements - ol ad ul (ordered and unordered list)
+---------------------------------------------------------
+
+<ol>
+  <li>Item1</li>
+  <li>Items
+     <ol>
+        <li>Item</li>
+        <li>Item</li>
+     </ol>
+  <li>
+  <li>Subjects
+      <ul>
+        <li>Maths</li>
+        <li>Science
+            <ol>
+              <li>Biology</li>
+              <li>Physics</li>
+              <li>Chemistry</li>
+            </ol>
+        </li>
+     </ul>
+  </li>
+  <li>Item3</li>
+</ol>
+   
+       
+
+ 
+
+ 

@@ -1,0 +1,34 @@
+The Map object
+==============
+
+To represent the key-value collections where key must be unique.
+
+A map entry is key-value pair. 
+
+ For instance,
+
+ let map = new Map();
+
+ //city-pin
+ map.set("Meh",384001);
+ map.set("Pat",39993);
+
+ console.log( map );
+ console.log( map.get("Meh"). map.get("pat") );   384001  undefined
+
+ //Replace the entry
+ map.set("Meh",4000); 
+ console.log(map);
+
+Example: Map collection and forEach callback
+
+   let students = new Map();
+   students.set(10,"Meena");
+   students.set(20,"Surya");
+
+   console.log(students);
+   students.forEach( (value,key)=> {
+     console.log(key,value);
+   });
+
+

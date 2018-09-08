@@ -1,0 +1,172 @@
+Resource reuse constructs - include, require
+=============================================
+
+There are four constructs namely:
+1. include "filename or url" - It insert the content of specified resource into current
+				.php file
+2. include_once "filename"   - It insert the content of specified resource once if
+				that particular resource is requested more than once.
+
+Note: Both, include and include_once shows a warning if given resource (file) is not available to include and also continue the further execution of current program.
+
+3. require "filename" - It insert the content of given file into current .php file
+4. require_once "filename" - It insert the content once if require_once is used 				multiple times.
+
+Note: require and require_once generate "fatal" error and stop the current page execution when given resource is not available/exists.
+
+Example: Website template 
+
+1. Create following directory structure
+
+/site/
+     |
+     |-----/css/
+               style.css
+     |-----/templates/
+                 header.php
+                 footer.php
+     |
+     | index.php
+       about.php
+       ......
+/site/templates/header.php
+---------------------
+<!DOCTYPE html>
+<html>
+<head>
+  <title><?= empty($title) ? "Welcome" : $title ?></title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="container">
+     <header>
+     	<h1>Sample Site</h1>
+     </header>
+     <nav>
+     	<a href="index.php">Home</a>
+     	<a href="about.php">About</a>
+     	<a href="login.php">Login</a>
+     </nav>
+     <section>
+     	
+/site/templates/footer.php
+--------------------------
+     </section>
+     <footer>
+     	<p>&copy; Sample Site - 2018</p>
+     </footer>
+  </div>
+</body>
+</html>
+
+/site/index.php
+----------------
+<?php $title = "Welcome" ?>
+<?php include_once "templates/header.php" ?>
+<h3>Welcome to our website</h3>
+<?php include_once "templates/footer.php" ?>
+
+Example: Add two more templates (in previous example) to the website for "Admin" and "Member" user.
+/site/
+     |---------/admin/
+                     |---------/templates/
+                                    header.php
+                                    footer.php
+                     | index.php and other pages
+     |--------/member/
+                     |
+                     |---------/templates/
+                                  header.php and footer.php
+                     |
+                     | index.php and other pages
+     |
+     |------/templates/ 
+               .....
+      .......
+     |
+     |------/lib/ 
+              db-functions.php
+
+/site/lib/db-functions.php
+----------------------------
+<?php
+ function get_cn() {
+ 	return new PDO("mysql:host=localhost;dbname=emp_db","root","");
+ }
+
+ //Use this function for insert/delete/update/create/alter/drop query
+ function execute($sql, $data = null) {
+ 	$cn = get_cn();
+ 	$st = $cn->prepare( $sql );
+ 	$st->execute( $data );
+ 	$err = $st->errorInfo();
+ 	//var_dump($err);
+ 	return !$err[1];
+ }
+
+//Fetch single row
+ function row($sql, $data = null) {
+ 	$cn = get_cn();
+ 	$st = $cn->prepare( $sql );
+ 	$st->execute( $data );
+ 	return $st->fetch();
+ }
+
+//Fetch multiple rows
+ function rows($sql, $data = null) {
+ 	$cn = get_cn();
+ 	$st = $cn->prepare( $sql );
+ 	$st->execute( $data );
+ 	return $st->fetchall();
+ }
+                     
+/site/test.php
+-----------------
+<?php
+ require_once "lib/db-functions.php";
+  
+  $r=execute("insert into emp(emp_name,emp_id,bdate) 
+  	  values (?,?,?)",array('Reema',80,'2002-10-02'));
+  if($r)
+  	echo "OK";
+  else 
+  	 echo "Not OK";
+
+  
+   $r= row("select * from emp where emp_id=?",array(50));
+   var_dump($r);
+
+    $r= rows("select * from emp");
+   var_dump($r);
+
+/site/templates/header.php
+<?php  require_once "lib/db-functions.php" ?>
+<!doctype html> ........
+
+/site/admin/templates/header.php
+<?php  require_once "../lib/db-functions.php" ?>
+<!doctype html> ........
+
+Example: Create "country.php", "state.php", and "city.php" under "admin" folder to perform insert/delete/update/select/show countries/states/cities records
+
+Tables:
+create table country
+(
+   country_id int primary key auto_increment,
+   country_name varchar(50) not null unique
+)
+create table state
+(
+   state_id int primary key auto_increment,
+   state_name varchar(50) not null unique,
+   country_id int not null,
+   foreign key(country_id) references country(country_id)
+)
+create table city
+(
+   city_id int primary key auto_increment,
+   city_name varchar(50) not null unique,
+   state_id int not null,
+   foreign key(state_id) references state(state_id)
+)
+

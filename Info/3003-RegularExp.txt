@@ -1,0 +1,120 @@
+Regular Expression Object - RegExp
+==================================
+
+Regular Expression is a pattern base matching scheme on strings so we can easily search, replace or delete , split the strings.
+
+Create an object of Regular Expression, we can use pair of forward slashes:
+
+ var regExp = /here-goes-pattern/;
+
+To define the regular expression patterns, following character classes are used:
+
+Char class	Meaning
+-----------------------
+	.	It matches any char
+	\w	It matches a word char ( an alphabet or a digit or puncutituion mark)
+        \d	It matches a digit char 
+   	\W	It matches a non-word char
+	\D	It matches a non-digit char
+	\s	It matches a whitespace
+	\S	It matches a non-whitespace char
+	[set]	It matches a char from the set
+		e.g [\w\d]
+		    [a-zA-Z]
+		    [0-9]
+		    [ABCD0123]
+        (pattern) It matches a group pattern or value
+		 e.g (red|green|blue) -- any one name from the group
+		     (\w|\d|\s)
+
+Following quantifiers are also used for repeatation of expression
+
+	X?	"X" occurs zero or one
+	X*	"X" occurs zero or more than zero
+	X+	"X" occurs one or more
+	X{n}	Exact "n" occurences of "X" 
+	X{n,m}  Exact n to m occurence (min - n and max is "m")
+		e.g  \d{4}  -- Four digits
+		     \d{4,9} -- Min four digits and max 9 digits
+	^	Begin of the input - boundary matcher
+	$	End of the input - boundary matcher
+
+Example-1: 
+<script>
+	//First four letter can be A or B or C or D
+	//Next char can be any
+	//Next two char must be digit - 5 or 6
+	let regExp = /^[ABCD][ABCD][ABCD][ABCD].[56][56]$/;
+	let string = "DABA%65";
+	console.log( regExp.test( string ) );
+</script>	
+
+Example-2: To check whether a "red" word exists in "The red sun" string. Don't use
+	   bounday marker.
+<script>
+  let pattern = /red/;
+  let string = "The red sun";
+  console.log( pattern.test( string ) );
+</script>
+
+Example: Check a given sentence is ends with . (full stop)
+
+   > /[.]$/.test("The red sun")
+Example: Rewrite first example using quntifiers
+      let pattern = /^[ABCD]{4}.[56]{2}$/;
+      console.log( pattern.test( "DDAB 55");
+Example: A Valid name of person cannot contains digits and special characters.
+
+	let pattern = /^[a-zA-Z ]+$/;
+        console.log( pattern.test("Reena Shah") );
+        console.log( pattern.test("Miss. Reena Shah") );
+Example: Length of person name cannot exceed 50 
+         let pattern = /^[a-zA-Z ]{1,50}$/;
+Example: Check whether a string value is "red" or "blue" or "green" word
+	let pattern = /(red|green|blue)/;
+        console.log( pattern.test("Yellow") );         
+        console.log( pattern.test("red") );
+Example: Email patterns
+
+<script>
+	let email = /^\w+[@]\w+[.]\w+$/;
+	console.log( email.test( "a@a.com" ));
+	console.log( email.test( "a@a." ));
+	console.log( email.test( "10.a.a@a.p.e" ));
+
+	email = /^\w+([.]\w+)*[@]\w+([.]\w+)+$/;
+	console.log( email.test( "10.a.a@a.p.e" ));
+	console.log( email.test( "10.ada@gmail.co.in" ));
+</script>	
+Example:  dd/mm/yyyy date pattern
+Example: An address contains alphabets, digits, comma, spaces, hyphen, period, % $ # @ 		! * & ( ) + = /  characters with maximum 2000 and min 1 chars
+Example: Pin code -- six digits
+Example: Mobile number country code + 10 digit number
+Example: Url e.g http://www.sitename.domain
+                 https://www.....
+Example: String without whitespace
+
+	 e.g string = " A D"; <-- invalid
+                      "AD";   <--- valid
+		   let pattern = /\S+/
+Example: input validation
+
+<input type="number" id="no" placeholder="No">
+<input type="text" id="name" placeholder="Name">
+
+<button onclick="doCheck()">Submit</button>
+<script>
+  let no = document.querySelector("#no");
+  let name = document.querySelector("#name");
+  const nameExp = /^[a-zA-Z ]+$/;
+  function doCheck() {
+  	 if(!no.value) return;
+  	 if(!name.value) return;
+     if(!nameExp.test( name.value )) return;
+ 
+     console.log( no.value, name.value );
+  }
+</script>	
+
+
+

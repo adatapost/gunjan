@@ -1,0 +1,168 @@
+Attach the "function" to the event of HTML objects
+===================================================
+Each & every HTML object has number of "events" and each & every event name begins with "on" prefix.
+
+For instance, onclick  - When mouse click or enter key is pressed
+              onkeyup  - when key is released
+              onkeypress
+              onkeydown and many more...
+
+We can use "global" functions as "handlers" of the events of HTML objects.
+
+Event is nothing but passing a function reference to another or built-in function and will be called by that built-in function.
+
+
+Example:
+
+<div onclick="doAct()">Click Here</div>
+<button onclick="doAct()">Hello! click here</button>
+<p onclick="doThis()">This is para. Click here</p>
+
+<script>
+  function doAct() {
+     console.log("This function is called when user click on div or button object.");
+  }
+  function doThis() {
+      console.log("This is another handler with an object of p element.");
+  }
+</script>
+
+Description:
+  
+   <div onclick="doAct()"  means, we just pass the reference of doAct() to onclick    callback and this passed function is called "handler" and onclick is known as 
+   event.
+
+   There are two syntax to assign function to the event:
+
+	onxxxxxxx = "return functionName()"
+        onxxxxxxx = "functionName()"
+
+   You can pass arguments to the functions or event handlers,
+
+       onxxxxxx = "functionName(value1,value2,...)"
+
+IMPORTANT *** There are numbers of ways to attach a function to an event and above one is one of them. We will learn & use other methods shortly.
+
+Example: Passing arguments
+
+<p onclick="doAct(1)">Para</p>
+<button onclick="doAct(2)">Para</button>
+<a href="#" onclick="doAct(3)">Link</a>
+
+<script>
+  function doAct(status) {
+     if(status == 1) {
+       console.log('Write code ......for para');
+     } else if(status == 2) {
+        console.log('For button');
+     } else if(status == 3) {
+         console.log('For link..');
+     }
+  </script>
+
+A function that returns the reference of one or more functions -- The Closure object 
+----------------------------------------------------------------------------------
+
+The meaning of term "closure" is:
+
+    It is an object of function which persists or saves some data into object scope.
+    
+To define a closure, we first define a function which returns another funtion.
+
+Note that, there are number of syntax or ways to create object but the core understanding behind closure is "a function returns from another function or a function defined inside another function".
+
+function test() {
+  return function myClosure1() {
+     //code
+  }
+}
+
+function test() {
+   ....
+   function() { }   //closure
+}
+Example:
+
+<script>
+   function myFunc(no) {
+      return function() {
+      	console.log( no ); // "no" will be saved into an object that is
+      }                    // a function object known as "closure"
+   }
+
+   let k1 = myFunc(10);  //myFunc(10) is called and returns anonymous function object
+   let k2 = myFunc(20);  //  which is called closure
+
+   //call the closures and print the saved data
+   k1();
+   k2();
+   k1();
+   k2();
+</script>
+
+Example: Closure which increment and decrement the value of number.
+
+function myClosure(no,action) {
+  	return function() {
+  		if(action == '+') {
+  			no++;
+  		}  else if(action == '-') {
+  			no--;
+  		}
+            console.log( no );
+  	}
+  }    
+
+  // Obtain the closures
+  let incr = myClosure(50,'+');
+  let decr = myClosure(50,'-');
+
+  //call the closures
+  incr();
+  incr();
+  decr();
+  decr();
+  incr();
+</script>
+
+Example: A function returns an array of "closures" (functions)
+
+<script>
+  function myClosure(no) {
+  	return [ function() {
+  		  no++;
+                  console.log( no );
+   	         },
+             function() {
+  		  no--;
+                  console.log( no );
+   	       }
+  	  ];
+  }
+  let act = myClosure(50);
+  act[0](); 
+  act[0]();
+  act[0]();
+  act[1]();
+  act[1]();
+  act[1]();
+  act[0]();
+</script>
+Example: 
+<script>
+  var t = (function(n) {
+             return function() {
+                return n=n+2;
+             }
+           })(10);
+  console.log(t(),t(),t(),t());
+</script>
+
+Above code snippet explains how we can call the anonymous function.
+
+  ( function() { } )();
+Or( ()=> stmt )();
+  ( function(n1,n2) {} )(10,20);
+
+
+ 

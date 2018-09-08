@@ -1,0 +1,77 @@
+The REPL - Read Evalute Play Learn
+-----------------------------------
+REPL is a way to learn programming language's features. The web-browser's developer tool (which we can start by pressing F12 key or via menu options) has a console section and at console you will find a REPL prompt. e.g >_
+
+
+Example: Open Developer Tool + Console + And type following lines
+
+>no = 1000
+>no
+1000
+>no+30
+>no.toFixed(3)
+>no.toExponential()
+
+Note: The REPL prompt immediate return the result/error/message/warning.
+
+To write JavaScript code in a web-document
+-------------------------------------------
+Add <script> HTML tag into a document (at anywhere - begin or middle or end of the doc).
+
+<!doctype html>
+<title>Welcome JavaScript</title>
+<body>
+  <script>
+    //code
+    no = 900.22212;
+    console.log( no.toFixed(2) );
+    console.log( no + 40 );
+ </script>
+ <h2>This is HTML object</h2>
+ <script>
+    no++;
+    console.log( no );
+    console.log( amount );
+ </script>
+</body>
+
+To write JavaScript code using NodeJS's REPL
+---------------------------------------------
+NodeJS is the JavaScript server environment which must be installed in your system before you issue following command.
+1. Open command prompt/terminal
+2. Type "node" at prompt
+
+>node    <-- and press enter
+>no = 100
+>no
+1000
+>no+30
+
+Press CTRL+C two times to stop the NodeJS's REPL prompt.
+
+To write JavaScript code as single .js file and later embed it in web-document or execute it via NodeJS.
+-----------------------------------
+
+1. Embed to external JavaScript code resource
+
+sample.js
+-----------
+console.info("Learning the Developer tool!");
+no1 = 100;
+no2 = 200;
+no3 = no1 / no2;
+console.log( no1, no2, no3);
+
+index.php
+---------
+<script src="sample.js"></script>
+
+
+IMPORTANT: Never put anything inside the open and close <script> tag especially when you're embeding external JavaScript code file.
+  e.g <script src="sample.js"> /* This is test code */ </script>
+            might replace the "sample.js" code
+
+2. Using NodeJS, execute the .js code
+
+At command prompt,
+c:\your-web>node sample.js 

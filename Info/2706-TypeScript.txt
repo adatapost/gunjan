@@ -1,0 +1,126 @@
+The Generics - Parameterized Types
+==================================
+
+Generics is a way to re-use the existing code by passing/placing datatypes to another function or class. This technique allows us to pass Types/classes as a parameter to other classes or functions.
+
+Syntax for functions :
+
+   function functionName<Type1,Type2,...>(param1: Type1,...) : Type {
+
+   }
+
+Syntax for classes:
+
+   class ClassName<Type1,Type2,....> {    
+      ..
+   }
+
+The < > is called diamond operator and inside this operator we can specify one or more type identifier. Type identifier represent the Type reference and it should be upper alphabet however, you may choose your own naming convention.
+
+Example: Passing Types to the functions
+
+function printIt<P>(data: P) : void {
+    console.log( data, typeof(data) );
+}
+function showIt<K,V>(key: K, value: V): void {
+    console.log( "Key  ", typeof(key));
+    console.log( "Value  ", typeof(value));
+}
+
+class Student { }
+
+// Call the function
+printIt<number>(10);
+printIt<string>('Hello');
+printIt([11,22,3]);
+printIt(true)
+printIt<Student>(new Student())
+
+showIt<number,string>(10,"Abc");
+
+Example: A general purpose class "Data" that can receive a "Type"
+
+class Data<T> {
+    private _value: T;
+
+    constructor(value: T) {
+    	this._value = value;
+    }
+
+    set value(value: T) { 
+        this._value = value; 
+    }
+    get value(): T {
+        return this._value;
+    }
+}
+
+// Tests
+
+let num = new Data<number>(10);
+let str = new Data<string>("Sample Text");
+
+console.log(num.value, str.value);
+
+num.value = 10;
+str.value = "TypeScript";
+
+console.log(num.value, str.value);
+
+The interface - a contract between to entities
+===============================================
+
+We want two entities in JavaScript automatically communicate via "duck" or "sub" typing -- this "duck" method of type allows user to pass some sort of data to other entities and other entities receives them as per their need -- this only happens with "dynamic" nature of programming language.
+
+For "duck" typing mechanism, the contract is defined via an object that contains one or more necessary properties.
+
+Example: Suppose we've a function that receive an object having "firstName" property of any class to greet the people.
+
+function welcome( obj: {firstName: string } ) {
+	console.log("Welcome!!! ", obj.firstName);
+}
+
+let data = {
+  firstName: "Reena",
+  lastName: "Patel"
+};
+
+welcome(data);
+welcome( {firstName: "Trusha"} );
+
+So, the parameter at "welcome()" is a contract between the user's code and the code of the "welcome()" function.
+
+The interface keyword is also used to define a contract datatype and that type might used to define a contract.
+
+Syntax:
+
+interface InterfaceName {
+   propertyName: type;
+   propertyName?: type;  // optional property
+   .....
+}
+
+Example:
+
+interface WelcomeData {
+    firstName: string;   // Mandatory property
+    lastName?: string;   // Optional label/pproperty
+}
+function welcome( obj: WelcomeData ) {
+	console.log("Welcome!!! ", obj.firstName, obj.lastName ? obj.lastName : "");
+}
+
+
+let data = {
+  firstName: "Reena",
+  lastName: "Patel"
+};
+
+welcome(data);
+welcome( {firstName: "AA"} );
+
+
+   
+
+
+

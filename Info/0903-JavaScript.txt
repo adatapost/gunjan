@@ -1,0 +1,276 @@
+Boolean value - Falsy value & Truthy value
+-------------------------------------------
+
+0, 0.0, '', "", null, NaN, undefined are consider as falsy value.
+
+<script>
+  var no1 = prompt("Enter the no");
+  var no2 = prompt("Enter another no");
+
+  var no3 = parseFloat( no1 ) + parseFloat( no2 );
+  if( no3 ) {
+       alert("Sum " + no3);
+  } else {
+       alert("Error in data.");
+  }
+</script>
+
+The prompt() function read the value via dialog.
+The alert() function show a message pane/box.
+
+<script>
+  var value = "";
+  if( value ) {
+      let result = confirm('Are you sure to perform this task?');
+      if( result ) {
+           alert('Done');
+      } else {
+           alert('Abandon');
+      }
+  } else {
+     alert('Empty value');
+  }
+</script>
+
+The confirm(message) returns boolean (true or false).
+
+Relational and logical operators always uses boolean value.
+ 
+  Relational operator  == (equality) compare two values for equality
+                       === Identity - compare two values for equality along with
+					types comparision.
+			!= not equal without datatype compare
+  			!== Not Identity - Data as well as Type comparison.
+
+ >1 == '1'
+ true
+ >1 === '1'
+ false
+ >1 === 1
+ 
+ > 'Hello' === 10
+ 
+  Use &&, || and ! as boolean or logical operators.
+
+
+Arrays - The Array object
+==========================
+JavaScript "array" is a dynamic object or array which allow us to insert, delete, replace elements at any index. 
+
+There are two methods to create array:
+
+ 1. Array() construct and
+ 2. [] Subscript operator 
+
+Example-1
+
+<script>
+   var nos = [10,20,6,88];
+   var names = new Array("Meh","Pat","Raj");
+
+   console.log( nos, names);
+
+   console.log( nos.length, names.length);
+
+   console.log( nos[0], names[2]);
+</script>
+
+Example-2 Empty array
+
+ var items = []; // or var iems = new Array();
+ console.log( items );
+
+Example-3 array's push() and pop() functions
+
+ var items = [];
+ items.push("Mehsana");
+ items.push(30);
+ items.push("Surat");
+
+ console.log( items );
+ 
+  console.log( items.pop() );
+  console.log( items.pop() );
+  console.log( items.pop() );
+  console.log( items.pop() );
+
+Example-4 Set or get value at index
+
+var names = ["Raj","Man"];
+
+console.log( names[0] );
+
+names[0] = "Rajesh";  // Update
+names.push("Reena");  // append - add at the end of list
+names[10] = "Meena";  // Insert if index is new, replace/update otherwise
+console.log( names );
+
+if(names[6]) 
+  console.log(names[6]);
+else 
+  console.log('Not set');
+
+
+Example-5 Traverse the array using for each loop:
+
+   Syntax:   for(let index in arrayVarName) {
+                 ....
+             }
+
+var nos = [11,2,3,4,55,66];
+for(i in nos) {
+  console.log(i, nos[i]);
+}
+
+nos[10] = 2000;
+nos[20] = 4000;
+
+for(let j in nos) {
+  console.log(j, nos[j]);
+}
+
+The for each loop returns an "index" of an element till an array has elements.
+
+Example-6 Array's splice(index, num_elements_tobe_replaced, new_elements)
+
+ //1. Add element at index
+ var nos = [10,20,30,40];
+ nos.splice(1,0, 500);      
+ console.log( nos ); // 10 500 20 30 40
+
+ //insert three element at first index
+ nos.splice(0,0, 66,77,88);   // 66 77 88 10 500 20 30 40
+ 
+ //Remove 2nd element
+ nos.splice(2,1);    // 66 88 10 500 20 30 40
+ //Remove 3 elements from 2nd index
+ nos.splice(2,3);
+
+ console.log(nos);
+
+ //Remove some elements and also add (replace)
+ nos.splice(3,5,200);  // remove 5 elements and add 200 at 3 index
+ console.log(nos);
+
+
+Functions  - User defined functions
+==========
+
+The "function" keyword in JavaScript create a function/procedure.
+
+Syntax:
+
+  1. Global function - It has a name and it can be used anywhere within the 			current document.
+
+  2. Variable function - It has no name or it is nameless function whose address (
+			 memory reference) will be assigned to the variable.
+
+
+  Global function :
+
+    function funcName(arguments....) {
+       //statements
+       return value;
+    }
+
+  Variable function :
+
+    var varName = function(arguments....) {
+        //statements
+        retrun ...;
+    };
+
+To call a function, use varName(arguments) or funcName(arg..);
+
+Example:
+
+<script>
+  function add(no1, no2) {    //global function
+    return no1+no2;
+  }
+
+  var mul = function(no1, no2) { // variable function
+    return no1*no2;
+  };
+
+ //call the functions
+ 
+ let r = add(10,20);
+ console.log( r);
+ console.log( add(4,5) , mul(20,30));
+</script>
+
+
+NOTE: **Variable function** is also known as "Anonymous Function".
+
+The Arrow function -- another syntax to define anonymous function
+------------------------------------------------------
+ Syntax:
+
+     var varName = (arg....) => single_statement;
+     var varName = (arg....) => {
+         //multiple statements;
+     };
+
+<script>
+  var mul = (no1,no2) => no1*no2;
+  var sum = (a,b) => console.log("Sum",a+b);
+  var add = (p,q) =>p+q;
+  var sub = (p,q) => p-q;
+  var printSeries = (p,q) => {
+     for(i=p;i<=q;i++) {
+        console.log(i); 
+     }
+  };
+
+ console.log( mul(3,4));
+ console.log( sum(3,4));
+ console.log( add(3,4));
+ console.log( sub(3,4));
+
+ printSeries(2,40);
+</script>
+
+Passing functions as parameters
+===============================
+
+Passing functions to another function as parameters is known as "callback" function.
+
+<script>
+  function calc(no1,no2,callback) {
+     callback(no1,no2);
+  }
+
+  //define the callbacks
+ function add(p,q) {
+   console.log(p+q);
+ }
+
+ var max = function(p,q) {
+    if(p>q) 
+      console.log(p);
+   else 
+      console.log(q);
+  };
+
+ //Now call the calc function
+
+   calc(5,6, add);    // 5 and 6 are number and 'add'  is the function
+   calc(10,5, max);
+   calc(10,5, (p,q)=>p+q);    // anonymous arrow function
+   calc(10,6, function(p,q) { // anonymous function
+      return p+q;
+   });
+
+   calc(1,50, (s,e) => {
+      let sum = 0;
+      for(i=s;i<=e;i++) {
+          sum = sum + i;
+      }
+     console.log(sum);
+   });
+</script> 
+
+
+
+

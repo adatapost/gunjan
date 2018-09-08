@@ -1,0 +1,24 @@
+The "ng build" command
+=======================
+
+Once you develop the ngApp under the "development/debug" environment, we must have to build the entire app in order to deploy that ngApp in "production" environment. The "ng build" command generate and package the node-modules, ng-modules and HTML/CSS markup into a single JavaScript application which will be created under "dist" folder.
+
+Steps to build and deploy the app:
+
+1. Invoke following command within the angular app's root folder.
+
+e.g ...\app>ng build
+
+
+2. A "dist" folder will be created/replaced and this folder contains compiled code of    ngApp.
+
+3. Now, copy the content of "dist/app" folder into production environment. e.g say at    www.example.com  Or deploy it into WAMP/XAMPP server:
+     -> Copy the app folder at "www"
+     -> Use PHP local server to run/deploy the app
+
+       ..\www\app>php -S 127.0.0.1:8090
+
+                  This command will starts a local web-server at 8090 port. Now open the web-browser and request the app:
+        http://localhost:8090
+
+        

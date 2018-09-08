@@ -1,0 +1,118 @@
+HTML Objects and DOM APIs
+=========================
+
+HTML Objects -- Each & Every HTML tag in a web-document (loaded) will be transformed 		into object by the web-browser's HTML parser and finally these objects
+		are placed into document tree. 
+
+		It is important to note that the objects (HTML) we sense or see on 
+		web-browsers are already added into the document tree or collection of
+		objects that are attached to the user interface section of web-browser.
+
+		If the HTML object is not attached to not added to the document tree
+		then it will not be rendered or painted or displayed.
+
+Now, in order to use the objects of "document tree" we must have a programming interface and this interface is known as Document Object Model -- this is the standard library to manipulate the HTML objects via JavaScript code.
+
+The "document" property
+------------------------
+This "document" property represent the document tree and also expose the DOM APIs (functions).
+
+
+Basic actions on document at console prompt
+>console.dir( document )  
+>document.title  = "Web page title"
+>document.title
+>document.body.style.backgroundColor = "#f00"
+>document.baseUri
+>document.URL
+>document.location 
+>document.location.href = "http://www.google.com"
+>document["body"]["style"]["fontSize"] = "3em";
+
+Example: Write a code to increase or decrease the font-size of document's body when use click on [A+] [A-] buttons respectively.
+        Note: Set 1.5em font-size initially when page rendered first time.
+
+Example: Click on buttons to open yahoo.com, google.com, stackoverflow.com etc website.
+         
+Example: We've three images at "images" folder. Write code which set the background of body with an image when one of the three button or link is pressed.
+
+Example: Change repeat style of background image when use press 
+         buttons.  [no repeat]  [repeat horizontally] [repeat vertically] [tile]
+		   [fullscreen]
+
+
+<!doctype html>
+
+<html>
+<head>
+	<title>Sample</title>
+	<style>
+	   body {
+	   	font-size: 1.5em;
+	   }
+    </style>
+</head>
+<body>
+	<h1>The Appleman Pvt Ltd</h1>
+	<p>This is the test page to test font-size property.</p>
+	<a href="#" onclick="doIncr()">A+</a>
+	<a href="#" onclick="doDecr()">A-</a>
+
+	<script>
+		
+		var size = 1.5;
+        //document.body.style.fontSize = size + "em";   // Initial value
+		function doIncr() {
+			size += .1;
+			document.body.style.fontSize = size + "em";
+		}
+        function doDecr() {
+			size -= .1;
+			document.body.style.fontSize = size + "em";
+		}
+	</script>
+</body>
+</html>
+
+
+Example:
+
+<!doctype html>
+
+<html>
+<head>
+	<title>Sample</title>
+	<style>
+	   body {
+	   	font-size: 1.5em;
+	   }
+    </style>
+</head>
+<body>
+	<h1>The Appleman Pvt Ltd</h1>
+	<p>This is the test page to test font-size property.</p>
+	<a href="#" onclick="doIncr()">A+</a>
+	<a href="#" onclick="doDecr()">A-</a>
+
+	<button onclick="setBackground('a1.png')">Set Background 1 </button>
+	<button onclick="setBackground('a2.png')">Set Background 1 </button>
+	<button onclick="setBackground('a3.png')">Set Background 1 </button>
+	<script>
+		function setBackground(fileName) {
+			document.body.style.background = "url(images/" + fileName + ") no-repeat";
+		}
+	    // Font size
+		var size = 1.5;
+        //document.body.style.fontSize = size + "em";   // Initial value
+		function doIncr() {
+			size += .1;
+			document.body.style.fontSize = size + "em";
+		}
+        function doDecr() {
+			size -= .1;
+			document.body.style.fontSize = size + "em";
+		}
+	</script>
+</body>
+</html>
+ 

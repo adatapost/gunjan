@@ -1,0 +1,111 @@
+Example: Input two numbers and print result based upon the actions defined by the
+         Sum, Mul, Div and Sub buttons.
+No:___ 
+No:___ 
+
+[Sum] [Mul] [Div] [Sub]
+
+Result :  
+
+Example: We've following table objects
+
+|----|---|---|
+|    |   |   |
+|----|---|---|
+|    |   |   |
+|----|---|---|
+|    |   |   |
+|----|---|---|
+
+ Three rows and three columns.  
+
+Write a program to display "X" sign when an area of <td> is clicked if that td is empty and also empty it if it is already filled with "X".
+
+Example: Handle onkeypress event of two input object which shows addition of two numbers into a div object.
+
+[No1   ] [No2   ]  [Result - div]
+
+Example: Update the prev program with "onkeyup" event.
+Example: Update the prev program with "onchange" event.
+
+<input type="number" id="no1" onkeypress="doAdd()" />
+<input type="number" id="no2" onkeypress="doAdd()" />
+<div id="result"></div>
+<script>
+  function doAdd() {
+    let n1 = parseFloat( document.getElementById("no1").value );
+    let n2 = parseFloat( document.getElementById("no2").value );
+    let n3 = n1 + n2;
+    let result = document.getElementById("result");
+    result.innerHTML = "";
+    if(n3)
+       result.innerHTML = n3
+  }
+</script>
+Example: Write a program to check the "checkbox" via event code of button.
+
+[ ]
+
+[Button - Check] [Button - Uncheck]
+
+ <input type="checkbox"  id="check1">
+   <button onclick="doSet()">Check</button>
+   <button onclick="doUnSet()">Uncheck</button>
+  <script>
+    var check1 = document.getElementById("check1");
+    function doSet() {
+       check1.setAttribute("checked","checked");
+    }
+    function doUnSet() {
+       check1.removeAttribute("checked");
+    }
+  </script>
+Example:  Enable a button when checkbox is checked. Use "onchange" event of checkbox input.
+
+<input type="checkbox" onchange="doEnable()">
+   <button id="btn1" disabled="disabled">Check</button>
+    
+  <script>
+    var btn1 = document.getElementById("btn1");
+    function doEnable() {
+       console.log( btn1.getAttribute("disabled"));
+       if( btn1.getAttribute("disabled")) 
+           btn1.removeAttribute("disabled");
+       else 
+           btn1.setAttribute("disabled","disabled");
+    }
+  </script>
+
+
+Example: Show a selected county name (dropdown list)
+
+   <select onchange="doSelect(this)">
+      <option value="">Choose</option>
+      <option value="IN">India</option>
+      <option value="UK">United Kingdom</option>
+      <option>Nepal</option>
+    </select>
+    <p id="info"></p>
+  <script>
+     function doSelect(dp) {
+        document.getElementById("info").innerHTML = dp.value;  
+     }
+  </script>
+
+Example: We've three radio buttons. Write code that paint background of document with diff color when radio button is selected
+( ) Green
+( ) Blue
+( ) Red
+
+Example: Display following data
+
+emp = {
+ "id": 10,
+ "name": "Miss A",
+ "married": false  <--- Use checkbox
+ "gender": "f"     <--- Use radio buttons
+}
+
+
+
+  

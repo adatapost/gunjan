@@ -1,0 +1,63 @@
+The Date object
+=================
+
+The Date object represent local date, time and timezone data. The month value begins with 0 (1st month - Jan).
+
+<script>
+  let dt = new Date();   //Current system's local date time
+  console.log( dt );
+
+  let birthDate = new Date(2002,10,30);   // User defined date
+  console.log( birthDate );
+
+</script>
+
+The setXXXXXX(value) and getXXXXXX() methods 
+-------------------------------------------
+These methods allows user to set or get the part of date or time.
+
+<script>
+  let dt = new Date();
+  console.log( dt.getDate() ); //day of month
+  console.log( dt.getDay() );  //day of week
+  console.log( dt.getMonth() ); //month number
+  
+  dt.setMonth(11);   //set December month
+  dt.setYear(2002);
+  console.log(dt);
+</script>
+
+
+Date to milliseconds     - Date.now() and Date.parse("year-month-day")
+----------------------
+
+These two methods returns date in milliseconds
+
+<script>
+  let ms1 = Date.now();
+  let ms2 = Date.now("2002-10-31");
+
+  console.log( ms1, ms2);
+
+  // convet milliseconds to Date object
+
+  let dt1 = new Date(ms1);
+  let dt2 = new Date(ms2);
+
+  console.log(dt1, dt2);
+</script>
+
+Example: Find the day,minutes, seconds and milliseconds difference between two dates
+
+<script>
+   let first = Date.parse("2001-2-20");
+   let second = Date.parse("2018-3-28");
+
+    let msDiff = second - first;
+    let secDiff = msDiff / 1000;   //1 second = 1000 millis
+    let minDiff = secDiff / 60;
+    let hourDiff = minDiff / 60;
+    console.log( msDiff, secDiff, minDiff, hourDiff );
+</script>
+
+ 

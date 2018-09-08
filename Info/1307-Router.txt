@@ -1,0 +1,50 @@
+The Router and RoutersModule
+============================
+
+What the "route?
+
+It is an integral part of MVC design pattern and it is the component/class which receive the requests from client (browser's url along with data). This component analyze the requested URL/URI, convert URL's data into meaningful component & controller and invoke or load them into memory so the views associate with these components/controller can be returned to the "client".
+
+The RoutersModule in Angular acts as the "filter" or "main controller" which receive all requests and load the appropriate component as per requested URLs.
+
+The "Router" API is basically used to define the "navigation" system in Angular application. You can navigate from one component to another via "Addressbar URL" or put it into hyperlink, form's action or event of the DOM.
+
+ For example,   /    <--- Home or root component
+                /product    <--- Load the product
+                /product/1  <--- Load a product component which receive value 1 (id)
+                /product/edit/1
+
+Step-1 Create application routing file
+
+>ng generate module app-routing --flat  
+
+    --flat option will create a file in "app" folder.
+
+Step-2 
+
+Import the "@angular/router" with two classes RouterModule and Routes
+
+import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from "@angular/core";
+
+// Import the components
+import { HomeComponent } from .....;
+
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { ..... },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
+];
+
+@NgModule({
+ imports: [ RouterModule.forRoot(routes) ],
+ exports: [RouterModule ]
+}
+export class AppRouterModule { }
+
+Step-3 Open app.module.ts and import the AppRouterModule class.
+Step-4 Now, open app.component template to add navigational router object via:  
+    <router-outlet> markup.
+Ex:
+ <a routerLink="/home">Home</a>
+ <router-outlet></router-outlet>

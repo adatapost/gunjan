@@ -1,0 +1,59 @@
+Record pagining
+=====================
+To show some records per page. Especially, when we have  long list of records.
+
+We can use SELECT with LIMIT clause to fetch some records (or given range) from the database.
+
+ SELECT .... WHERE .... LIMIT START_RECORD, NUM_RECORDS
+
+e.g
+
+ select * from emp limit 0,5  (First five)
+ select * from emp limit 5,5  (Next five)
+
+
+Example:
+
+<?php 
+ $cn = new PDO("mysql:host=localhost;dbname=emp_db","root","");
+
+ //Calculate the count of records
+ $st = $cn->prepare("select count(*) from emp");
+ $st->execute();
+ $count = $st->fetch()[0];
+
+ $start = 0 + (isset($_POST["start"]) ? $_POST["start"] : "");
+ $cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
+ $page_size = 10;
+
+  $total_pages = (int) ($count / $page_size);
+  if($count % $page_size !=0) $total_pages++;
+
+ if($cmd == "Next") {
+ 	$start++;
+ }
+  if($cmd == "Prev") {
+ 	$start--;
+ }
+ if($start<0) 
+ 	 $start = 0;
+ if($start>$total_pages-1) 
+ 	 $start = $total_pages-1;
+
+ print($total_pages);
+ $start_position = $start * $page_size;
+
+ $st = $cn->prepare("select * from emp limit $start_position, $page_size");
+ $st->execute();
+ $rows = $st->fetchall();
+
+ foreach($rows as $row) {
+ 	echo "<br/>", $row[0], "  " , $row[1], " " , $row[2];
+ }
+ ?>
+ <form method="post">
+ 	<input type="hidden" name="start" value="<?=$start?>">
+ 	<button name="cmd" value="Prev">Prev</button>
+ 	<button name="cmd" value="Next">Next</button>
+ </form>
+

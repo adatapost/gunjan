@@ -1,0 +1,421 @@
+The class keyword -- Design class, methods, properties
+======================================================
+
+The "class" keyword creates a new datatype.
+
+A "class" definition can include:
+   1. static members -- Members defined via "static" keyword. These members are
+      simply a "logical" group of some class variables and class methods.
+
+   2. Instance members -- These members are allocated when you instantiate the class
+			  using the "new" keyword.
+
+Static members are referenced via ClassName.MemberName whereas
+the instance members are referenced via obj.memberName.
+
+Syntax:
+
+class YourClassName [extends SuperClassName, InterfaceName1,....] {
+  public | private | protected methodName(parameters...): returntype {
+  }
+  .....
+  .....
+  public  private | protected | readonly field_or_property;
+  ....
+}
+
+Note: Default access is the "public"
+
+The constructor() method 
+-------------------------
+You may initialize your object via adding a special named method in your class and that method is "constructor".
+
+Example:
+
+class Emp {
+	firstName: string = "";
+	age: number = 0
+
+    /* constructor() is reserved name to define instance constructor*/
+	constructor(firstName: string = "", age: number = 0) {
+		this.age = age;
+		this.firstName = firstName;
+	}
+}
+/* Create an object */
+let p: Emp = new Emp();
+p.age = 10;
+p.firstName = "Meena";
+let q = new Emp("Seema",4);
+console.log( p.age, p.firstName );
+console.log( q.age, q.firstName );
+
+Example: Static members
+
+class MyMath {
+	static add(n1: number, n2: number): number { return n1+n2; }
+	static sub(n1: number, n2: number): number { return n1-n2; }
+
+	static readonly PI: number = 3.14;
+}
+console.log( MyMath.add(10,20) );
+console.log( MyMath.sub(10,20) );
+console.log( MyMath.PI );
+
+The namespace  keyword
+=======================
+In TypeScript, we've a keyword called "namespace" to created group of related "variables", "functions", and "classes/interfaces" and keep that group of items distinct from another group of items.
+
+Basic syntax:  Use "export" keyword for those entities which your want to add into your namespace.
+
+namespace NewNamespace {
+
+   export let var: type = value;
+
+   export function funcName(): void { }
+
+   export class ClassName { }
+}
+
+[Note: In order version of TypeScript, namespace was introduced as sub-module but now, it is not consider as module. A module is a group of related components from one or more source code files.]
+
+Example:
+namespace A {
+  export class MyMath {
+    static add(n1: number, n2: number): number { return n1+n2; }
+  }
+  export let version: number = 10;
+}
+namespace B {
+  export class MyMath {
+    static add(): string { return "Add"; }
+  }
+}
+
+console.log( A.MyMath.add(10,20) );
+console.log( B.MyMath.add() );
+console.log( A.version );
+
+Inheritance syntax
+==================
+
+class Person {
+   firstName: string = "";
+   age: number = 0;
+}
+
+class Student extends Person {
+    standard: string = "";
+}
+
+class Teacher extends Person {
+    mainSubject: string = "";
+}
+
+/* Test the objects */
+
+let s = new Student();
+s.firstName = "A";
+s.age = 10;
+s.standard = "4th";
+
+let t = new Teacher();
+t.mainSubject = "Maths";
+t.firstName = "Seema";
+t.age = 23;
+
+//code to print the object content
+
+Example:
+class Question {
+   public constructor(text: string = "", 
+                      op1: string = "",  
+                      op2: string = "", 
+                      op3: string = "",
+                      correct: number = 0) {
+       this.text = text;
+       this.op1 = op1;
+       this.op2 = op2;
+       this.op3 = op3;
+       this.correct = correct;
+       this.userChoice = 0;
+  }
+}
+class SingleChoice extends Question {
+     public constructor(text: string = "", 
+                      op1: string = "",  
+                      op2: string = "", 
+                      op3: string = "",
+                      correct: number = 0) {
+         super(text,op1,op2,op3,correct);  //invoke super class constructor
+    }
+    displayQuestion() {
+      //code to display quuestion
+    }
+    isCorrect() { return this.correct == this.userChoice; }
+}
+class MultipleChoice extends Question { /* May be all three or one or two options are
+  the correct answer */
+  displayQuestion() {  .. } 
+  isCorrect() { .. }
+}
+
+Example: Define a family tree by creating "Person" class that include name: string and father: Person and mother: Person properties.
+
+class Person {
+	firstName: string = "";
+	father: Person = new Person();
+	mother: Person = new Person();
+	
+	constructor(firstName: string = "") {
+		this.firstName = firstName;
+	}
+	setParent(father: Person, mother: Person) {
+		this.father = father;
+		this.mother = mother;
+	}
+}
+
+let m1 = new Person("Raj");
+let m2 = new Person("Meena");
+
+let m3 = new Person("Ram");
+m3.father = m1;
+m3.mother = m2;
+
+let m4 = new Person("Rim");
+m4.setParent(m1,m2);
+
+console.log(m3.firstName, m3.father.firstName, m3.mother.firstName)
+
+
+Example: Edit the Person and use "any" type for father, mother and spouse properties.
+
+class Person {
+   firstName: string = "";
+   father: any = null;
+   mother: any = null;
+   spouse: any = null;
+   
+   constructor(firstName = "", father= null, mother = null, spouse = null) {
+     this....
+   }
+
+  child(fistName: string) {
+     return new Person(firstName, this,this.mother );
+  }
+}
+     
+
+Example: Question and its sub-classes
+
+class Question {
+	text: string;
+	op1: string;
+	op2: string;
+	op3: string;
+	
+	public constructor(text = "", op1 = "", op2 = "", op3 = "") {
+		this.text = text;
+		this.op1 = op1;
+		this.op2 = op2;
+		this.op3 = op3;
+	}
+	public display() {
+      console.log(this.text);
+      console.log(1,this.op1);
+      console.log(2,this.op2);
+      console.log(3,this.op3);
+	}
+	public isCorrect() {
+		return false;
+	}
+}
+
+class SingleChoice extends Question {
+	correct: number = 0;
+	userChoice: number = 0;
+	public constructor(text = "", op1 = "", op2 = "", op3 = "", correct = 0) {
+       super(text,op1,op2,op3);
+       this.correct = correct;
+	}
+	public display(userChoice =0) {
+       super.display();
+       console.log("Enter your choice [1 or 2 or 3 ]: ");
+       this.userChoice = userChoice;
+	}
+	public isCorrect() {
+		return this.correct == this.userChoice;
+	}
+}
+
+class MultipleChoice extends Question {
+	correct: number[]  = [0,0,0];
+	userChoice: number[] = [0,0,0];
+
+	public constructor(text = "", op1 = "", op2 = "", op3 = "", correct = [0]) {
+       super(text,op1,op2,op3);
+       this.correct = correct;
+	}
+	public display(userChoice=[0]) {
+       super.display();
+       console.log("Enter three choices : ");
+       this.userChoice = userChoice;
+	}
+	public isCorrect() {
+		return this.correct[0] == this.userChoice[0]
+		   && this.correct[1] == this.userChoice[1]
+		       && this.correct[2] == this.userChoice[2];
+	}
+}
+
+class Paper {
+	questions: Question[] = [];
+	public constructor(questions: Question[]=[]) {
+		this.questions = questions;
+	}
+	show() {
+		for(let q of this.questions) {
+			console.log( typeof(q));
+			q.display();
+    		console.log(q.isCorrect());
+    	}
+     }
+}
+
+let ques: Question[] = [
+   new MultipleChoice("Q1","a1","a2","a3",[1,0,1]),
+   new SingleChoice("Q1","a1","a2","a3",2),
+   new MultipleChoice("Q1","a1","a2","a3",[1,0,1]),
+   ];
+
+for(let q of ques) {
+	console.log( typeof(q));
+	q.display();
+    console.log(q.isCorrect());
+}
+
+
+let paper = new Paper(ques);
+paper.show();
+
+
+The properties methods
+=======================
+
+Properties methods are very special methods that can be invoked by = assignment operator and they are used to "set" (store) value or "get" (retrieve) value into/from
+ the object.
+
+ Syntax:
+
+ set  methodName(argument: type) {  }
+ get  methodName() { }
+
+Property method must be used when you want to fields of the class cannot visible outside the class -- because you don't want that the user can change data of an object directly.
+
+In this case, your class data members are private or protected and the "set" and "get" properties allows us to "encapsulate" the data member.
+
+Naming conventions:
+
+1. Use _underscore prefix for "private" and "protected" members of the class.
+2. Use camelCase name for public method and fields.
+
+class Student {
+	private _roll: number = 0;
+	private _name: string = "";
+
+	//properties
+	set roll(roll: number) {
+		if(roll>0)
+		  this._roll = roll;
+	}
+	get roll() { return this._roll; }
+
+	set name(name: string) {
+		if(name && name.length>5)
+		    this._name = name;
+	}
+	get name() { return this._name; }
+}
+
+let p = new Student();
+p.roll = -10;
+p.name = "M";
+console.log( p.roll, p.name );
+
+
+The "abstract" keyword -- to create an abstract method and abstract class
+==========================================================================
+
+If you want to allow the user to use your class via Inheritance (by subclassing) then you must declare your class definition with abstract keyword.
+
+Suppose, you want to create a class has some abstract methods (only declared) then your declared method must be qualified with "abstract" keyword along with class definition.
+
+Example:
+
+abstract class Question {
+  ....
+  ....
+  public abstract isCorrect(): boolean;
+}
+
+The enum keyword and enum Type
+==============================
+To create symbolic (named) constants, we've two different ways:
+  1. use the "const" keyword and
+  2. use the enum to define enumerate class
+
+Syntax:
+
+enum EnumName {
+  item1 = [value1],
+  ....
+  itemn = [valuen]
+};
+
+By default, all enum elements automatically represent integer (number) value that will begins with 0 and next element's value will be previous value + 1 and so on.
+
+enum Days {
+	Mon,
+	Tue,
+	Wed,
+	Thr,
+	Fri,
+	Sat,
+	Sun
+};
+
+let toDay: Days = Days.Tue;  // Enum variable
+
+console.log( toDay, Days.Sun );   // Number 1 6
+console.log( Days[0], Days[toDay] ) // Names
+
+for(let p = Days.Mon; p<=Days.Sun;p++) {
+	console.log( p, Days[p] );
+}
+
+Assign value to enum elements:
+
+enum Color {
+  Red = 2
+  LightRed,
+  DarkGreen = 5,
+  Green,
+  LightGreen
+}
+
+console.log( Color.LightRed ) // 3
+
+We can use "any" type of value for enum elements:
+
+enum Earth {
+   Weight = "533434 Kg",
+   Radius = "322321 Km"
+}
+  
+
+
+
+
+
+

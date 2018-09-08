@@ -1,0 +1,15 @@
+Invoice Raw Data (Sales)
+=================
+ country(id,name)
+ state(id,name,country_id(f))
+ city(id,name, state_id(f))
+ Customer (id,name,address, city_id(f))
+ Product(id,name,unit,available)
+ Bill(id,bill_date, customer_id(f))
+
+ Bill_product(id, bill_id(f),product_id(f), qty, rate, discount,included)
+ Sales return(bill_product_id (f), qty, rate,reason)
+
+Example: Event management system -- Design the logical schema
+
+  

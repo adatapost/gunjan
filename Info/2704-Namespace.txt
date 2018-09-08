@@ -1,0 +1,56 @@
+The Namespace in PHP ( In JavaScript, "window" is the default namespace)
+=========================================
+
+The namespace create a group for related functions & classes and keep one group's functions & classes distinct from another group to avoid name collition or name duplication.
+
+syntax: In code file
+
+namespace YourNameSpaceName;
+.... functions and classes
+
+
+Note: Use "PascalCase" to name the namespaces.
+
+Example: 
+
+<?php
+namespace A;
+    class T { 
+      function __construct() { echo "T in A"; }
+    }
+    function post() {
+      echo "This is A's post";
+    }
+namespace B;
+     class T {
+      function __construct() { echo "T in B"; }
+     }
+     function post() {
+       echo "This is B's post";
+     }
+
+//Now, use the namespace functions & classes
+
+\A\post();
+\B\post();  
+
+$p = new \A\T();
+$q = new \B\T();
+
+*** IMPORTANT -- Namespace do not include page scope variables and constants.
+
+
+Define a constant in PHP
+==========================
+The define("name",value) keyword insert one or more constants into current page/program.
+
+<?php
+ define("AUTHOR","Mr. ABC");
+ define("SITE","The Appleman Pvt Ltd");
+ define("PHONE",9288292323);
+ define("UPLOAD_FOLDER","my-files/");
+
+ echo "<h1>", SITE, "</h1>";
+ echo "<h6>", AUTHOR, "  ", PHONE , "</h6>";
+  echo "<h4>", UPLOAD_FOLDER, "</h4>";
+

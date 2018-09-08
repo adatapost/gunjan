@@ -1,0 +1,154 @@
+Upload a file
+==============
+
+1. server page /www/web-api/upload.php
+<?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
+
+$result = array("message"=>"","status"=>false);
+if(isset($_FILES["file"])) {
+  $file = $_FILES['file'];
+  move_uploaded_file($file['tmp_name'], 'files/' . $file['name']);
+  $result['message']='uploaded successfully!';
+  $result['status'] = true;
+}
+echo json_encode( $result );
+
+2. code in component.ts
+
+    uploadFile(files: any) : void {
+  	console.log( files );
+
+    if(files.length!=0) {
+  	   let data = new FormData();
+  	   data.append("file",files[0]);
+  	   this.http.post("http://localhost:8080/web-api/upload.php",data)
+  	   .subscribe( x=> console.log(x) );
+  	}
+
+
+3. component.html
+
+<input type="file"
+ (change)="uploadFile($event.target.files)" />
+ 
+
+Example: UserInfo class contains Email, Password, Role and Photo: Any
+
+export class UserInfo {
+	email: string  = '';
+	password: string  = '';
+	role: string = 'Admin';
+	photo: any = null;
+
+	constructor(email: string  = '', 
+		password: string  = '', 
+		role: string = 'Admin', 
+		photo: any = null) {
+
+		this.email = email;
+		this.password = password;
+		this.role = role;
+		this.photo = photo;
+	}
+}
+
+
+Create registration component - user-register or register
+
+
+register.component.ts
+====================
+import { Component, OnInit } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { UserInfo } from '../user-info';
+import { UserInfoService } from '../user-info.service';
+
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
+})
+export class RegisterComponent implements OnInit {
+
+  constructor(private service: UserInfoService) { }
+
+  ngOnInit() {
+  }
+
+  message: string = "";
+  file: any = null;
+  confirm: string = "";
+  userInfo: UserInfo = new UserInfo();
+
+  uploadFile(files: any) : void {
+  	if(files.length==0) {
+  		this.message = "Please select a file";
+  	} else {
+  		this.file = files[0];
+  	}
+  }
+
+  createUser(): void {
+  	if(this.confirm!=this.userInfo.password) {
+  		this.message = "Confirm password and password is different...!";
+  		return;
+  	}
+  	if( this.file == null) {
+  		this.message = "Please select a photo.";
+  		return;
+  	}
+  	this.userInfo.photo = this.file;
+  	this.service.add(this.userInfo)
+  	.subscribe(x=> {
+  		this.message = x.message;
+  	});
+  }
+
+}
+
+register.component.html
+===============
+<input type="email" [(ngModel)]="userInfo.email" />
+<input type="password" [(ngModel)]="userInfo.password" />
+<input type="password" [(ngModel)]="confirm" />
+<input type="text" [(ngModel)]="userInfo.role" />
+<input type="file" (change)="uploadFile($event.target.files)" />
+
+<button (click)="createUser()">Submit</button>
+<p>{{ message }}</p>
+
+
+user-info.service.ts
+
+import { Injectable } from '@angular/core';
+
+import { HttpClient  } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { UserInfo } from './user-info';
+
+const URL:string = "http://localhost:8080/web-api/user-info.php";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserInfoService {
+
+  constructor(private http: HttpClient) { }
+
+  // Methods
+
+  add(userInfo: UserInfo) : Observable<any> {
+  	let form = new FormData();
+  	form.append("email", userInfo.email);
+  	form.append("password", userInfo.password);
+  	form.append("role", userInfo.role);
+  	form.append("photo", userInfo.photo);
+  	form.append("cmd","Add");
+  	return this.http.post(URL, form);
+  }
+}
+

@@ -1,0 +1,149 @@
+The Number type and objects
+---------------------------
+
+We can use literals,
+
+  <script> 
+    var no = 10;
+    var amount = 10.10;   
+    console.log(no, typeof(no), amount, typeof(amount));
+  </script>
+
+Or use Number() object,
+
+ <script>
+   var no = new Number(10);
+   var amount = new Number(10.10);
+   console.log( no, amount);
+ </script>
+
+ Mathematical operators : + - * / % 
+ Increment/Decrement operators : ++ and --
+ 
+ Can be used to perform calculations.
+
+ There will be a special value called "NaN" not a number will be assigned to variable is arithmatical expression has non-numeric data.
+
+ e.g
+ <script>
+   var amount = 10 * "five";
+   console.log( amount );
+ </script>
+
+Example: Test the NaN falsy value
+
+<script>
+  var no = 10;
+  if(no) { //truthy
+    console.log("Value ",no);
+  } else {
+    console.log("No value or errorneous value.");
+  }
+</script>
+
+ Now, change the line, 
+     var no = 10 * "A"; and see what happen
+
+Formating and string conversion functions
+-----------------------------------------
+toString(), toFixed(n), toExponential(n) methods of number object convert numeric type to string.
+
+>no = 299922.23234
+>no.toFixed(3)
+>no.toExponential(2)
+
+The "String"
+-------------
+JavaScript string is a unicode or UTF. The String can be expressed via single, double quote or "String()" object.
+
+<script>
+  var info1 = 'The "Red" sun';  //escape the double quotes
+  var info2 = "The 'Red' sun";  //escape the single quotes
+  var data = "<input type='text' />"; //escape single quotes
+  var path = "c:\\test\\new folder"; /Escape the backslash characters
+</script>
+
+String methods
+---------------
+1. indexOf(search, start-index) - Returns -1 if search failed
+
+<script>
+   let str = "The red sun and red rose red blue and green";
+   let searchText = "red";
+
+   let index = str.indexOf(searchText);   //first search
+   console.log( index );
+   if( index!=-1 ) {
+   	 console.log(searchText + " is found");
+   } else {
+   	console.log("Not found");
+   }
+
+   //Occurences
+   searchText = "red";
+   let occur = 0;
+   index = -1;
+
+/*
+   index=str.indexOf(searchText, index+1);
+   console.log( index );
+   index=str.indexOf(searchText, index+1);
+   console.log( index );
+   index=str.indexOf(searchText, index+1);
+   console.log( index );
+   */
+    while( ( index=str.indexOf(searchText, index+1) )>0 ) {
+        occur++;
+    }
+    console.log("Count : " + occur);
+
+</script>
+</body>	
+
+2. str = "     Trim remove space from both end   ";
+   str.trim()
+   str.trimLeft()
+   str.trimRight()
+
+3. str = "The red sun.";
+   str.startsWith("The")
+   str.endsWith(".");
+
+4. str = "Apple"
+   str.charAt(0) 
+   str.charAt(1)
+
+5. Number to string 
+   
+   var no = 100;
+   var str = no.toString(); // or toFixed or toExponential
+
+   String to number
+
+   var str = "1000";
+   var no = parseInt(str);
+   var no1 = parseFloat("2323.2323");
+   console.log( no, typeof(no) );
+   console.log( no1, typeof(no1) );
+
+   We can use  mathematical operators - * / % to parse the string to number. The + 
+   operator is used to concat two strings,
+
+    var str1 = "Hello";
+    var str2 = "World";
+    var str3 = str1 + str2;
+    console.log( str3 );
+
+    str1 = "100";
+    str2 = "200";
+    
+    var n1 = str1 - 0;  
+    var n2 = str2 * 1;
+    console.log( n1, typeof(n1) );  //number
+    console.log( n2, typeof(n2) );  // number
+
+   var n3 = str1 + str2;
+    console.log(n3, typeof(n3)); //string 
+
+
+

@@ -1,0 +1,115 @@
+The custom object by defining a class or datatype or type
+==========================================================
+
+JSON is the another way to customize the object. However, JSON object donot provide a schema or template or structure to create similar objects. It means we can't create one or more objects that belongs to same or common properties using single statement. Of course we need to write very same code again and again.
+
+For instance,
+  Suppose, we need three product objects then we would use:
+    var product1 = { ,,, };
+    var product2 = { ,,, }; 
+    var product3 = { ,,, };
+
+To create/define a new datatype/class, we have to use "function" keyword. It is important to note here that the "function" keyword can be used to create function/procedure as well as class/datatype.
+
+To follow the naming conventions of JavaScript class and method/function name, we will use "PascalCase" to name the class and "camelCase" for the methods, properties and variables.
+
+Syntax:
+
+function YourClassName(parameter1,parameter2,...) {
+   this.member1 = value1;
+   this.member2 = value2;
+   ....
+}
+
+All members of the class must be qualified with "this" keyword. If "this" is not used then they will be consider as "local" scope variable.
+
+To create an object of the class, use new keyword.
+
+  let obj1 = new YourClassName();
+
+Example: Define a Product class having constructor which take two value id and name
+
+<script>
+    function Product(id, name) {   // Constructor with two arguments
+        //properties
+        this.id = id;
+        this.name = name;
+
+        //member functions
+        this.print = function() {
+            console.log( this.id, this.name);
+        }
+    }
+
+    //create objects
+    var p1 = new Product(10,"Pencil");
+    var p2 = new Product(20,"Pen");
+
+    p1.print();
+    p2.print();
+
+    p1.id = 200;
+    p1.name = "Test";
+
+    p1.print();
+</script>
+
+Example: Define a Student class with constructor. 
+         Initialize the class members using falsy (undefined) value and || logical or
+	 operator.
+
+ function Student(id, name, english, gujarati, hindi,maths, science) {
+         this._id = id || 0;
+         this._name = name || "";
+         this._english = english || 0;
+         this._gujarati = gujarati || 0;
+         this._hindi = hindi || 0;
+         this._maths = maths || 0;
+         this._science = science || 0;
+
+         this.setRoll=function(id) {
+            this._id = id;
+         }
+         this.getRoll = function() { return this._id; }
+         this.getTotal = function() {
+            return this._science + this._maths + this._english 
+                                 + this._gujarati + this._hindi;
+         }
+         this.getPercent = function() { return this.getTotal() / 5; }
+         this.getGrade = function() {
+            let per = this.getPercent();
+            if(per>=70) return "A";
+            if(per>=60) return "B";
+            if(per>=50) return "C";
+            return "D";
+         }
+    }
+
+    var s1 = new Student();
+    console.log(s1);
+    var s2 = new Student(10,"Reena",66,77,88,99,44);
+    console.log(s2);
+
+    s1.setRoll(10);
+    console.log( s1.getRoll() );
+    console.log( s2.getTotal(), s2.getPercent(), s2.getGrade());
+</script>
+
+Example: Write a program to represent Quiz questions ( Question, four options, correct option number, and user's choice).
+
+    Quiz ( has collection of questions ) and
+Question ( contains question text, four options, correct choice, user's choice )
+
+Example: Write a program to represent family records.
+     
+    Person(name, gender, birthdate, father, mother)
+    Family( collection of Person)
+
+Example: Define "Product" and "Cart" classes to represent the cart data for more than            one customers.
+
+Example: Represent the news heading, description in 1000 chars, new date and source website name for some news records.
+
+Example: We want to persists City, State and Country records into memory. Write appropriate code (classes) to manage the data.
+
+   Country ( India, Usa etc )
+   State ( "Guj" belongs to Country(India),  "Ohayo" belongs to Country(Usa)  ) and    similarly City belong to State.

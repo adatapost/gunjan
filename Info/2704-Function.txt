@@ -1,0 +1,116 @@
+PHP user defined functions
+===========================
+
+The "functions" are the smallest and individual units of programs and allow us to reuse the code again and again.
+
+Like JavaScript, we have two syntax to create functions:
+
+  1. named functions
+
+     function functionName(arguments....) {  
+        //statements
+        return value;
+     }
+
+  2. Anonymous or variable functions
+
+     $varName = function(arguments...) { 
+        //statements
+        return value;
+     };  <-- Don't forget this semi-colon
+
+In PHP functions, we can't use page scoped variables into the functions directly instead we have to use $GLOBALS or use global keywords to tells the PHP engine to make available the global scoped variables in the function.
+
+<?php
+   $no  = 10;
+   function first() {
+      echo $no;  // This is an error statement because $no is not exists
+   }
+
+   function second() {
+       echo $GLOBALS["no"];  // This will access the $no
+   }
+
+   function third() {
+       global $no;    // Will tells the PHP engine to now use the global variable
+       echo $no;
+    }
+
+  //call the functions
+  first();
+  second();
+  third();
+
+Example: Named and anonymous function
+
+<?php
+  function add($no1,$no2) {
+    return $no1+$no2;
+  }
+  $mul = function($no1,$no2) {
+   return $no1*$no2; 
+  };
+
+  echo add(10,20), " ", $mul(55,67);
+
+Example: Encapsulate the $_POST, $_GET, $_FILES and many more actions
+
+ <?php
+   function post($name) {
+      if(isset($_POST[$name])) return $_POST[$name];
+      return "";
+   }
+   function get($name) {
+      if(isset($_GET[$name])) return $_GET[$name];
+      return "";
+    }
+   function upload($name,$dest) {
+      if(!isset($_FILES[$name])) return false;
+      $file = $_FILES[$name];
+      move_uploaded_file($file["tmp_name"], $dest . $file["name"]);
+      return true;
+    }
+  function list_options($data,$selected="") {
+     echo "<option>Choose</option>";
+     foreach($data as $v) {
+       $sel = $v==$selected ? "selected" : "";
+       echo "<option $sel>$v</option>";
+     }
+  }
+ 
+ $countries = ["India","Nepal","USA"];
+ $degrees = ["SSC","HSC","Graduate","Post Graduate","Master"];
+
+ $name = post("name");
+ $degree = post("degree");
+ $country = post("country");
+ $cmd = post("cmd");
+ $message = "";
+ if($cmd == "Add") {
+   if( upload("file",'my-files/')) {
+     $message = "File uploaded as well as data received : $name, $country, $degree";
+   } else {
+    $message = "Can't";
+   }
+ }
+ ?>
+
+ <form method="post"
+       enctype="multipart/form-data">
+  <br/>Name : <input type="text" value="<?=$name?>" name="name" />
+  <br/>Degree : 
+         <select name="degree">
+             <?=list_options($degrees,$degree)?>
+          </select>
+  <br/>Country :
+          <select name="country">
+            <?=list_options($countries,$country)?>
+          </select>  
+   <br/>File : 
+      <input type="file" name="file">                    
+      <button name="cmd" value="Add">Submit</button>
+      <p><?=$message?></p>
+</form>       
+
+
+

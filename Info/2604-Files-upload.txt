@@ -1,0 +1,140 @@
+<input type="file"> and $_FILES
+================================
+In order to upload any or specific, single or multiple files, we must configure the following:
+
+ 1. Default upload limit is 2 MB and want to change then open "php.ini" (At system tray + select WAMP Server's green icon + PHP + Php.ini + Search for "Upload" section and update:
+ upload_max_filesize = 500M 
++ Save the PHP.ini + click on WAMP server green icon + Restart/start all services
+
+ 2. The <form> must be of POST method with enctype="multipart/form-data" attribute.
+    This way the web-browser sends large amount of data into small chunks to the server (ie. multi part).
+
+ 3. To receive the uploaded data, use $_FILES superglobals
+
+Example-1
+<?php
+ var_dump($_FILES["myfile"]);
+?>
+<form method="post"
+      enctype="multipart/form-data">
+   <input type="file" name="myfile"/>
+   <button>Submit</button>
+</form>
+
+Example-2  Set file upload filter. Use accept attribute with 
+  <input type="file" accept="image/*" name="myfile" /> -- for images only
+  <input type="file" accept="audio/*" .../> for audio file
+
+Example-3 Upload multiple files. We must have to add multiple="multiple" attribute and also set name attribute with [] array syntax.
+
+    <input type="file"
+           multiple="multiple"
+           name="myfile[]"  />
+
+The array returned by the $_FILES superglobal contains five elements:
+   name:  The name of uploaded file
+   tmp_name: Location of temporary file
+   size: size of the uploaded file
+   type: content type
+   error: error code - 0 for success
+
+We can use "size" to restrict the size of uploaded file and "type" to filter the content type.
+
+To copy the uploaded file into our project folder. Make sure that uploaded files copied at a specific folder.  (for example, create a folder named "files" for this example)
+
+Use move_uploaded_file(src, dest) method to copy the uploaded file from tmp_name location to user specified folder.
+
+Example:
+
+<?php
+  $message ="";
+  if(isset($_FILES["myfile"])) {
+     $myfile = $_FILES["myfile"];
+     $size = $myfile["size"];
+     if($size>=1 && $size<=1024*1024*30) { // 30 MB 
+     	$src = $myfile["tmp_name"];
+     	$dest = 'files/' . $myfile["name"];
+     	move_uploaded_file($src, $dest);
+     	$message="Success!!!";
+     } else {
+        $message = "Size must be below 30 MB";
+     }
+  }
+?>
+<form method="post"
+      enctype="multipart/form-data">
+   <input
+     accept="*/*"
+    type="file" name="myfile"/>
+   <button>Submit</button>
+   <p><?=$message?></p>
+</form>
+
+Example: Program to upload multiple files
+
+Example: Upload via XHR
+
+upload.php
+----------
+<?php
+  $message ="";
+  if(isset($_FILES["myfile"])) {
+     $myfile = $_FILES["myfile"];
+     $size = $myfile["size"];
+     if($size>=1 && $size<=1024*1024*30) { 
+     	$src = $myfile["tmp_name"];
+     	$dest = 'files/' . $myfile["name"];
+     	move_uploaded_file($src, $dest);
+     	$message="Success!!!";
+     } else {
+        $message = "Size must be below 30 MB";
+     }
+  }
+  echo $message;
+
+file.php
+-------
+<input type="file" id="myfile">
+<button onclick="submitForm()">Submit</button>
+<div id="message"></div>
+<script>
+  let message = document.querySelector("#message");
+  let myfile = document.querySelector("#myfile");
+  function submitForm() {
+      let data = new FormData();
+      data.set("myfile",myfile.files[0]);
+      post("upload.php",(result)=> {
+          message.innerHTML = result;
+      },data);
+  }
+  function post(url, callback_function,data) {
+        var xhr =new XMLHttpRequest();
+        xhr.open("post", url);
+
+        xhr.onreadystatechange = ((xhr)=>{
+          return function() {	 
+            if(xhr.DONE == xhr.readyState) {
+           	callback_function(xhr.responseText);
+             }
+          }
+        })(xhr);
+
+        xhr.send(data);
+   }
+</script>
+
+To download a file, use <a href="url" download="filename">Download</a> tag.
+e.g  <a href="files/sample.mp4" download="sample.mp4">Download Video</a>
+     <a href="files/sample.mp4">Play Video in same frame/tab</a> 
+     <a href="files/sample.mp4" target="_blank">Play Video in new tab</a> 
+
+Example: We've invoice data into an array
+e.g
+
+ $invoice = array("customer"=>array("Mr.A","ABC Road"),
+                  "bill"=>array("billno"=>"32992932","10-10-2018"),
+                  "products"=>array( array(1,"A",...), ... ));
+
+and print the invoice on screen. (format the layout -- lines, alignment, borders etc)
+
+

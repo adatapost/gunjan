@@ -1,0 +1,125 @@
+HTML Object Continue...
+------------------------
+
+4. document.getElementById("id-value-of-an-object") - It returns an object reference
+   of given "id", returns null if "id" not exist.
+
+Example:
+
+<h1 id="info">The red sun</h1>
+
+<script>
+  var obj = document.getElementById("inf");
+  console.log( obj ); // prints null because "inf" value is not exists in id attribute
+
+  obj = document.getElementById("info");
+  if(obj!=null) {     // full proof code
+     obj.style.color = "red"; 
+     obj.style.border = "1px solid black;" 
+  }
+</script>
+
+5. methods of DOM
+   --------------
+   obj.innerHTML  - To set or get the HTML text into/from the object.
+
+                      <div><p>The <b>red</b> sun</p> and <p>The red rose</p></div>
+                           |------------------------------------------------|
+                                 innerHTML
+  obj.innerText - To set/get the Text (no html tag).
+
+  obj.outerHTML =    Current tag and including innerHTML is represented by the 			outerHTML.                                
+  obj.outerText = Text only 
+
+  obj.setAttribute("attribute", "value") - To set the attribute
+  obj.getAttribute("attribute") - To get the attribute value
+  obj.removeAttribute("attribute") - To remove the attribute
+  
+  obj.value = To set or get the value of <input >, <select>, <textarea> elements.
+  obj.style = To returns a style (CSS) object         
+
+Example-1
+
+<div id="info">
+  <p>The <b>red</b> sun</p> and <p>The red rose</p>
+ </div>
+ <script>
+  var obj = document.getElementById("info");
+
+   //Read the properies
+   console.log( obj.innerHTML);
+   console.log( obj.outerHTML);
+   console.log( obj.innerText);
+   console.log( obj.outerText);
+
+   //Update properties
+   obj.innerText = "<h4>Hello</h4>";
+   //obj.innerHTML = "<h4>Hello</h4>";
+   //obj.outerHTML = "<h4>Hello</h4>";
+   //obj.outerText = "<h4>Hello</h4>";
+</script>       
+
+Example-2
+<input type="text" id="no" />
+<input type="checkbox" id="status" />
+<script>
+  var no = document.getElementById("no");
+  no.value = "20";
+
+  var status = document.getElementById("status");
+  status.setAttribute("checked","checked");
+</script>
+
+Example-3
+
+<input type="text" id="inp_name" />
+<button onclick="doChange(1)">Password</button>
+<button onclick="doChange(2)">Number</button>
+<button onclick="doChange(3)">Text</button>
+<button onclick="doChange(4)">Email</button>
+<button onclick="doChange(5)">Radio</button>
+<button onclick="doChange(6)">Checkbox</button>
+
+<script>
+  var inp_name = document.getElementById("inp_name"); // It is good practice to user
+						      // same var name as id value
+  function doChange(op) {
+     if(op == 1) {
+         inp_name.setAttribute("type","password");
+     }
+    else 
+    if(op == 2) {
+         inp_name.setAttribute("type","number");
+     }
+    else 
+    if(op == 3) {
+         inp_name.setAttribute("type","text");
+     }
+    else 
+    if(op == 4) {
+         inp_name.setAttribute("type","email");
+     }
+    else 
+    if(op == 5) {
+         inp_name.setAttribute("type","radio");
+     }
+    else 
+    if(op == 6) {
+         inp_name.setAttribute("type","checkbox");
+     }
+  }
+</script>
+Or
+
+...
+<button onclick="doChange('password')">Password</button>
+....
+<script>
+  function doChange(op) {
+      inp_name.setAttribute("type",op);
+  }
+</script>
+
+
+
+

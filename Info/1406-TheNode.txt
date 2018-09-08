@@ -1,0 +1,70 @@
+The NodeJS - a JavaScript environment
+======================================
+
+NodeJS is a JavaScript Environment through which we can develop, deploy and execute the JavaScript program either client or server machine.
+
+NodeJS programming framework allows developers to use the JavaScript language and NodeJS echosystem -- very rich and robust library as well as open source libs.
+
+The Node Package Manager - npm tool allows developer to fetch "packages" -- also known as "JavaScript libraries" from the network repository. For example, if we need a jQuery library, the npm tool copy necessary files from network repository to local repository.
+
+A "repository" is just like a storage area or recognized store for the programmers and tools to use libraries/frameworks. 
+
+There are two kind of "repository" will be created:
+   1. Global repository -- The lib or packag will be saved into a "global" folder
+			   and allows everybody to use this lib or package.
+			   That means, we can share same package/lib for one or more
+			   projects but beware of using "global" copies of packages.
+
+			   Any changes in global copy will affect all projects which
+				uses the package that is being updated or upgraded
+				or removed or re-installed -- possibly new version
+				or major changes in package.
+  2. Local repository or developer copy - This way you can tell the npm to download
+			necessary packages and store them into current project
+			or application folder.
+
+			So, different project/app folders have separate copy of the
+			packages (whether they are same or same with different 			versions).
+				
+
+Example: Open command prompt (Assume that we already installed NodeJS)
+
+c:\my-app>npm install --save-dev  jquery   
+
+          This command create "local" node package repository in current "c:\my-app"
+          folder to save the "jquery" package
+
+c:\my-app>npm install -g jquery   Will download jquery package and save it into 
+				  global repository.
+
+Example: Create a node-js application -- an application folder contains package.json
+	 that contains application meta-data along with package depdendecies.
+
+1. First of all create a app folder and issue "npm init" command -- this command will create package.json by asking some value/data from you abou the current app.
+
+c:\my-app>npm init
+c:\my-app>dir
+
+Now, download the "jquery" package with --save-dev switch
+c:\my-app>npm install --save-dev jquery
+
+	This command automatically update the "package.json" by inserting package
+	dependencies along with package version.
+
+Now, in order to use the installed package in NodeJS environment, we must have to use "require()" function to import a module.
+
+c:\my-app>notepad sample.js
+
+let jq = require("jquery")   // This statement load the jquery .js file and
+                             // returns the reference of the loaded object
+
+//Now, we can use "jq" as reference for jquery functions.
+
+console.log( jq );
+
+c:\my-app>node sample.js  -- will prints error if specified pakcage not exists
+			     
+
+
+
+

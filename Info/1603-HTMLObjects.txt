@@ -1,0 +1,150 @@
+document object functions/methods
+==================================
+
+1. document.getElementsByTagName("tagName") - This method create a "NodeList" object    which contains one or more HTML objects of specified "tagName".
+
+  This and following methods (will discussed in this session) are used to read one or 
+  more HTML objects from the document tree and perform number of actions on them.
+
+Example:
+
+<h1>The Abc Ltd</h1>
+<p>This is a text tag</p>
+<h1>The Appleman Ltd</h1>
+<p>Another text </p>
+<p>Another para</p>
+
+<script>
+   //Obtain the 'p' element's objects
+   var list = document.getElementsByTagName("p");
+   console.log( list );  
+
+   //traverse the list 
+   for(i=0;i<list.length;i++) {
+     var obj = list.item(i);     // get the object reference 
+     //process the object - set/get attributes, CSS properties, handle events etc
+
+     obj.style.color = "red";
+     obj["style"]["fontSize"] = "1.9em";
+   }
+</script>
+
+Example: Update previous program to handle the event of 'p' objects
+....
+....
+var obj = list.item(i);
+//handle the event
+obj.onclick = function() {
+  console.log(i, obj, " is clicked");
+ };
+}//end for loop
+</script>
+
+NOTE: On click on "p" object, a common message 
+ 3 xxxx is clicked
+ will be printed because of the variable's latest values.
+
+So, in order to preseve the loop specific data we must have to create a closure:
+
+Edit:
+<script>
+    var list = document.getElementsByTagName("p");
+	console.log( list );
+	for(i=0;i<list.length;i++) {
+		var m = list.item(i);
+		m.onclick = myClosure(i,m); 
+	}
+    function myClosure(index, obj) {
+    	return function() {
+    		console.log(index, obj, " is pressed");
+    		if(obj.style.color == "red")
+    		     obj.style.color = "blue";
+    		 else 
+    		 	obj.style.color = "red";
+    	};
+    }
+</script>
+
+OR
+for(i=0;i<list.length;i++) {
+  list.item(i).onclick = (function(index,obj) {
+         return function() {
+            console.log(index, obj, " is clicked");
+         };
+     })(i, list.item(i) );
+}
+OR
+..
+list.item(i).onclick = ( (index,obj) => ()=> console.log(index,obj, " is clicked"))(i,
+        list.item(i));
+
+2. document.getElementsByName("name-attribute-value") -- Returns an object list that is a collection of HTML object from common name attribute value.
+
+<p name="help">This is para</p>
+<button name="run">Button</button>
+<button name="help">Help Button</button>
+<h4 name="help">Smoething...</h4>
+
+<script>
+  var list = document.getElementsByName("help");
+  console.log ( list );
+
+  //change the backgound 
+  for(i=0;i<list.length;i++) {
+     list.item(i).style.backgroundColor = "red";
+  }
+</script>
+
+
+Example: Use three <input type="range" > to create the colors.
+
+<input type="range" min="0" onchange="setBk()" max="255" value="0" name="color">	 
+ <input type="range" min="0" onchange="setBk()" max="255" value="0" name="color">	 
+ <input type="range" min="0" onchange="setBk()"  max="255" value="0" name="color">	 
+
+<script>
+	function setBk(){
+           var list = document.getElementsByName("color");
+           let red =  parseInt(list.item(0).value);
+	   let green =  parseInt(list.item(1).value);
+	   let blue =  parseInt(list.item(2).value);
+	   document.body.style.background = "rgb(" + red + ","
+                            + green + "," + blue +")";
+   	    document.title = document.body.style.background;
+	}
+</script>
+
+
+
+<!doctype html>
+
+<html>
+<head>
+	<title>Sample</title>
+</head>
+<body>
+ <input type="range" min="0" max="255" value="0" name="color">	 
+ <input type="range" min="0" max="255" value="0" name="color">	 
+ <input type="range" min="0" max="255" value="0" name="color">	 
+
+<script>
+	var list = document.getElementsByName("color");
+	console.log( list );
+	for(i=0;i<list.length;i++) {
+		var m = list.item(i);
+		console.log(m);
+
+		m.onchange = ((obj,index)=> ()=> {
+			console.log( obj.value, index );
+			let red =  parseInt(list.item(0).value);
+			let green =  parseInt(list.item(1).value);
+			let blue =  parseInt(list.item(2).value);
+			document.body.style.background = "rgb(" + red + ","+ green + "," + blue +")";
+
+			document.title = document.body.style.background;
+		})(m,i);
+	}
+</script>
+ 
+</body>
+</html>

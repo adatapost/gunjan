@@ -1,0 +1,154 @@
+The "class" keyword
+====================
+
+We can define a new "TYPE/class/datatype" using the "class" keyword.
+
+There are two purposes to define a class OR there are two different types of members in the class, the static members and instance members.
+
+The static (global) members and class name qualifier
+=====================================================
+We've seen (previous session) that the duplication in functions & class names resulting the exception -- duplicate or re-declare name.
+
+However, we can use "namespace" to separate these entities but here we have an alternative to define same named functions (especially functions) into separate class where class name just act as a group or namespace alike name.
+
+The only condition is that the functions must be defined with "static" keyword.
+
+Example:
+
+<?php
+ //Two developers named Meena and Seema has developed some functions 
+
+class Meena {
+   static function add($no1,$no2) { return $no1+$no2; }
+}
+class Seema {
+   static function add($no1,$no2) { 
+   	echo $no1+$no2; 
+   }
+}
+
+//To call the static methods/functions ClassName::functionName
+
+echo "<br/>Call Meena::add(20,30) : " . Meena::add(20,30);
+echo "<br/>Call Seema::add(4,5)";
+Seema::add(4,5);
+
+The :: scope resolution operator
+---------------------------------
+The static members of the class is accessed via ClassName::memberName and inside the class you can also use self::memberName  (However you may also use ClassName instead of self keyword).
+
+Example: A configuration class 
+
+<?php
+class Config {
+  static $app = "Appleman Pvt Ltd";
+  static $db = "mysql";
+  static $user = "root";
+}
+
+echo "<br/>", Config::$app;
+
+
+Access modifiers in class
+=========================
+To set visibility (hide or show) the members, we have "private", "public", and "protected" access modifiers.
+
+The "public" entities have no access restrictions. They can be used outside and inside the class.
+
+The "private" entities are only visible inside the class.
+
+The "protected" entities are same as "private" except they are visible in sub-classes.
+
+Example: Demonstrate how to protect the class fields 
+
+<?php
+class Config {
+   private static $app = "Appleman Pvt Ltd";  
+
+   public static function app() {
+   	  return self::$app;   //or return Config::$app;
+   }
+}
+echo Config::app(); 
+
+The default access of class member is "public" in PHP
+------------------------------------------------------
+If access modifier is not specified then default access will be "public". However, for the sake of documentation, which is good practice, always use keywords - public, private and protected as needed.
+
+
+The instance members of the class
+==================================
+If members created without the use of "static" are "instance members". The "instance members" will be created each time when you issue the "new" keyword:
+
+ Syntax:
+
+   $varName = new ClassName();
+   Or
+   new ClassName();
+
+Example:
+
+<?php
+class MyDate {
+  public $d,$m,$y;
+}
+
+//Create three instances (three copies of $d, $m and $y) or three objects
+$p = new MyDate();
+$q = new MyDate();
+$r = new MyDate();
+
+var_dump($p);
+var_dump($q);
+var_dump($r);
+
+//set or get instance members
+$p->d = 10;
+$p->m = 20;
+$p->y = 2002;
+echo "<br/>" . $p->d . '-' . $p->m . '-' . $p->y;
+
+The static members are accessed via :: (scope resolution) whereas instance members are accessed via -> (arrow operator).
+
+Within the class you can access the instance members via $this->memberName syntax.
+
+Example: Invoice and Product classes
+
+<?php
+class Invoice {
+	public $billNo = 10;
+	public $billDate = "10-10-2018";
+	public $customer = "Mr. ABC";
+	public $products = [];            // 1 invoice and many products (1-M)
+}
+class Product {
+	public $name = "";
+	public $rate = 0.0;
+	public $qty = 0;
+	public $unit = "";
+
+	public function __construct($name = "",$rate = 0.0, 
+		                $qty = 0,$unit = "") {
+		$this->name = $name;
+		$this->rate = $rate;
+		$this->qty = $qty;
+		$this->unit = $unit;
+	}
+
+	public function amount() { 
+		return $this->qty * $this->rate;
+	}
+}
+
+$inv = new Invoice();
+$inv->customer = "Miss. ABC";
+$inv->products[] = new Product("Pen",5.5,10,"Pc");
+$inv->products[] = new Product("Pencil",10,100,"Doz");
+
+var_dump($inv);
+foreach($inv->products as $p) {
+	echo "<br/>" . $p->name, $p->amount();
+}
+
+Case Study --- Normalize the "invoice" data.
+

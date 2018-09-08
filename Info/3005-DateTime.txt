@@ -1,0 +1,88 @@
+The DateTime APIs
+------------------
+
+Classes:
+  1. DateTime - Represent DateTime data and actions
+  2. DateTimeZone - Represent TimeZone instance
+  3. DateInterval - Represent interval value
+  4. DatePeriod  - Represent period value
+
+Example: 
+<?php
+  // Current Date & Time
+  $now = new DateTime();   // UTC DateTime
+  var_dump($now);
+  echo "<br/>", $now->date;
+
+  $now = new DateTime("", 
+               new DateTimeZone("Asia/Kolkata"));   // IST DateTime
+  var_dump($now);
+  echo "<br/>", $now->date;
+
+  // Custom Date & Time
+  $mydate = new DateTime("31-12-2018 22:55:33");
+  var_dump($mydate);
+
+Example: Format the date & time using DateTime#format() method
+
+   
+  $now = new DateTime();   // UTC DateTime
+  echo "<br/>", $now->format('d-M-Y H:i:s');  // H for 24 hour 
+  echo "<br/>", $now->format('d-M-Y h:i:s a'); // h for 12 hour
+  echo "<br/>", $now->format('d-m-Y');
+  echo "<br/>", $now->format('d D, M-Y');
+
+Example: Date difference using DateTime#diff(dt_obj) method
+
+<?php
+  $zone = new DateTimeZone("Asia/Kolkata") ;
+
+  $now = new DateTime("",$zone);
+  $dt1 = new DateTime("20-9-2002",$zone);
+
+  $diff = $now->diff($dt1);
+  var_dump($diff);
+  
+  echo "<br/>", $diff->y, "years ", $diff->m , "months";
+
+Example: DateInterval object to define the Date & Time interval to create past or future date & time object of current date & time instance.
+
+Syntax:   $interval = new DateInterval("PnYnMnDTnHnMnS")
+           P - Part
+           T - T time seperator
+
+<?php
+  $zone = new DateTimeZone("Asia/Kolkata") ;
+
+  $dt = new DateTime("",$zone);
+  echo "<br/>", $dt->format("d-m-Y h:i:s a");
+
+  $interval = new DateInterval("P1Y2M3DT2H2M2S");
+  $dt->add($interval);
+  echo "<br/>", $dt->format("d-m-Y h:i:s a");
+  $interval = new DateInterval("P1Y2M3DT2H2M2S");
+  $dt->sub($interval);
+  echo "<br/>", $dt->format("d-m-Y h:i:s a");
+  
+
+Example: DatePeriod(DateTime $nstance, DateInterval $interval, int occurence) - To returns dates (array or date time) of given interval for occurence specified.
+
+<?php
+  $zone = new DateTimeZone("Asia/Kolkata") ;
+
+  $dt = new DateTime("",$zone);
+  // 1.5 month interval 
+  $periods = new DatePeriod($dt,new DateInterval("P1M15D"),10);
+  foreach($periods as $p) {
+  	echo "<br/>", $p->format("d-m-Y h:i:s a");
+  }
+
+
+  
+
+  
+  
+  
+
+
+  

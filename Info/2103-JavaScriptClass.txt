@@ -1,0 +1,341 @@
+Example : Level 1 - Quiz and Question class
+--------------------------------------------
+
+/webapp/
+       | question.js
+       | test.html
+
+question.js
+-----------
+function Question(text,op1,op2,op3,op4,correctChoice,userChoice) {
+	//fields or members or properties
+    this.text = text;
+    this.op1 = op1;
+    this.op2 = op2;
+    this.op3 = op3;
+    this.op4 = op4;
+    this.correctChoice = correctChoice;
+    this.userChoice = userChoice;
+}
+
+function Quiz( userName ) {
+    this.questions = [];
+    this.userName = userName;
+
+    this.addQuestion = function( question ) {
+       this.questions.push( question );
+    }
+    this.getQuestion = function(index) {
+    	return this.questions[index];
+    }
+    this.count = function() {
+    	return this.questions.length;
+    }
+}
+
+
+test.html
+----------
+ <script src="question.js"></script>
+ <script>
+    var maths = new Quiz( "Dhruvi" );
+    maths.addQuestion( new Question(
+    	"What do you meant by the term Integer?",
+    	"First option",
+    	"Second Option",
+    	"It is kind of number",
+    	"It is a funny thing",
+    	3,0) );
+    maths.addQuestion( new Question(
+        "What do you meant by the real value.",
+        "It is an alphanet",
+        "It is just another number",
+        "It is real world's number",
+        "It is a float value",
+        4,0	));
+
+ 	console.log( maths );
+ 	console.log( maths.count());
+ 	console.log( maths.getQuestion(0));
+ 	console.log( maths.getQuestion(1));
+ </script> 	
+
+Example : Level 2 - Quiz and Question class
+----------------------------------------------
+Update in "Question" class
+  
+    //update
+    this.isCorrect = function() {
+    	return this.correctChoice == this.userChoice;
+    }
+
+Update in Quiz class:
+
+  1. Add this.index = -1 field
+  2. Add following methods
+
+  this.index = -1;  //Update
+  ....
+  ....
+   //Update - Navigate question
+    this.nextQuestion = function() {
+    	this.index++;
+    	if(this.index>=this.count()) {
+    		this.index = this.count()-1;
+    	}
+    	return this.questions[this.index];
+    }
+     this.prevQuestion = function() {
+    	this.index--;
+    	if(this.index<0) {
+    		this.index = 0;
+    	}
+    	return this.questions[this.index];
+    }
+    //Update question
+    this.updateUserChoice = function(userChoice) {
+    	this.questions[this.index].userChoice = userChoice;
+    }
+    //Informative question
+    this.correctCount = function() {
+    	let c = 0;
+    	for(let i in this.questions) {
+    	  let q = this.questions[i];
+    	  if(q.isCorrect()) {
+    	  	c++;
+    	  }
+    	}
+    	return c;
+    }
+    this.correctPercent = function() {
+    	let c = this.correctCount();
+    	let t = this.count();
+    	return c/t * 100;
+    }
+
+Use of the Quiz and Question class
+-------------
+
+<script src="question.js"></script>
+ <script>
+ 	var maths = ... as per previous example....;
+     
+ 	var q = maths.nextQuestion();
+ 	console.log( q );
+ 	maths.updateUserChoice(3);
+ 	console.log( q.isCorrect() );
+
+ 	q = maths.nextQuestion();
+ 	console.log( q );
+ 	maths.updateUserChoice(4);
+ 	console.log( q.isCorrect() );
+
+ 	console.log( maths.correctCount());
+ 	console.log( maths.correctPercent());
+</script> 	
+
+Full Code
+----------
+
+function Question(text,op1,op2,op3,op4,correctChoice,userChoice) {
+	//fields or members or properties
+    this.text = text;
+    this.op1 = op1;
+    this.op2 = op2;
+    this.op3 = op3;
+    this.op4 = op4;
+    this.correctChoice = correctChoice;
+    this.userChoice = userChoice;
+
+    //update
+    this.isCorrect = function() {
+    	return this.correctChoice == this.userChoice;
+    }
+}
+
+function Quiz( userName ) {
+    this.questions = [];
+    this.userName = userName;
+    this.index = -1;  //Update
+
+    this.addQuestion = function( question ) {
+       this.questions.push( question );
+    }
+    this.getQuestion = function(index) {
+    	return this.questions[index];
+    }
+    this.count = function() {
+    	return this.questions.length;
+    }
+
+    //Update
+    this.nextQuestion = function() {
+    	this.index++;
+    	if(this.index>=this.count()) {
+    		this.index = this.count()-1;
+    	}
+    	return this.questions[this.index];
+    }
+     this.prevQuestion = function() {
+    	this.index--;
+    	if(this.index<0) {
+    		this.index = 0;
+    	}
+    	return this.questions[this.index];
+    }
+    this.updateUserChoice = function(userChoice) {
+    	this.questions[this.index].userChoice = userChoice;
+    }
+    this.correctCount = function() {
+    	let c = 0;
+    	for(let i in this.questions) {
+    	  let q = this.questions[i];
+    	  if(q.isCorrect()) {
+    	  	c++;
+    	  }
+    	}
+    	return c;
+    }
+    this.correctPercent = function() {
+    	let c = this.correctCount();
+    	let t = this.count();
+    	return c/t * 100;
+    }
+
+}
+
+
+<!doctype html>
+
+<html>
+<head>
+	<title>Sample</title>
+</head>
+<body>
+ <script src="question.js"></script>
+ <script>
+ 	var maths = new Quiz( "Dhruvi" );
+    maths.addQuestion( new Question(
+    	"What do you meant by the term Integer?",
+    	"First option",
+    	"Second Option",
+    	"It is kind of number",
+    	"It is a funny thing",
+    	3,0) );
+    maths.addQuestion( new Question(
+        "What do you meant by the real value.",
+        "It is an alphanet",
+        "It is just another number",
+        "It is real world's number",
+        "It is a float value",
+        4,0	));
+     
+
+ 	console.log( maths );
+
+ 	var q = maths.nextQuestion();
+ 	console.log( q );
+ 	maths.updateUserChoice(3);
+ 	console.log( q.isCorrect() );
+
+ 	q = maths.nextQuestion();
+ 	console.log( q );
+ 	maths.updateUserChoice(4);
+ 	console.log( q.isCorrect() );
+
+ 	console.log( maths.correctCount());
+ 	console.log( maths.correctPercent());
+ 	 
+
+ </script> 	
+ 
+</body>
+</html>
+
+
+Example: Level - 3 User Quiz, and Question class and objects to populate the DOMs.
+
+Step-1 question.js contains two classes - Question, and Quiz and at the end of file add objects of questions.
+
+question.js
+-----------
+function Question(...) { }
+function Quiz(..) { }
+
+var maths = new Quiz("Dhruri);
+... add some questions here.
+
+show.html
+---------
+
+<script src="question.js"></script>
+
+ <div id="question"></div>
+
+ <p><input type="radio" 
+ 	onclick="updateOption(1)" 
+        name="opt"><span id="op1"></span>
+ </p>
+
+ <p><input type="radio"
+ 	onclick="updateOption(2)"
+        name="opt"><span id="op2"></span>
+ </p>
+ <p><input type="radio"
+        onclick="updateOption(3)"
+        name="opt"><span id="op3"></span>
+ </p>
+ <p><input type="radio"
+        onclick="updateOption(4)"
+        name="opt"><span id="op4"></span>
+ </p>
+ <p>
+ 	<button onclick="showPrev()">Prev</button>
+ 	<button onclick="showNext()">Next</button>
+ </p>
+
+ <script>
+    var question = document.getElementById("question");
+    var op1 = document.getElementById("op1");
+    var op2 = document.getElementById("op2");
+    var op3 = document.getElementById("op3");
+    var op4 = document.getElementById("op4");
+    var q = null;
+
+    function showNext() {
+    	q = maths.nextQuestion();
+    	fillData(q);
+    }  
+    function showPrev() {
+    	 q = maths.prevQuestion();
+    	fillData(q);
+    }  
+   function fillData(q) {
+          question.innerHTML = q.text;
+          op1.innerHTML = q.op1;
+          op2.innerHTML = q.op2;
+          op3.innerHTML = q.op3;
+          op4.innerHTML = q.op4;
+   }
+   function updateOption(n) {
+   	
+   	maths.updateUserChoice(n);
+   	console.log(q.isCorrect());
+   }
+  showNext();
+ </script> 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

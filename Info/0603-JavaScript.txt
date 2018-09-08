@@ -1,0 +1,178 @@
+The console object
+===================
+The "console" object plays very important to role to debug the JavaScript code. It offers methods to write data, test result and debug result onto the console window.
+
+  console.log(value1,value2,....) - To display data/value
+  console.error(error-description) - To show error info 
+  console.info(information-message) - To show information 
+  console.warn(warning-message) - To show warning message
+  console.dir( obj ) - To dump object data
+  console.assert( true | false ) - Throws an exception when expression returns
+				  "false".
+
+Example:1
+
+<script>
+  no = 10;
+  dt = new Date();
+  console.info("** Trying to use the console's methods **");
+  console.log(no,dt);
+  console.dir(no);
+  console.dir(dt);
+  console.assert( no < 9 );
+</script>
+  
+
+The type system in JavaScript
+==============================
+JavaScript is a dynamic programming language. It means there is not named datatype in JavaScript. Or We can say JavaScript is untype language. Of course there are datatypes/types but they don't have names as those found in C/Java and other languages.
+
+Basic Types in JavaScript are:
+  1. Number - to represent numbers including integral & float - JavaScript has 64 bits
+		number type to represent any integral or float value.
+  2. String - You can use single or double quotes to represent the string.
+
+  3. Math - Represent the maths functions.
+
+  4. Boolean - true or false. In JavaScript any value from the following is consider
+		as "falsy" (or false) value:
+
+			0
+			0.0	
+			''
+			""
+			false
+			null
+			NaN
+			undefined
+
+		And any value other than "falsy" is truthy.
+			e.g
+			10
+			-19
+			"A"
+			  etc...
+  5. Array - to represent the collections of items
+  6. Object - To represent an object (custom object)
+  7. Function - To represent the JavaScript class or user-defined functions.
+  8. RegExp - Regular Expression object
+  9. Date  - Date Time object
+  10. XmlHttpRequest - Asynchronious Request  (AJAX)
+  11. document - It represent the current web document (currently loaded/launched )
+  12. window - It refers the web-browser's windowing system.
+    and many more...
+
+
+Note: Everything in JavaScript is an object. An "object" is just a collection of reserved or allocated bytes.
+
+For instance,
+
+    Assume that we want to store 3.5 value into RAM (memory) via JavaScript,
+
+          m = 3.5;
+
+     Here, an object of 8 bytes will be created (8 bytes will be allocated):
+
+		|-----------| 1007   = 8 bytes  <-- end address
+		|           | ....
+		| 3.5       | ....  
+                |-----------| 1000  <-- start address <-- start address is 
+					alternatively used by "m" variable name.
+
+				So, memory address 1000 to 1007 area is called an
+				object.
+
+
+How to create a variable?
+=========================
+There are number of ways to do so:
+1. varName = value;   
+2. window.varName = value;
+3. var varName = value;
+4. let varName = value;
+
+
+The var keyword
+----------------
+It creates a variable with/without value.
+
+<script>
+   var a,b,c = 10;
+   console.log(a,b,c);
+   console.log(typeof(a), typeof(b), typeof(c));
+</script>
+
+Note that the "typeof()" is a keyword which returns the name of type of value.
+
+<script>
+    var a = 10;
+    console.log( a, typeof(a));
+    a = "Hello";
+    console.log( a, typeof(a));
+    a = new Date();
+    console.log( a, typeof(a));
+    a = false;
+    console.log( a, typeof(a));
+</script>
+
+The window namespace (global namespace)
+---------------------------------------
+The "window" is global namespace of JavaScript. Anything you add or define or create, that thing is going to add into the or under the "window" namespace.
+
+For example,
+
+<script>
+  var no = 30;   // is same as window.no = 30
+  no1 = 40;      // is same as window.no1 = 40
+  window.no2 = 50 // is same as no2 = 50 or var no2 = 50
+
+ console.log(no, no1, no2);
+ console.log(window.no, window.no1, window.no2);
+</script>
+Note: class, functions, variables, arrays, objects and many more things will be added inside the "window" automatically.
+
+NOTE: It is good practice to create our own namespace or scope via functions, and objects syntax to keep global namespace simple.
+
+The let keyword
+-----------------
+The let keyword is introduced to not to use "global" namespace or not to pollute the window namespace. It uses temporary code block, function block to represent the entities.
+
+Example:
+
+<script>
+    for(let i = 1; i<=10;i++) {   // i is block scope variable
+    	 var m = i*i;    // global scope variable
+    	console.log(m, i) ;
+    }
+   
+    console.log( m );  // 100
+    console.log( i );  // Error 'i' is undefined
+</script>
+
+Variable scope in functions
+----------------------------
+Variable created inside the function and without the use of "var" or "let", it will be created into window namespace -- in global scope.
+
+So, always use "var" or "let" keyword especially while working inside the functions.
+
+<script>
+  var n = 10;   // global
+  function test() {
+    	m = 100;    //global
+  }
+
+  //call a 'test'
+  test();
+
+  console.log( n);
+  console.log(m);
+</script>
+</body>	
+
+Now, replace var m = 100 in test() and see what happen? There will be an error : "m" is undefined.
+
+
+
+
+ 
+

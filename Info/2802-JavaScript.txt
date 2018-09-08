@@ -1,0 +1,57 @@
+The JavaScript Language
+=========================
+
+-> JavaScript is the only programming language available in web-browser and that is
+   why every web-developer must have to learn this language.
+
+-> JavaScript is also known as "Mocha" or "ES - ECMAScript". The term "JavaScript"
+   has nothing to do with Java or Java technologies.
+
+-> JavaScript is the most commonly used programming language and it is available 
+   everywhere. We don't have to install JavaScript. It is already with Web-browsers
+   as well as  JavaScript Server Environment, the NodeJS.
+
+-> JavaScript is the specification based language. The European Computer Merchant 
+   Association define the "standard or specification for JavaScript language" and 
+   vendors like Google, Mozilla, Microsoft, Apple and many more implement the    ECMAScript specification.
+
+   At present, all web-browsers have ECMAScript 5 (ES5) standard of JavaSCript    environment and 70% of the web-browsers also have ES6 standard.
+
+   Next standard of ECMA number will be given as per year number. For example, ECMA    2018 and so on.
+
+What are the base software that constitute the web-browser Or Ingredient of web-browser.
+-----------------------
+ A web-browser is made up of following languages, tools and APIs:
+  1. Html parser
+  2. XML parser
+  3. JavaScript language
+  4. CSS Language
+  5. Graphics Render Engine
+  6. Developer Tool
+  7. Plug-in or Add-on development kit
+  8. Network APIs, I/O APIs
+  9. SVG - Scalar Vector Graphics APIs and SVG Parser
+ 10. Canvas - Graphics API
+
+ And also there are many more components, tools and APIs in web-browser. In fact, the web-browser (modern web-browsers) is just like an operating system. [FireFox OS, JIO mobile OS, Cromium OS etc) and the JavaScript is the only language for this OS.
+
+In other words, all kind or type of APIs in web-browser are accessible via JavaScript program.
+
+Why one should learn & use the JavaScript language?
+---------------------------------------------------
+
+1. It is the only programming language in browser.
+2. It is used to read, update, replace, or add or remove HTML objects programatically.
+3. It is used to request the resources/pages via program and also receive the response
+   and this technique is know as AJAX - Asynchronious JavaScript And XML.
+4. JavaScript is pure object-oriented progaming language and we will have to use its
+   types system to model the data.
+   Arrays, functions, closure, objects, classes, inheritance etc are the common
+   content of this language.
+
+5. It uses graphics engine's API to draw or paint the primitve graphics.
+6. Provide the APIs to process the SVG objects.
+
+
+
+   
