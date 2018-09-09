@@ -2,24 +2,37 @@
 
 <html>
  <head>
-     <title>ADC-Sample</title>
-     <link rel="stylesheet" href="css/bootstrap.min.css" />
+     <style>
+         #modal {
+             visibility: hidden;
+             position: absolute;
+             left: 0px;
+             top: 0px;
+             width:100%;
+             height:100%;
+             text-align:center;
+             z-index: 1000;
+         }
+         #modal #modal-content {
+             width:300px;
+             margin: 100px auto;
+             background-color: #fff;
+             border:1px solid #000;
+             padding:15px;
+             text-align:center;
+         }
+     </style>
  </head>
  <body>
 
-   <button type="button" class="btn btn-link" data-toggle="modal" data-target="#registerForm">
+   <button type="button" onclick="showHide()">
        Register
    </button>
-
    <!-- Modal -->
-   <div class="modal fade" id="registerForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
+       <div id="modal">
+           <div id="modal-content">
                <div class="modal-header">
-                   <h5 class="modal-title" id="exampleModalLabel">New User</h5>
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                       <span aria-hidden="true">&times;</span>
-                   </button>
+                   <h5>New User</h5>
                </div>
                <div class="modal-body">
                    <p>Email</p>
@@ -29,27 +42,45 @@
                    <p id="msg"></p>
                </div>
                <div class="modal-footer">
-                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                   <button type="button" class="btn btn-primary" onclick="doSave()">Register</button>
+                   <button type="button" onclick="closeIt()">Close</button>
+                   <button type="button" onclick="doSave()">Register</button>
                </div>
            </div>
        </div>
-   </div>
 
-   <script src="js/jquery-3.3.1.min.js"></script>
-   <script src="js/bootstrap.bundle.min.js"></script>
+
   <script>
-      $("#msg").text("");
+      var el = document.getElementById("modal");
+      var email = document.querySelector("#email");
+      var pass = document.querySelector("#password");
+      var msg = document.querySelector("#msg");
+
+      function showHide() {
+          el.style.visibility = el.style.visibility == "visible" ? "hidden" : "visible";
+      }
+      function closeIt() {
+          el.style.visibility = "hidden";
+      }
       function doSave() {
-          var data = {"email": $("#email").val(), "pass": $("#password").val() };
-          $.post("UserController.php",data, function(result) {
-             $("#msg").text( result.message );
-             console.log( result  );
-             if(result.status)
-                $("#registerForm").modal('hide');
-          });
+          var data = new FormData();
+          data.append("email",email.value);
+          data.append("pass",pass.value);
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("post","UserController.php");
+          xhr.onreadystatechange = function() {
+              if(xhr.readyState ==  4) {
+                var obj = JSON.parse(xhr.responseText);
+                  msg.innerHTML = obj.message;
+                if(obj.status) {
+                    msg.innerHTML = "Registration done successfully!!!";
+                }
+              }
+          };
+          xhr.send(data);
       }
   </script>
  </body>
 </html>
+
 
